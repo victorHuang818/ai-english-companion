@@ -111,6 +111,12 @@ The JSON structure must match the following schema:
     "depth": "<the native refined rewrite>",
     "star_alignment": "<speaking tips>"
   },
+  "scores": {
+    "fluency": <fluency score from 0 to 100 (integer)>,
+    "vocabulary": <vocabulary score from 0 to 100 (integer)>,
+    "grammar": <grammar score from 0 to 100 (integer)>,
+    "pronunciation": <pronunciation score from 0 to 100 (integer)>
+  },
   "overall_comment": "<A warm, encouraging summary sentence highlighting the main strength or area of improvement>"
 }`
 )
