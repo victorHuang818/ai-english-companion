@@ -145,7 +145,23 @@ export const InterviewRoomPage: React.FC = () => {
           <GlassCard className="suggestion-card-horizontal">
             <div className="card-header"><span className="accent-label">AI HINT</span></div>
             <div className="suggestion-content">
-              {loadingSuggestion ? <div className="typing-loader">Thinking...</div> : <p>{suggestion || 'Hints will appear here...'}</p>}
+              {loadingSuggestion ? (
+                <div className="typing-loader">Thinking...</div>
+              ) : suggestion ? (
+                <div className="suggestion-pills">
+                  {suggestion.split('\n')
+                    .map(line => line.trim().replace(/^-\s*/, ''))
+                    .filter(Boolean)
+                    .map((item, index) => (
+                      <span key={index} className="suggestion-pill animate-fade-in">
+                        {item}
+                      </span>
+                    ))
+                  }
+                </div>
+              ) : (
+                <div className="empty-suggestion">Awaiting next question to generate hints...</div>
+              )}
             </div>
           </GlassCard>
         </div>
