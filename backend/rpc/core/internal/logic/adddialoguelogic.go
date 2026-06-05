@@ -29,7 +29,7 @@ func NewAddDialogueLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddDi
 	}
 }
 
-// Interview Dialogues
+// Dialogues
 func (l *AddDialogueLogic) AddDialogue(in *core.AddDialogueReq) (*core.AddDialogueResp, error) {
 	dialogueID := uuid.New().String()
 
@@ -38,7 +38,6 @@ func (l *AddDialogueLogic) AddDialogue(in *core.AddDialogueReq) (*core.AddDialog
 		audioUrl = sql.NullString{String: in.AudioObjectKey, Valid: true}
 	}
 
-	// 🌟 如果传入了原始音频字节，代表需要直接将音频合并文件存储至 MinIO 并绑定落库
 	if len(in.AudioContent) > 0 {
 		objectKey := fmt.Sprintf("audios/%s.wav", uuid.New().String())
 		_, err := l.svcCtx.MinioClient.PutObject(
@@ -61,16 +60,16 @@ func (l *AddDialogueLogic) AddDialogue(in *core.AddDialogueReq) (*core.AddDialog
 		evaluation = sql.NullString{String: in.Evaluation, Valid: true}
 	}
 
-	data := &model.InterviewDialogues{
-		Id:                 dialogueID,
-		InterviewSessionId: in.SessionId,
-		Role:               in.Role,
-		AudioUrl:           audioUrl,
-		Content:            in.Content,
-		Evaluation:         evaluation,
+	data := &model.Dialogues{
+		Id:                dialogueID,
+		PracticeSessionId: in.SessionId,
+		Role:              in.Role,
+		AudioUrl:          audioUrl,
+		Content:           in.Content,
+		Evaluation:        evaluation,
 	}
 
-	_, err := l.svcCtx.InterviewDialogueModel.Insert(l.ctx, data)
+	_, err := l.svcCtx.DialogueModel.Insert(l.ctx, data)
 	if err != nil {
 		l.Errorf("Failed to insert dialogue: %v", err)
 		return nil, err

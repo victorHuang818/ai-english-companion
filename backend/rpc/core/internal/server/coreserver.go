@@ -23,34 +23,34 @@ func NewCoreServer(svcCtx *svc.ServiceContext) *CoreServer {
 	}
 }
 
-// Resume & OSS
+// User Profile & OSS
 func (s *CoreServer) GenerateUploadUrl(ctx context.Context, in *core.GenerateUploadUrlReq) (*core.GenerateUploadUrlResp, error) {
 	l := logic.NewGenerateUploadUrlLogic(ctx, s.svcCtx)
 	return l.GenerateUploadUrl(in)
 }
 
-func (s *CoreServer) CreateResume(ctx context.Context, in *core.CreateResumeReq) (*core.CreateResumeResp, error) {
-	l := logic.NewCreateResumeLogic(ctx, s.svcCtx)
-	return l.CreateResume(in)
+func (s *CoreServer) CreateUserProfile(ctx context.Context, in *core.CreateUserProfileReq) (*core.CreateUserProfileResp, error) {
+	l := logic.NewCreateUserProfileLogic(ctx, s.svcCtx)
+	return l.CreateUserProfile(in)
 }
 
-func (s *CoreServer) GetResume(ctx context.Context, in *core.GetResumeReq) (*core.GetResumeResp, error) {
-	l := logic.NewGetResumeLogic(ctx, s.svcCtx)
-	return l.GetResume(in)
+func (s *CoreServer) GetUserProfile(ctx context.Context, in *core.GetUserProfileReq) (*core.GetUserProfileResp, error) {
+	l := logic.NewGetUserProfileLogic(ctx, s.svcCtx)
+	return l.GetUserProfile(in)
 }
 
-// Job Profiles
-func (s *CoreServer) CreateJobProfile(ctx context.Context, in *core.CreateJobProfileReq) (*core.CreateJobProfileResp, error) {
-	l := logic.NewCreateJobProfileLogic(ctx, s.svcCtx)
-	return l.CreateJobProfile(in)
+// Scenarios
+func (s *CoreServer) CreateScenario(ctx context.Context, in *core.CreateScenarioReq) (*core.CreateScenarioResp, error) {
+	l := logic.NewCreateScenarioLogic(ctx, s.svcCtx)
+	return l.CreateScenario(in)
 }
 
-func (s *CoreServer) GetJobProfile(ctx context.Context, in *core.GetJobProfileReq) (*core.GetJobProfileResp, error) {
-	l := logic.NewGetJobProfileLogic(ctx, s.svcCtx)
-	return l.GetJobProfile(in)
+func (s *CoreServer) GetScenario(ctx context.Context, in *core.GetScenarioReq) (*core.GetScenarioResp, error) {
+	l := logic.NewGetScenarioLogic(ctx, s.svcCtx)
+	return l.GetScenario(in)
 }
 
-// Interview Sessions
+// Practice Sessions
 func (s *CoreServer) CreateSession(ctx context.Context, in *core.CreateSessionReq) (*core.CreateSessionResp, error) {
 	l := logic.NewCreateSessionLogic(ctx, s.svcCtx)
 	return l.CreateSession(in)
@@ -61,7 +61,7 @@ func (s *CoreServer) UpdateSessionStatus(ctx context.Context, in *core.UpdateSes
 	return l.UpdateSessionStatus(in)
 }
 
-// Interview Dialogues
+// Dialogues
 func (s *CoreServer) AddDialogue(ctx context.Context, in *core.AddDialogueReq) (*core.AddDialogueResp, error) {
 	l := logic.NewAddDialogueLogic(ctx, s.svcCtx)
 	return l.AddDialogue(in)
@@ -72,13 +72,13 @@ func (s *CoreServer) UpdateDialogueEvaluation(ctx context.Context, in *core.Upda
 	return l.UpdateDialogueEvaluation(in)
 }
 
-// 面试上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
-func (s *CoreServer) GetInterviewContext(ctx context.Context, in *core.GetInterviewContextReq) (*core.GetInterviewContextResp, error) {
-	l := logic.NewGetInterviewContextLogic(ctx, s.svcCtx)
-	return l.GetInterviewContext(in)
+// 上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
+func (s *CoreServer) GetPracticeContext(ctx context.Context, in *core.GetPracticeContextReq) (*core.GetPracticeContextResp, error) {
+	l := logic.NewGetPracticeContextLogic(ctx, s.svcCtx)
+	return l.GetPracticeContext(in)
 }
 
-// 面试列表与详情
+// 列表与详情
 func (s *CoreServer) ListSessions(ctx context.Context, in *core.ListSessionsReq) (*core.ListSessionsResp, error) {
 	l := logic.NewListSessionsLogic(ctx, s.svcCtx)
 	return l.ListSessions(in)

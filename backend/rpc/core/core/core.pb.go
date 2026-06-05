@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.20.3
-// source: core.proto
+// source: backend/rpc/core/core.proto
 
 package core
 
@@ -30,7 +30,7 @@ type GenerateUploadUrlReq struct {
 
 func (x *GenerateUploadUrlReq) Reset() {
 	*x = GenerateUploadUrlReq{}
-	mi := &file_core_proto_msgTypes[0]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *GenerateUploadUrlReq) String() string {
 func (*GenerateUploadUrlReq) ProtoMessage() {}
 
 func (x *GenerateUploadUrlReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[0]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *GenerateUploadUrlReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateUploadUrlReq.ProtoReflect.Descriptor instead.
 func (*GenerateUploadUrlReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{0}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GenerateUploadUrlReq) GetFilename() string {
@@ -75,7 +75,7 @@ type GenerateUploadUrlResp struct {
 
 func (x *GenerateUploadUrlResp) Reset() {
 	*x = GenerateUploadUrlResp{}
-	mi := &file_core_proto_msgTypes[1]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -87,7 +87,7 @@ func (x *GenerateUploadUrlResp) String() string {
 func (*GenerateUploadUrlResp) ProtoMessage() {}
 
 func (x *GenerateUploadUrlResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[1]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -100,7 +100,7 @@ func (x *GenerateUploadUrlResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateUploadUrlResp.ProtoReflect.Descriptor instead.
 func (*GenerateUploadUrlResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{1}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GenerateUploadUrlResp) GetUploadUrl() string {
@@ -117,29 +117,30 @@ func (x *GenerateUploadUrlResp) GetObjectKey() string {
 	return ""
 }
 
-type CreateResumeReq struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	ObjectKey     string                 `protobuf:"bytes,2,opt,name=object_key,json=objectKey,proto3" json:"object_key,omitempty"` // OSS 中的文件路径
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type CreateUserProfileReq struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	UserId         string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	EnglishLevel   string                 `protobuf:"bytes,2,opt,name=english_level,json=englishLevel,proto3" json:"english_level,omitempty"`       // beginner/intermediate/advanced
+	LearningTarget string                 `protobuf:"bytes,3,opt,name=learning_target,json=learningTarget,proto3" json:"learning_target,omitempty"` // 学习目标
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
-func (x *CreateResumeReq) Reset() {
-	*x = CreateResumeReq{}
-	mi := &file_core_proto_msgTypes[2]
+func (x *CreateUserProfileReq) Reset() {
+	*x = CreateUserProfileReq{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateResumeReq) String() string {
+func (x *CreateUserProfileReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateResumeReq) ProtoMessage() {}
+func (*CreateUserProfileReq) ProtoMessage() {}
 
-func (x *CreateResumeReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[2]
+func (x *CreateUserProfileReq) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -150,26 +151,33 @@ func (x *CreateResumeReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateResumeReq.ProtoReflect.Descriptor instead.
-func (*CreateResumeReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use CreateUserProfileReq.ProtoReflect.Descriptor instead.
+func (*CreateUserProfileReq) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreateResumeReq) GetUserId() string {
+func (x *CreateUserProfileReq) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
 	return ""
 }
 
-func (x *CreateResumeReq) GetObjectKey() string {
+func (x *CreateUserProfileReq) GetEnglishLevel() string {
 	if x != nil {
-		return x.ObjectKey
+		return x.EnglishLevel
 	}
 	return ""
 }
 
-type CreateResumeResp struct {
+func (x *CreateUserProfileReq) GetLearningTarget() string {
+	if x != nil {
+		return x.LearningTarget
+	}
+	return ""
+}
+
+type CreateUserProfileResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"` // 解析状态
@@ -177,21 +185,21 @@ type CreateResumeResp struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateResumeResp) Reset() {
-	*x = CreateResumeResp{}
-	mi := &file_core_proto_msgTypes[3]
+func (x *CreateUserProfileResp) Reset() {
+	*x = CreateUserProfileResp{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateResumeResp) String() string {
+func (x *CreateUserProfileResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateResumeResp) ProtoMessage() {}
+func (*CreateUserProfileResp) ProtoMessage() {}
 
-func (x *CreateResumeResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[3]
+func (x *CreateUserProfileResp) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -202,47 +210,47 @@ func (x *CreateResumeResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateResumeResp.ProtoReflect.Descriptor instead.
-func (*CreateResumeResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{3}
+// Deprecated: Use CreateUserProfileResp.ProtoReflect.Descriptor instead.
+func (*CreateUserProfileResp) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateResumeResp) GetId() string {
+func (x *CreateUserProfileResp) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *CreateResumeResp) GetStatus() string {
+func (x *CreateUserProfileResp) GetStatus() string {
 	if x != nil {
 		return x.Status
 	}
 	return ""
 }
 
-type GetResumeReq struct {
+type GetUserProfileReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetResumeReq) Reset() {
-	*x = GetResumeReq{}
-	mi := &file_core_proto_msgTypes[4]
+func (x *GetUserProfileReq) Reset() {
+	*x = GetUserProfileReq{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetResumeReq) String() string {
+func (x *GetUserProfileReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetResumeReq) ProtoMessage() {}
+func (*GetUserProfileReq) ProtoMessage() {}
 
-func (x *GetResumeReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[4]
+func (x *GetUserProfileReq) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -253,43 +261,43 @@ func (x *GetResumeReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetResumeReq.ProtoReflect.Descriptor instead.
-func (*GetResumeReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{4}
+// Deprecated: Use GetUserProfileReq.ProtoReflect.Descriptor instead.
+func (*GetUserProfileReq) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetResumeReq) GetId() string {
+func (x *GetUserProfileReq) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-type GetResumeResp struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`             // JSON 格式
-	PdfUrl        string                 `protobuf:"bytes,4,opt,name=pdf_url,json=pdfUrl,proto3" json:"pdf_url,omitempty"` // 预签名 GET URL (带时效)
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type GetUserProfileResp struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	EnglishLevel   string                 `protobuf:"bytes,3,opt,name=english_level,json=englishLevel,proto3" json:"english_level,omitempty"`
+	LearningTarget string                 `protobuf:"bytes,4,opt,name=learning_target,json=learningTarget,proto3" json:"learning_target,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
-func (x *GetResumeResp) Reset() {
-	*x = GetResumeResp{}
-	mi := &file_core_proto_msgTypes[5]
+func (x *GetUserProfileResp) Reset() {
+	*x = GetUserProfileResp{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetResumeResp) String() string {
+func (x *GetUserProfileResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetResumeResp) ProtoMessage() {}
+func (*GetUserProfileResp) ProtoMessage() {}
 
-func (x *GetResumeResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[5]
+func (x *GetUserProfileResp) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -300,40 +308,40 @@ func (x *GetResumeResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetResumeResp.ProtoReflect.Descriptor instead.
-func (*GetResumeResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{5}
+// Deprecated: Use GetUserProfileResp.ProtoReflect.Descriptor instead.
+func (*GetUserProfileResp) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GetResumeResp) GetId() string {
+func (x *GetUserProfileResp) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *GetResumeResp) GetUserId() string {
+func (x *GetUserProfileResp) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
 	return ""
 }
 
-func (x *GetResumeResp) GetContent() string {
+func (x *GetUserProfileResp) GetEnglishLevel() string {
 	if x != nil {
-		return x.Content
+		return x.EnglishLevel
 	}
 	return ""
 }
 
-func (x *GetResumeResp) GetPdfUrl() string {
+func (x *GetUserProfileResp) GetLearningTarget() string {
 	if x != nil {
-		return x.PdfUrl
+		return x.LearningTarget
 	}
 	return ""
 }
 
-type CreateJobProfileReq struct {
+type CreateScenarioReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CreatorId     string                 `protobuf:"bytes,1,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
@@ -342,21 +350,21 @@ type CreateJobProfileReq struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateJobProfileReq) Reset() {
-	*x = CreateJobProfileReq{}
-	mi := &file_core_proto_msgTypes[6]
+func (x *CreateScenarioReq) Reset() {
+	*x = CreateScenarioReq{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateJobProfileReq) String() string {
+func (x *CreateScenarioReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateJobProfileReq) ProtoMessage() {}
+func (*CreateScenarioReq) ProtoMessage() {}
 
-func (x *CreateJobProfileReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[6]
+func (x *CreateScenarioReq) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -367,54 +375,54 @@ func (x *CreateJobProfileReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateJobProfileReq.ProtoReflect.Descriptor instead.
-func (*CreateJobProfileReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{6}
+// Deprecated: Use CreateScenarioReq.ProtoReflect.Descriptor instead.
+func (*CreateScenarioReq) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *CreateJobProfileReq) GetCreatorId() string {
+func (x *CreateScenarioReq) GetCreatorId() string {
 	if x != nil {
 		return x.CreatorId
 	}
 	return ""
 }
 
-func (x *CreateJobProfileReq) GetName() string {
+func (x *CreateScenarioReq) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *CreateJobProfileReq) GetDescription() string {
+func (x *CreateScenarioReq) GetDescription() string {
 	if x != nil {
 		return x.Description
 	}
 	return ""
 }
 
-type CreateJobProfileResp struct {
+type CreateScenarioResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateJobProfileResp) Reset() {
-	*x = CreateJobProfileResp{}
-	mi := &file_core_proto_msgTypes[7]
+func (x *CreateScenarioResp) Reset() {
+	*x = CreateScenarioResp{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateJobProfileResp) String() string {
+func (x *CreateScenarioResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateJobProfileResp) ProtoMessage() {}
+func (*CreateScenarioResp) ProtoMessage() {}
 
-func (x *CreateJobProfileResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[7]
+func (x *CreateScenarioResp) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -425,40 +433,40 @@ func (x *CreateJobProfileResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateJobProfileResp.ProtoReflect.Descriptor instead.
-func (*CreateJobProfileResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{7}
+// Deprecated: Use CreateScenarioResp.ProtoReflect.Descriptor instead.
+func (*CreateScenarioResp) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *CreateJobProfileResp) GetId() string {
+func (x *CreateScenarioResp) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-type GetJobProfileReq struct {
+type GetScenarioReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetJobProfileReq) Reset() {
-	*x = GetJobProfileReq{}
-	mi := &file_core_proto_msgTypes[8]
+func (x *GetScenarioReq) Reset() {
+	*x = GetScenarioReq{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetJobProfileReq) String() string {
+func (x *GetScenarioReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetJobProfileReq) ProtoMessage() {}
+func (*GetScenarioReq) ProtoMessage() {}
 
-func (x *GetJobProfileReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[8]
+func (x *GetScenarioReq) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -469,19 +477,19 @@ func (x *GetJobProfileReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetJobProfileReq.ProtoReflect.Descriptor instead.
-func (*GetJobProfileReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{8}
+// Deprecated: Use GetScenarioReq.ProtoReflect.Descriptor instead.
+func (*GetScenarioReq) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GetJobProfileReq) GetId() string {
+func (x *GetScenarioReq) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-type GetJobProfileResp struct {
+type GetScenarioResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
@@ -490,21 +498,21 @@ type GetJobProfileResp struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetJobProfileResp) Reset() {
-	*x = GetJobProfileResp{}
-	mi := &file_core_proto_msgTypes[9]
+func (x *GetScenarioResp) Reset() {
+	*x = GetScenarioResp{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetJobProfileResp) String() string {
+func (x *GetScenarioResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetJobProfileResp) ProtoMessage() {}
+func (*GetScenarioResp) ProtoMessage() {}
 
-func (x *GetJobProfileResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[9]
+func (x *GetScenarioResp) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -515,26 +523,26 @@ func (x *GetJobProfileResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetJobProfileResp.ProtoReflect.Descriptor instead.
-func (*GetJobProfileResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{9}
+// Deprecated: Use GetScenarioResp.ProtoReflect.Descriptor instead.
+func (*GetScenarioResp) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *GetJobProfileResp) GetId() string {
+func (x *GetScenarioResp) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *GetJobProfileResp) GetName() string {
+func (x *GetScenarioResp) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *GetJobProfileResp) GetDescription() string {
+func (x *GetScenarioResp) GetDescription() string {
 	if x != nil {
 		return x.Description
 	}
@@ -544,15 +552,15 @@ func (x *GetJobProfileResp) GetDescription() string {
 type CreateSessionReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	ResumeId      string                 `protobuf:"bytes,2,opt,name=resume_id,json=resumeId,proto3" json:"resume_id,omitempty"`
-	JobProfileId  string                 `protobuf:"bytes,3,opt,name=job_profile_id,json=jobProfileId,proto3" json:"job_profile_id,omitempty"`
+	UserProfileId string                 `protobuf:"bytes,2,opt,name=user_profile_id,json=userProfileId,proto3" json:"user_profile_id,omitempty"`
+	ScenarioId    string                 `protobuf:"bytes,3,opt,name=scenario_id,json=scenarioId,proto3" json:"scenario_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateSessionReq) Reset() {
 	*x = CreateSessionReq{}
-	mi := &file_core_proto_msgTypes[10]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -564,7 +572,7 @@ func (x *CreateSessionReq) String() string {
 func (*CreateSessionReq) ProtoMessage() {}
 
 func (x *CreateSessionReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[10]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -577,7 +585,7 @@ func (x *CreateSessionReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSessionReq.ProtoReflect.Descriptor instead.
 func (*CreateSessionReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{10}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CreateSessionReq) GetUserId() string {
@@ -587,16 +595,16 @@ func (x *CreateSessionReq) GetUserId() string {
 	return ""
 }
 
-func (x *CreateSessionReq) GetResumeId() string {
+func (x *CreateSessionReq) GetUserProfileId() string {
 	if x != nil {
-		return x.ResumeId
+		return x.UserProfileId
 	}
 	return ""
 }
 
-func (x *CreateSessionReq) GetJobProfileId() string {
+func (x *CreateSessionReq) GetScenarioId() string {
 	if x != nil {
-		return x.JobProfileId
+		return x.ScenarioId
 	}
 	return ""
 }
@@ -610,7 +618,7 @@ type CreateSessionResp struct {
 
 func (x *CreateSessionResp) Reset() {
 	*x = CreateSessionResp{}
-	mi := &file_core_proto_msgTypes[11]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -622,7 +630,7 @@ func (x *CreateSessionResp) String() string {
 func (*CreateSessionResp) ProtoMessage() {}
 
 func (x *CreateSessionResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[11]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -635,7 +643,7 @@ func (x *CreateSessionResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSessionResp.ProtoReflect.Descriptor instead.
 func (*CreateSessionResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{11}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CreateSessionResp) GetId() string {
@@ -656,7 +664,7 @@ type UpdateSessionStatusReq struct {
 
 func (x *UpdateSessionStatusReq) Reset() {
 	*x = UpdateSessionStatusReq{}
-	mi := &file_core_proto_msgTypes[12]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -668,7 +676,7 @@ func (x *UpdateSessionStatusReq) String() string {
 func (*UpdateSessionStatusReq) ProtoMessage() {}
 
 func (x *UpdateSessionStatusReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[12]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -681,7 +689,7 @@ func (x *UpdateSessionStatusReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateSessionStatusReq.ProtoReflect.Descriptor instead.
 func (*UpdateSessionStatusReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{12}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateSessionStatusReq) GetId() string {
@@ -714,7 +722,7 @@ type UpdateSessionStatusResp struct {
 
 func (x *UpdateSessionStatusResp) Reset() {
 	*x = UpdateSessionStatusResp{}
-	mi := &file_core_proto_msgTypes[13]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -726,7 +734,7 @@ func (x *UpdateSessionStatusResp) String() string {
 func (*UpdateSessionStatusResp) ProtoMessage() {}
 
 func (x *UpdateSessionStatusResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[13]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -739,7 +747,7 @@ func (x *UpdateSessionStatusResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateSessionStatusResp.ProtoReflect.Descriptor instead.
 func (*UpdateSessionStatusResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{13}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateSessionStatusResp) GetSuccess() bool {
@@ -763,7 +771,7 @@ type AddDialogueReq struct {
 
 func (x *AddDialogueReq) Reset() {
 	*x = AddDialogueReq{}
-	mi := &file_core_proto_msgTypes[14]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -775,7 +783,7 @@ func (x *AddDialogueReq) String() string {
 func (*AddDialogueReq) ProtoMessage() {}
 
 func (x *AddDialogueReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[14]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -788,7 +796,7 @@ func (x *AddDialogueReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddDialogueReq.ProtoReflect.Descriptor instead.
 func (*AddDialogueReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{14}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *AddDialogueReq) GetSessionId() string {
@@ -842,7 +850,7 @@ type AddDialogueResp struct {
 
 func (x *AddDialogueResp) Reset() {
 	*x = AddDialogueResp{}
-	mi := &file_core_proto_msgTypes[15]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -854,7 +862,7 @@ func (x *AddDialogueResp) String() string {
 func (*AddDialogueResp) ProtoMessage() {}
 
 func (x *AddDialogueResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[15]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -867,7 +875,7 @@ func (x *AddDialogueResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddDialogueResp.ProtoReflect.Descriptor instead.
 func (*AddDialogueResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{15}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *AddDialogueResp) GetId() string {
@@ -887,7 +895,7 @@ type UpdateDialogueEvaluationReq struct {
 
 func (x *UpdateDialogueEvaluationReq) Reset() {
 	*x = UpdateDialogueEvaluationReq{}
-	mi := &file_core_proto_msgTypes[16]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -899,7 +907,7 @@ func (x *UpdateDialogueEvaluationReq) String() string {
 func (*UpdateDialogueEvaluationReq) ProtoMessage() {}
 
 func (x *UpdateDialogueEvaluationReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[16]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -912,7 +920,7 @@ func (x *UpdateDialogueEvaluationReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDialogueEvaluationReq.ProtoReflect.Descriptor instead.
 func (*UpdateDialogueEvaluationReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{16}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *UpdateDialogueEvaluationReq) GetDialogueId() string {
@@ -938,7 +946,7 @@ type UpdateDialogueEvaluationResp struct {
 
 func (x *UpdateDialogueEvaluationResp) Reset() {
 	*x = UpdateDialogueEvaluationResp{}
-	mi := &file_core_proto_msgTypes[17]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -950,7 +958,7 @@ func (x *UpdateDialogueEvaluationResp) String() string {
 func (*UpdateDialogueEvaluationResp) ProtoMessage() {}
 
 func (x *UpdateDialogueEvaluationResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[17]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -963,7 +971,7 @@ func (x *UpdateDialogueEvaluationResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDialogueEvaluationResp.ProtoReflect.Descriptor instead.
 func (*UpdateDialogueEvaluationResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{17}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *UpdateDialogueEvaluationResp) GetSuccess() bool {
@@ -973,31 +981,28 @@ func (x *UpdateDialogueEvaluationResp) GetSuccess() bool {
 	return false
 }
 
-// 一次性拉取面试所需的完整上下文
-// interview_api 在建立 WebSocket 后，用 session_id 调用此接口获取简历和岗位信息
-// 用于组装发给 Gemini Live API 的系统提示词
-type GetInterviewContextReq struct {
+type GetPracticeContextReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetInterviewContextReq) Reset() {
-	*x = GetInterviewContextReq{}
-	mi := &file_core_proto_msgTypes[18]
+func (x *GetPracticeContextReq) Reset() {
+	*x = GetPracticeContextReq{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetInterviewContextReq) String() string {
+func (x *GetPracticeContextReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetInterviewContextReq) ProtoMessage() {}
+func (*GetPracticeContextReq) ProtoMessage() {}
 
-func (x *GetInterviewContextReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[18]
+func (x *GetPracticeContextReq) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1008,44 +1013,45 @@ func (x *GetInterviewContextReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetInterviewContextReq.ProtoReflect.Descriptor instead.
-func (*GetInterviewContextReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{18}
+// Deprecated: Use GetPracticeContextReq.ProtoReflect.Descriptor instead.
+func (*GetPracticeContextReq) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{18}
 }
 
-func (x *GetInterviewContextReq) GetSessionId() string {
+func (x *GetPracticeContextReq) GetSessionId() string {
 	if x != nil {
 		return x.SessionId
 	}
 	return ""
 }
 
-type GetInterviewContextResp struct {
+type GetPracticeContextResp struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	SessionId      string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	ResumeContent  string                 `protobuf:"bytes,2,opt,name=resume_content,json=resumeContent,proto3" json:"resume_content,omitempty"`      // 简历结构化 JSON
-	JobProfileName string                 `protobuf:"bytes,3,opt,name=job_profile_name,json=jobProfileName,proto3" json:"job_profile_name,omitempty"` // 岗位名称
-	JobProfileDesc string                 `protobuf:"bytes,4,opt,name=job_profile_desc,json=jobProfileDesc,proto3" json:"job_profile_desc,omitempty"` // 岗位描述
-	UserId         string                 `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                           // 用于后续 Token 额度扣减
+	EnglishLevel   string                 `protobuf:"bytes,2,opt,name=english_level,json=englishLevel,proto3" json:"english_level,omitempty"`       // 英语水平
+	LearningTarget string                 `protobuf:"bytes,3,opt,name=learning_target,json=learningTarget,proto3" json:"learning_target,omitempty"` // 学习目标
+	ScenarioName   string                 `protobuf:"bytes,4,opt,name=scenario_name,json=scenarioName,proto3" json:"scenario_name,omitempty"`       // 场景名称
+	ScenarioDesc   string                 `protobuf:"bytes,5,opt,name=scenario_desc,json=scenarioDesc,proto3" json:"scenario_desc,omitempty"`       // 场景描述
+	UserId         string                 `protobuf:"bytes,6,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                         // 用于后续 Token 额度扣减
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
-func (x *GetInterviewContextResp) Reset() {
-	*x = GetInterviewContextResp{}
-	mi := &file_core_proto_msgTypes[19]
+func (x *GetPracticeContextResp) Reset() {
+	*x = GetPracticeContextResp{}
+	mi := &file_backend_rpc_core_core_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetInterviewContextResp) String() string {
+func (x *GetPracticeContextResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetInterviewContextResp) ProtoMessage() {}
+func (*GetPracticeContextResp) ProtoMessage() {}
 
-func (x *GetInterviewContextResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[19]
+func (x *GetPracticeContextResp) ProtoReflect() protoreflect.Message {
+	mi := &file_backend_rpc_core_core_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1056,40 +1062,47 @@ func (x *GetInterviewContextResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetInterviewContextResp.ProtoReflect.Descriptor instead.
-func (*GetInterviewContextResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{19}
+// Deprecated: Use GetPracticeContextResp.ProtoReflect.Descriptor instead.
+func (*GetPracticeContextResp) Descriptor() ([]byte, []int) {
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{19}
 }
 
-func (x *GetInterviewContextResp) GetSessionId() string {
+func (x *GetPracticeContextResp) GetSessionId() string {
 	if x != nil {
 		return x.SessionId
 	}
 	return ""
 }
 
-func (x *GetInterviewContextResp) GetResumeContent() string {
+func (x *GetPracticeContextResp) GetEnglishLevel() string {
 	if x != nil {
-		return x.ResumeContent
+		return x.EnglishLevel
 	}
 	return ""
 }
 
-func (x *GetInterviewContextResp) GetJobProfileName() string {
+func (x *GetPracticeContextResp) GetLearningTarget() string {
 	if x != nil {
-		return x.JobProfileName
+		return x.LearningTarget
 	}
 	return ""
 }
 
-func (x *GetInterviewContextResp) GetJobProfileDesc() string {
+func (x *GetPracticeContextResp) GetScenarioName() string {
 	if x != nil {
-		return x.JobProfileDesc
+		return x.ScenarioName
 	}
 	return ""
 }
 
-func (x *GetInterviewContextResp) GetUserId() string {
+func (x *GetPracticeContextResp) GetScenarioDesc() string {
+	if x != nil {
+		return x.ScenarioDesc
+	}
+	return ""
+}
+
+func (x *GetPracticeContextResp) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
@@ -1105,7 +1118,7 @@ type ListSessionsReq struct {
 
 func (x *ListSessionsReq) Reset() {
 	*x = ListSessionsReq{}
-	mi := &file_core_proto_msgTypes[20]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1117,7 +1130,7 @@ func (x *ListSessionsReq) String() string {
 func (*ListSessionsReq) ProtoMessage() {}
 
 func (x *ListSessionsReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[20]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1130,7 +1143,7 @@ func (x *ListSessionsReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSessionsReq.ProtoReflect.Descriptor instead.
 func (*ListSessionsReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{20}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ListSessionsReq) GetUserId() string {
@@ -1143,7 +1156,7 @@ func (x *ListSessionsReq) GetUserId() string {
 type SessionItem struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	JobTitle      string                 `protobuf:"bytes,2,opt,name=job_title,json=jobTitle,proto3" json:"job_title,omitempty"`
+	ScenarioName  string                 `protobuf:"bytes,2,opt,name=scenario_name,json=scenarioName,proto3" json:"scenario_name,omitempty"`
 	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
 	CreatedAt     int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	OverallScore  int32                  `protobuf:"varint,5,opt,name=overall_score,json=overallScore,proto3" json:"overall_score,omitempty"`
@@ -1153,7 +1166,7 @@ type SessionItem struct {
 
 func (x *SessionItem) Reset() {
 	*x = SessionItem{}
-	mi := &file_core_proto_msgTypes[21]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1165,7 +1178,7 @@ func (x *SessionItem) String() string {
 func (*SessionItem) ProtoMessage() {}
 
 func (x *SessionItem) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[21]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1178,7 +1191,7 @@ func (x *SessionItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SessionItem.ProtoReflect.Descriptor instead.
 func (*SessionItem) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{21}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *SessionItem) GetId() string {
@@ -1188,9 +1201,9 @@ func (x *SessionItem) GetId() string {
 	return ""
 }
 
-func (x *SessionItem) GetJobTitle() string {
+func (x *SessionItem) GetScenarioName() string {
 	if x != nil {
-		return x.JobTitle
+		return x.ScenarioName
 	}
 	return ""
 }
@@ -1225,7 +1238,7 @@ type ListSessionsResp struct {
 
 func (x *ListSessionsResp) Reset() {
 	*x = ListSessionsResp{}
-	mi := &file_core_proto_msgTypes[22]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1237,7 +1250,7 @@ func (x *ListSessionsResp) String() string {
 func (*ListSessionsResp) ProtoMessage() {}
 
 func (x *ListSessionsResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[22]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1250,7 +1263,7 @@ func (x *ListSessionsResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSessionsResp.ProtoReflect.Descriptor instead.
 func (*ListSessionsResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{22}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListSessionsResp) GetSessions() []*SessionItem {
@@ -1269,7 +1282,7 @@ type GetSessionDetailReq struct {
 
 func (x *GetSessionDetailReq) Reset() {
 	*x = GetSessionDetailReq{}
-	mi := &file_core_proto_msgTypes[23]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1281,7 +1294,7 @@ func (x *GetSessionDetailReq) String() string {
 func (*GetSessionDetailReq) ProtoMessage() {}
 
 func (x *GetSessionDetailReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[23]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1294,7 +1307,7 @@ func (x *GetSessionDetailReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionDetailReq.ProtoReflect.Descriptor instead.
 func (*GetSessionDetailReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{23}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetSessionDetailReq) GetSessionId() string {
@@ -1307,7 +1320,7 @@ func (x *GetSessionDetailReq) GetSessionId() string {
 type GetSessionDetailResp struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	SessionId        string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	JobTitle         string                 `protobuf:"bytes,2,opt,name=job_title,json=jobTitle,proto3" json:"job_title,omitempty"`
+	ScenarioName     string                 `protobuf:"bytes,2,opt,name=scenario_name,json=scenarioName,proto3" json:"scenario_name,omitempty"`
 	Transcript       string                 `protobuf:"bytes,3,opt,name=transcript,proto3" json:"transcript,omitempty"` // 格式化后的对话文本
 	OverallScore     int32                  `protobuf:"varint,4,opt,name=overall_score,json=overallScore,proto3" json:"overall_score,omitempty"`
 	EvaluationReport string                 `protobuf:"bytes,5,opt,name=evaluation_report,json=evaluationReport,proto3" json:"evaluation_report,omitempty"` // JSON
@@ -1317,7 +1330,7 @@ type GetSessionDetailResp struct {
 
 func (x *GetSessionDetailResp) Reset() {
 	*x = GetSessionDetailResp{}
-	mi := &file_core_proto_msgTypes[24]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1329,7 +1342,7 @@ func (x *GetSessionDetailResp) String() string {
 func (*GetSessionDetailResp) ProtoMessage() {}
 
 func (x *GetSessionDetailResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[24]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1342,7 +1355,7 @@ func (x *GetSessionDetailResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionDetailResp.ProtoReflect.Descriptor instead.
 func (*GetSessionDetailResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{24}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetSessionDetailResp) GetSessionId() string {
@@ -1352,9 +1365,9 @@ func (x *GetSessionDetailResp) GetSessionId() string {
 	return ""
 }
 
-func (x *GetSessionDetailResp) GetJobTitle() string {
+func (x *GetSessionDetailResp) GetScenarioName() string {
 	if x != nil {
-		return x.JobTitle
+		return x.ScenarioName
 	}
 	return ""
 }
@@ -1389,7 +1402,7 @@ type DeleteSessionReq struct {
 
 func (x *DeleteSessionReq) Reset() {
 	*x = DeleteSessionReq{}
-	mi := &file_core_proto_msgTypes[25]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1401,7 +1414,7 @@ func (x *DeleteSessionReq) String() string {
 func (*DeleteSessionReq) ProtoMessage() {}
 
 func (x *DeleteSessionReq) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[25]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1414,7 +1427,7 @@ func (x *DeleteSessionReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSessionReq.ProtoReflect.Descriptor instead.
 func (*DeleteSessionReq) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{25}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *DeleteSessionReq) GetSessionId() string {
@@ -1433,7 +1446,7 @@ type DeleteSessionResp struct {
 
 func (x *DeleteSessionResp) Reset() {
 	*x = DeleteSessionResp{}
-	mi := &file_core_proto_msgTypes[26]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1445,7 +1458,7 @@ func (x *DeleteSessionResp) String() string {
 func (*DeleteSessionResp) ProtoMessage() {}
 
 func (x *DeleteSessionResp) ProtoReflect() protoreflect.Message {
-	mi := &file_core_proto_msgTypes[26]
+	mi := &file_backend_rpc_core_core_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1458,7 +1471,7 @@ func (x *DeleteSessionResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSessionResp.ProtoReflect.Descriptor instead.
 func (*DeleteSessionResp) Descriptor() ([]byte, []int) {
-	return file_core_proto_rawDescGZIP(), []int{26}
+	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *DeleteSessionResp) GetSuccess() bool {
@@ -1468,50 +1481,50 @@ func (x *DeleteSessionResp) GetSuccess() bool {
 	return false
 }
 
-var File_core_proto protoreflect.FileDescriptor
+var File_backend_rpc_core_core_proto protoreflect.FileDescriptor
 
-const file_core_proto_rawDesc = "" +
+const file_backend_rpc_core_core_proto_rawDesc = "" +
 	"\n" +
-	"\n" +
-	"core.proto\x12\x04core\"2\n" +
+	"\x1bbackend/rpc/core/core.proto\x12\x04core\"2\n" +
 	"\x14GenerateUploadUrlReq\x12\x1a\n" +
 	"\bfilename\x18\x01 \x01(\tR\bfilename\"U\n" +
 	"\x15GenerateUploadUrlResp\x12\x1d\n" +
 	"\n" +
 	"upload_url\x18\x01 \x01(\tR\tuploadUrl\x12\x1d\n" +
 	"\n" +
-	"object_key\x18\x02 \x01(\tR\tobjectKey\"I\n" +
-	"\x0fCreateResumeReq\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
-	"\n" +
-	"object_key\x18\x02 \x01(\tR\tobjectKey\":\n" +
-	"\x10CreateResumeResp\x12\x0e\n" +
+	"object_key\x18\x02 \x01(\tR\tobjectKey\"}\n" +
+	"\x14CreateUserProfileReq\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12#\n" +
+	"\renglish_level\x18\x02 \x01(\tR\fenglishLevel\x12'\n" +
+	"\x0flearning_target\x18\x03 \x01(\tR\x0elearningTarget\"?\n" +
+	"\x15CreateUserProfileResp\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\"\x1e\n" +
-	"\fGetResumeReq\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"k\n" +
-	"\rGetResumeResp\x12\x0e\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\"#\n" +
+	"\x11GetUserProfileReq\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x8b\x01\n" +
+	"\x12GetUserProfileResp\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\x12\x17\n" +
-	"\apdf_url\x18\x04 \x01(\tR\x06pdfUrl\"j\n" +
-	"\x13CreateJobProfileReq\x12\x1d\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12#\n" +
+	"\renglish_level\x18\x03 \x01(\tR\fenglishLevel\x12'\n" +
+	"\x0flearning_target\x18\x04 \x01(\tR\x0elearningTarget\"h\n" +
+	"\x11CreateScenarioReq\x12\x1d\n" +
 	"\n" +
 	"creator_id\x18\x01 \x01(\tR\tcreatorId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\"&\n" +
-	"\x14CreateJobProfileResp\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\"\n" +
-	"\x10GetJobProfileReq\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"Y\n" +
-	"\x11GetJobProfileResp\x12\x0e\n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\"$\n" +
+	"\x12CreateScenarioResp\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\" \n" +
+	"\x0eGetScenarioReq\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"W\n" +
+	"\x0fGetScenarioResp\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\"n\n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\"t\n" +
 	"\x10CreateSessionReq\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tresume_id\x18\x02 \x01(\tR\bresumeId\x12$\n" +
-	"\x0ejob_profile_id\x18\x03 \x01(\tR\fjobProfileId\"#\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12&\n" +
+	"\x0fuser_profile_id\x18\x02 \x01(\tR\ruserProfileId\x12\x1f\n" +
+	"\vscenario_id\x18\x03 \x01(\tR\n" +
+	"scenarioId\"#\n" +
 	"\x11CreateSessionResp\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"m\n" +
 	"\x16UpdateSessionStatusReq\x12\x0e\n" +
@@ -1539,22 +1552,23 @@ const file_core_proto_rawDesc = "" +
 	"evaluation\x18\x02 \x01(\tR\n" +
 	"evaluation\"8\n" +
 	"\x1cUpdateDialogueEvaluationResp\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"7\n" +
-	"\x16GetInterviewContextReq\x12\x1d\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"6\n" +
+	"\x15GetPracticeContextReq\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"\xcc\x01\n" +
-	"\x17GetInterviewContextResp\x12\x1d\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xe8\x01\n" +
+	"\x16GetPracticeContextResp\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\x12%\n" +
-	"\x0eresume_content\x18\x02 \x01(\tR\rresumeContent\x12(\n" +
-	"\x10job_profile_name\x18\x03 \x01(\tR\x0ejobProfileName\x12(\n" +
-	"\x10job_profile_desc\x18\x04 \x01(\tR\x0ejobProfileDesc\x12\x17\n" +
-	"\auser_id\x18\x05 \x01(\tR\x06userId\"*\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12#\n" +
+	"\renglish_level\x18\x02 \x01(\tR\fenglishLevel\x12'\n" +
+	"\x0flearning_target\x18\x03 \x01(\tR\x0elearningTarget\x12#\n" +
+	"\rscenario_name\x18\x04 \x01(\tR\fscenarioName\x12#\n" +
+	"\rscenario_desc\x18\x05 \x01(\tR\fscenarioDesc\x12\x17\n" +
+	"\auser_id\x18\x06 \x01(\tR\x06userId\"*\n" +
 	"\x0fListSessionsReq\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x96\x01\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x9e\x01\n" +
 	"\vSessionItem\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
-	"\tjob_title\x18\x02 \x01(\tR\bjobTitle\x12\x16\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
+	"\rscenario_name\x18\x02 \x01(\tR\fscenarioName\x12\x16\n" +
 	"\x06status\x18\x03 \x01(\tR\x06status\x12\x1d\n" +
 	"\n" +
 	"created_at\x18\x04 \x01(\x03R\tcreatedAt\x12#\n" +
@@ -1563,11 +1577,11 @@ const file_core_proto_rawDesc = "" +
 	"\bsessions\x18\x01 \x03(\v2\x11.core.SessionItemR\bsessions\"4\n" +
 	"\x13GetSessionDetailReq\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"\xc4\x01\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xcc\x01\n" +
 	"\x14GetSessionDetailResp\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x1b\n" +
-	"\tjob_title\x18\x02 \x01(\tR\bjobTitle\x12\x1e\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12#\n" +
+	"\rscenario_name\x18\x02 \x01(\tR\fscenarioName\x12\x1e\n" +
 	"\n" +
 	"transcript\x18\x03 \x01(\tR\n" +
 	"transcript\x12#\n" +
@@ -1577,46 +1591,46 @@ const file_core_proto_rawDesc = "" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"-\n" +
 	"\x11DeleteSessionResp\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xab\a\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xba\a\n" +
 	"\x04Core\x12L\n" +
-	"\x11GenerateUploadUrl\x12\x1a.core.GenerateUploadUrlReq\x1a\x1b.core.GenerateUploadUrlResp\x12=\n" +
-	"\fCreateResume\x12\x15.core.CreateResumeReq\x1a\x16.core.CreateResumeResp\x124\n" +
-	"\tGetResume\x12\x12.core.GetResumeReq\x1a\x13.core.GetResumeResp\x12I\n" +
-	"\x10CreateJobProfile\x12\x19.core.CreateJobProfileReq\x1a\x1a.core.CreateJobProfileResp\x12@\n" +
-	"\rGetJobProfile\x12\x16.core.GetJobProfileReq\x1a\x17.core.GetJobProfileResp\x12@\n" +
+	"\x11GenerateUploadUrl\x12\x1a.core.GenerateUploadUrlReq\x1a\x1b.core.GenerateUploadUrlResp\x12L\n" +
+	"\x11CreateUserProfile\x12\x1a.core.CreateUserProfileReq\x1a\x1b.core.CreateUserProfileResp\x12C\n" +
+	"\x0eGetUserProfile\x12\x17.core.GetUserProfileReq\x1a\x18.core.GetUserProfileResp\x12C\n" +
+	"\x0eCreateScenario\x12\x17.core.CreateScenarioReq\x1a\x18.core.CreateScenarioResp\x12:\n" +
+	"\vGetScenario\x12\x14.core.GetScenarioReq\x1a\x15.core.GetScenarioResp\x12@\n" +
 	"\rCreateSession\x12\x16.core.CreateSessionReq\x1a\x17.core.CreateSessionResp\x12R\n" +
 	"\x13UpdateSessionStatus\x12\x1c.core.UpdateSessionStatusReq\x1a\x1d.core.UpdateSessionStatusResp\x12:\n" +
 	"\vAddDialogue\x12\x14.core.AddDialogueReq\x1a\x15.core.AddDialogueResp\x12a\n" +
-	"\x18UpdateDialogueEvaluation\x12!.core.UpdateDialogueEvaluationReq\x1a\".core.UpdateDialogueEvaluationResp\x12R\n" +
-	"\x13GetInterviewContext\x12\x1c.core.GetInterviewContextReq\x1a\x1d.core.GetInterviewContextResp\x12=\n" +
+	"\x18UpdateDialogueEvaluation\x12!.core.UpdateDialogueEvaluationReq\x1a\".core.UpdateDialogueEvaluationResp\x12O\n" +
+	"\x12GetPracticeContext\x12\x1b.core.GetPracticeContextReq\x1a\x1c.core.GetPracticeContextResp\x12=\n" +
 	"\fListSessions\x12\x15.core.ListSessionsReq\x1a\x16.core.ListSessionsResp\x12I\n" +
 	"\x10GetSessionDetail\x12\x19.core.GetSessionDetailReq\x1a\x1a.core.GetSessionDetailResp\x12@\n" +
 	"\rDeleteSession\x12\x16.core.DeleteSessionReq\x1a\x17.core.DeleteSessionRespB\bZ\x06./coreb\x06proto3"
 
 var (
-	file_core_proto_rawDescOnce sync.Once
-	file_core_proto_rawDescData []byte
+	file_backend_rpc_core_core_proto_rawDescOnce sync.Once
+	file_backend_rpc_core_core_proto_rawDescData []byte
 )
 
-func file_core_proto_rawDescGZIP() []byte {
-	file_core_proto_rawDescOnce.Do(func() {
-		file_core_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_core_proto_rawDesc), len(file_core_proto_rawDesc)))
+func file_backend_rpc_core_core_proto_rawDescGZIP() []byte {
+	file_backend_rpc_core_core_proto_rawDescOnce.Do(func() {
+		file_backend_rpc_core_core_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_backend_rpc_core_core_proto_rawDesc), len(file_backend_rpc_core_core_proto_rawDesc)))
 	})
-	return file_core_proto_rawDescData
+	return file_backend_rpc_core_core_proto_rawDescData
 }
 
-var file_core_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
-var file_core_proto_goTypes = []any{
+var file_backend_rpc_core_core_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
+var file_backend_rpc_core_core_proto_goTypes = []any{
 	(*GenerateUploadUrlReq)(nil),         // 0: core.GenerateUploadUrlReq
 	(*GenerateUploadUrlResp)(nil),        // 1: core.GenerateUploadUrlResp
-	(*CreateResumeReq)(nil),              // 2: core.CreateResumeReq
-	(*CreateResumeResp)(nil),             // 3: core.CreateResumeResp
-	(*GetResumeReq)(nil),                 // 4: core.GetResumeReq
-	(*GetResumeResp)(nil),                // 5: core.GetResumeResp
-	(*CreateJobProfileReq)(nil),          // 6: core.CreateJobProfileReq
-	(*CreateJobProfileResp)(nil),         // 7: core.CreateJobProfileResp
-	(*GetJobProfileReq)(nil),             // 8: core.GetJobProfileReq
-	(*GetJobProfileResp)(nil),            // 9: core.GetJobProfileResp
+	(*CreateUserProfileReq)(nil),         // 2: core.CreateUserProfileReq
+	(*CreateUserProfileResp)(nil),        // 3: core.CreateUserProfileResp
+	(*GetUserProfileReq)(nil),            // 4: core.GetUserProfileReq
+	(*GetUserProfileResp)(nil),           // 5: core.GetUserProfileResp
+	(*CreateScenarioReq)(nil),            // 6: core.CreateScenarioReq
+	(*CreateScenarioResp)(nil),           // 7: core.CreateScenarioResp
+	(*GetScenarioReq)(nil),               // 8: core.GetScenarioReq
+	(*GetScenarioResp)(nil),              // 9: core.GetScenarioResp
 	(*CreateSessionReq)(nil),             // 10: core.CreateSessionReq
 	(*CreateSessionResp)(nil),            // 11: core.CreateSessionResp
 	(*UpdateSessionStatusReq)(nil),       // 12: core.UpdateSessionStatusReq
@@ -1625,8 +1639,8 @@ var file_core_proto_goTypes = []any{
 	(*AddDialogueResp)(nil),              // 15: core.AddDialogueResp
 	(*UpdateDialogueEvaluationReq)(nil),  // 16: core.UpdateDialogueEvaluationReq
 	(*UpdateDialogueEvaluationResp)(nil), // 17: core.UpdateDialogueEvaluationResp
-	(*GetInterviewContextReq)(nil),       // 18: core.GetInterviewContextReq
-	(*GetInterviewContextResp)(nil),      // 19: core.GetInterviewContextResp
+	(*GetPracticeContextReq)(nil),        // 18: core.GetPracticeContextReq
+	(*GetPracticeContextResp)(nil),       // 19: core.GetPracticeContextResp
 	(*ListSessionsReq)(nil),              // 20: core.ListSessionsReq
 	(*SessionItem)(nil),                  // 21: core.SessionItem
 	(*ListSessionsResp)(nil),             // 22: core.ListSessionsResp
@@ -1635,31 +1649,31 @@ var file_core_proto_goTypes = []any{
 	(*DeleteSessionReq)(nil),             // 25: core.DeleteSessionReq
 	(*DeleteSessionResp)(nil),            // 26: core.DeleteSessionResp
 }
-var file_core_proto_depIdxs = []int32{
+var file_backend_rpc_core_core_proto_depIdxs = []int32{
 	21, // 0: core.ListSessionsResp.sessions:type_name -> core.SessionItem
 	0,  // 1: core.Core.GenerateUploadUrl:input_type -> core.GenerateUploadUrlReq
-	2,  // 2: core.Core.CreateResume:input_type -> core.CreateResumeReq
-	4,  // 3: core.Core.GetResume:input_type -> core.GetResumeReq
-	6,  // 4: core.Core.CreateJobProfile:input_type -> core.CreateJobProfileReq
-	8,  // 5: core.Core.GetJobProfile:input_type -> core.GetJobProfileReq
+	2,  // 2: core.Core.CreateUserProfile:input_type -> core.CreateUserProfileReq
+	4,  // 3: core.Core.GetUserProfile:input_type -> core.GetUserProfileReq
+	6,  // 4: core.Core.CreateScenario:input_type -> core.CreateScenarioReq
+	8,  // 5: core.Core.GetScenario:input_type -> core.GetScenarioReq
 	10, // 6: core.Core.CreateSession:input_type -> core.CreateSessionReq
 	12, // 7: core.Core.UpdateSessionStatus:input_type -> core.UpdateSessionStatusReq
 	14, // 8: core.Core.AddDialogue:input_type -> core.AddDialogueReq
 	16, // 9: core.Core.UpdateDialogueEvaluation:input_type -> core.UpdateDialogueEvaluationReq
-	18, // 10: core.Core.GetInterviewContext:input_type -> core.GetInterviewContextReq
+	18, // 10: core.Core.GetPracticeContext:input_type -> core.GetPracticeContextReq
 	20, // 11: core.Core.ListSessions:input_type -> core.ListSessionsReq
 	23, // 12: core.Core.GetSessionDetail:input_type -> core.GetSessionDetailReq
 	25, // 13: core.Core.DeleteSession:input_type -> core.DeleteSessionReq
 	1,  // 14: core.Core.GenerateUploadUrl:output_type -> core.GenerateUploadUrlResp
-	3,  // 15: core.Core.CreateResume:output_type -> core.CreateResumeResp
-	5,  // 16: core.Core.GetResume:output_type -> core.GetResumeResp
-	7,  // 17: core.Core.CreateJobProfile:output_type -> core.CreateJobProfileResp
-	9,  // 18: core.Core.GetJobProfile:output_type -> core.GetJobProfileResp
+	3,  // 15: core.Core.CreateUserProfile:output_type -> core.CreateUserProfileResp
+	5,  // 16: core.Core.GetUserProfile:output_type -> core.GetUserProfileResp
+	7,  // 17: core.Core.CreateScenario:output_type -> core.CreateScenarioResp
+	9,  // 18: core.Core.GetScenario:output_type -> core.GetScenarioResp
 	11, // 19: core.Core.CreateSession:output_type -> core.CreateSessionResp
 	13, // 20: core.Core.UpdateSessionStatus:output_type -> core.UpdateSessionStatusResp
 	15, // 21: core.Core.AddDialogue:output_type -> core.AddDialogueResp
 	17, // 22: core.Core.UpdateDialogueEvaluation:output_type -> core.UpdateDialogueEvaluationResp
-	19, // 23: core.Core.GetInterviewContext:output_type -> core.GetInterviewContextResp
+	19, // 23: core.Core.GetPracticeContext:output_type -> core.GetPracticeContextResp
 	22, // 24: core.Core.ListSessions:output_type -> core.ListSessionsResp
 	24, // 25: core.Core.GetSessionDetail:output_type -> core.GetSessionDetailResp
 	26, // 26: core.Core.DeleteSession:output_type -> core.DeleteSessionResp
@@ -1670,26 +1684,26 @@ var file_core_proto_depIdxs = []int32{
 	0,  // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_core_proto_init() }
-func file_core_proto_init() {
-	if File_core_proto != nil {
+func init() { file_backend_rpc_core_core_proto_init() }
+func file_backend_rpc_core_core_proto_init() {
+	if File_backend_rpc_core_core_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_proto_rawDesc), len(file_core_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_backend_rpc_core_core_proto_rawDesc), len(file_backend_rpc_core_core_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_core_proto_goTypes,
-		DependencyIndexes: file_core_proto_depIdxs,
-		MessageInfos:      file_core_proto_msgTypes,
+		GoTypes:           file_backend_rpc_core_core_proto_goTypes,
+		DependencyIndexes: file_backend_rpc_core_core_proto_depIdxs,
+		MessageInfos:      file_backend_rpc_core_core_proto_msgTypes,
 	}.Build()
-	File_core_proto = out.File
-	file_core_proto_goTypes = nil
-	file_core_proto_depIdxs = nil
+	File_backend_rpc_core_core_proto = out.File
+	file_backend_rpc_core_core_proto_goTypes = nil
+	file_backend_rpc_core_core_proto_depIdxs = nil
 }

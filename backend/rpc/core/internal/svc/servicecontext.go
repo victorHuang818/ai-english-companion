@@ -17,15 +17,15 @@ import (
 )
 
 type ServiceContext struct {
-	Config                 config.Config
-	MinioClient            *minio.Client
-	OssClient              *oss_util.OSSClient
-	ResumeModel            model.ResumesModel
-	JobProfileModel        model.JobProfilesModel
-	InterviewSessionModel  model.InterviewSessionsModel
-	InterviewDialogueModel model.InterviewDialoguesModel
-	AiRpc                  ai.AiClient
-	SqlConn                sqlx.SqlConn
+	Config               config.Config
+	MinioClient          *minio.Client
+	OssClient            *oss_util.OSSClient
+	UserProfileModel     model.UserProfilesModel
+	ScenarioModel        model.ScenariosModel
+	PracticeSessionModel model.PracticeSessionsModel
+	DialogueModel        model.DialoguesModel
+	AiRpc                ai.AiClient
+	SqlConn              sqlx.SqlConn
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -68,14 +68,14 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.DataSource)
 
 	return &ServiceContext{
-		Config:                 c,
-		MinioClient:            minioClient,
-		OssClient:              ossClient,
-		ResumeModel:            model.NewResumesModel(sqlConn, c.CacheRedis),
-		JobProfileModel:        model.NewJobProfilesModel(sqlConn, c.CacheRedis),
-		InterviewSessionModel:  model.NewInterviewSessionsModel(sqlConn, c.CacheRedis),
-		InterviewDialogueModel: model.NewInterviewDialoguesModel(sqlConn, c.CacheRedis),
-		AiRpc:                  ai.NewAiClient(zrpc.MustNewClient(c.AiRpc).Conn()),
-		SqlConn:                sqlConn,
+		Config:               c,
+		MinioClient:          minioClient,
+		OssClient:            ossClient,
+		UserProfileModel:     model.NewUserProfilesModel(sqlConn, c.CacheRedis),
+		ScenarioModel:        model.NewScenariosModel(sqlConn, c.CacheRedis),
+		PracticeSessionModel: model.NewPracticeSessionsModel(sqlConn, c.CacheRedis),
+		DialogueModel:        model.NewDialoguesModel(sqlConn, c.CacheRedis),
+		AiRpc:                ai.NewAiClient(zrpc.MustNewClient(c.AiRpc).Conn()),
+		SqlConn:              sqlConn,
 	}
 }

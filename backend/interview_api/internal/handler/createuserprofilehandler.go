@@ -12,17 +12,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// 提交通知，触发简历解析入库
-func CreateResumeHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 提交并设置用户背景档案
+func CreateUserProfileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.CreateResumeReq
+		var req types.CreateUserProfileReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewCreateResumeLogic(r.Context(), svcCtx)
-		resp, err := l.CreateResume(&req)
+		l := logic.NewCreateUserProfileLogic(r.Context(), svcCtx)
+		resp, err := l.CreateUserProfile(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

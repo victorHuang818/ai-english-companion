@@ -12,24 +12,24 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type CreateJobProfileLogic struct {
+type CreateScenarioLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewCreateJobProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateJobProfileLogic {
-	return &CreateJobProfileLogic{
+func NewCreateScenarioLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateScenarioLogic {
+	return &CreateScenarioLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-// Job Profiles
-func (l *CreateJobProfileLogic) CreateJobProfile(in *core.CreateJobProfileReq) (*core.CreateJobProfileResp, error) {
+// Scenarios
+func (l *CreateScenarioLogic) CreateScenario(in *core.CreateScenarioReq) (*core.CreateScenarioResp, error) {
 	id := uuid.New().String()
-	_, err := l.svcCtx.JobProfileModel.Insert(l.ctx, &model.JobProfiles{
+	_, err := l.svcCtx.ScenarioModel.Insert(l.ctx, &model.Scenarios{
 		Id:        id,
 		CreatorId: in.CreatorId,
 		Name:      in.Name,
@@ -39,12 +39,11 @@ func (l *CreateJobProfileLogic) CreateJobProfile(in *core.CreateJobProfileReq) (
 		},
 	})
 	if err != nil {
-		l.Errorf("CreateJobProfile error: %v", err)
+		l.Errorf("CreateScenario error: %v", err)
 		return nil, err
 	}
 
-	return &core.CreateJobProfileResp{
+	return &core.CreateScenarioResp{
 		Id: id,
 	}, nil
 }
-

@@ -5,7 +5,7 @@ import (
 
 	"ai_interview/interview_api/internal/svc"
 	"ai_interview/interview_api/internal/types"
-	"ai_interview/rpc/core/core"
+	"ai_interview/rpc/core/coreclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -16,7 +16,7 @@ type GetSessionDetailLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 获取面试详情
+// 获取口语练习详情
 func NewGetSessionDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetSessionDetailLogic {
 	return &GetSessionDetailLogic{
 		Logger: logx.WithContext(ctx),
@@ -26,7 +26,7 @@ func NewGetSessionDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *GetSessionDetailLogic) GetSessionDetail(req *types.GetSessionDetailReq) (resp *types.GetSessionDetailResp, err error) {
-	rpcResp, err := l.svcCtx.CoreRpc.GetSessionDetail(l.ctx, &core.GetSessionDetailReq{
+	rpcResp, err := l.svcCtx.CoreRpc.GetSessionDetail(l.ctx, &coreclient.GetSessionDetailReq{
 		SessionId: req.SessionId,
 	})
 	if err != nil {
@@ -35,7 +35,7 @@ func (l *GetSessionDetailLogic) GetSessionDetail(req *types.GetSessionDetailReq)
 
 	return &types.GetSessionDetailResp{
 		SessionId:    rpcResp.SessionId,
-		JobTitle:     rpcResp.JobTitle,
+		ScenarioName: rpcResp.ScenarioName,
 		Transcript:   rpcResp.Transcript,
 		OverallScore: rpcResp.OverallScore,
 		Commentary:   rpcResp.EvaluationReport,

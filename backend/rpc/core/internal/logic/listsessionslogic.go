@@ -28,19 +28,18 @@ func NewListSessionsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *List
 
 type dbSessionItem struct {
 	Id               string         `db:"id"`
-	JobTitle         string         `db:"job_title"`
+	ScenarioName     string         `db:"scenario_name"`
 	Status           string         `db:"status"`
 	CreatedAt        time.Time      `db:"created_at"`
 	EvaluationReport sql.NullString `db:"evaluation_report"`
 }
 
-// 面试列表与详情
 func (l *ListSessionsLogic) ListSessions(in *core.ListSessionsReq) (*core.ListSessionsResp, error) {
 	var list []dbSessionItem
 	query := `
-		SELECT s.id, COALESCE(j.name, '未知岗位') AS job_title, s.status, s.created_at, s.evaluation_report
-		FROM interview_sessions s
-		LEFT JOIN job_profiles j ON s.job_profile_id = j.id
+		SELECT s.id, COALESCE(j.name, '未知场景') AS scenario_name, s.status, s.created_at, s.evaluation_report
+		FROM practice_sessions s
+		LEFT JOIN scenarios j ON s.scenario_id = j.id
 		WHERE s.user_id = ?
 		ORDER BY s.created_at DESC`
 	
@@ -70,7 +69,7 @@ func (l *ListSessionsLogic) ListSessions(in *core.ListSessionsReq) (*core.ListSe
 
 		sessions = append(sessions, &core.SessionItem{
 			Id:           item.Id,
-			JobTitle:     item.JobTitle,
+			ScenarioName: item.ScenarioName,
 			Status:       item.Status,
 			CreatedAt:    item.CreatedAt.Unix(),
 			OverallScore: score,

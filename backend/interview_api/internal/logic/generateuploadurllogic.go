@@ -1,6 +1,3 @@
-// Code scaffolded by goctl. Safe to edit.
-// goctl 1.9.2
-
 package logic
 
 import (
@@ -8,7 +5,7 @@ import (
 
 	"ai_interview/interview_api/internal/svc"
 	"ai_interview/interview_api/internal/types"
-	"ai_interview/rpc/core/core"
+	"ai_interview/rpc/core/coreclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -19,7 +16,7 @@ type GenerateUploadUrlLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 获取上传简历的预签名URL
+// 获取上传学习背景文件的预签名URL (备用)
 func NewGenerateUploadUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GenerateUploadUrlLogic {
 	return &GenerateUploadUrlLogic{
 		Logger: logx.WithContext(ctx),
@@ -29,7 +26,7 @@ func NewGenerateUploadUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *GenerateUploadUrlLogic) GenerateUploadUrl(req *types.GenerateUploadUrlReq) (resp *types.GenerateUploadUrlResp, err error) {
-	rpcResp, err := l.svcCtx.CoreRpc.GenerateUploadUrl(l.ctx, &core.GenerateUploadUrlReq{
+	rpcResp, err := l.svcCtx.CoreRpc.GenerateUploadUrl(l.ctx, &coreclient.GenerateUploadUrlReq{
 		Filename: req.Filename,
 	})
 	if err != nil {
@@ -41,4 +38,3 @@ func (l *GenerateUploadUrlLogic) GenerateUploadUrl(req *types.GenerateUploadUrlR
 		ObjectKey: rpcResp.ObjectKey,
 	}, nil
 }
-

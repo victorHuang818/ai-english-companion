@@ -1,6 +1,3 @@
-// Code scaffolded by goctl. Safe to edit.
-// goctl 1.9.2
-
 package logic
 
 import (
@@ -9,7 +6,7 @@ import (
 	"ai_interview/interview_api/internal/svc"
 	"ai_interview/interview_api/internal/types"
 	"ai_interview/pkg/error_pkg"
-	"ai_interview/rpc/core/core"
+	"ai_interview/rpc/core/coreclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -20,7 +17,7 @@ type CreateSessionLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 创建面试会话 (第一步走 HTTP)
+// 创建口语练习会话
 func NewCreateSessionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateSessionLogic {
 	return &CreateSessionLogic{
 		Logger: logx.WithContext(ctx),
@@ -30,17 +27,15 @@ func NewCreateSessionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 }
 
 func (l *CreateSessionLogic) CreateSession(req *types.CreateSessionReq) (resp *types.CreateSessionResp, err error) {
-	// 1. 从 context 获取 user_id (由全局网关透传并在中间件注入到 ctx)
 	userId, ok := l.ctx.Value("userId").(string)
 	if !ok || userId == "" {
 		return nil, error_pkg.NewCodeError(error_pkg.RequestParamError, "未获取到有效用户身份")
 	}
 
-	// 2. 调用 core_rpc 创建会话
-	rpcResp, err := l.svcCtx.CoreRpc.CreateSession(l.ctx, &core.CreateSessionReq{
-		UserId:       userId,
-		ResumeId:     req.ResumeId,
-		JobProfileId: req.JobProfileId,
+	rpcResp, err := l.svcCtx.CoreRpc.CreateSession(l.ctx, &coreclient.CreateSessionReq{
+		UserId:        userId,
+		UserProfileId: req.UserProfileId,
+		ScenarioId:    req.ScenarioId,
 	})
 	if err != nil {
 		l.Errorf("CoreRpc.CreateSession error: %v", err)
@@ -51,4 +46,3 @@ func (l *CreateSessionLogic) CreateSession(req *types.CreateSessionReq) (resp *t
 		SessionId: rpcResp.Id,
 	}, nil
 }
-

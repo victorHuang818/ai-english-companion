@@ -12,17 +12,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// 获取简历详情
-func GetResumeHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 创建练习场景
+func CreateScenarioHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetResumeReq
+		var req types.CreateScenarioReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewGetResumeLogic(r.Context(), svcCtx)
-		resp, err := l.GetResume(&req)
+		l := logic.NewCreateScenarioLogic(r.Context(), svcCtx)
+		resp, err := l.CreateScenario(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

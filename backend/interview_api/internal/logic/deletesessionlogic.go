@@ -1,6 +1,3 @@
-// Code scaffolded by goctl. Safe to edit.
-// goctl 1.9.2
-
 package logic
 
 import (
@@ -8,7 +5,7 @@ import (
 
 	"ai_interview/interview_api/internal/svc"
 	"ai_interview/interview_api/internal/types"
-	"ai_interview/rpc/core/core"
+	"ai_interview/rpc/core/coreclient"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -19,7 +16,7 @@ type DeleteSessionLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// 删除面试记录
+// 删除口语练习记录
 func NewDeleteSessionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteSessionLogic {
 	return &DeleteSessionLogic{
 		Logger: logx.WithContext(ctx),
@@ -29,7 +26,7 @@ func NewDeleteSessionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 }
 
 func (l *DeleteSessionLogic) DeleteSession(req *types.DeleteSessionReq) (resp *types.DeleteSessionResp, err error) {
-	rpcResp, err := l.svcCtx.CoreRpc.DeleteSession(l.ctx, &core.DeleteSessionReq{
+	rpcResp, err := l.svcCtx.CoreRpc.DeleteSession(l.ctx, &coreclient.DeleteSessionReq{
 		SessionId: req.SessionId,
 	})
 	if err != nil {

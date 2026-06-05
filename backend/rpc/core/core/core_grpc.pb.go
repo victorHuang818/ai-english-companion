@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v3.20.3
-// source: core.proto
+// source: backend/rpc/core/core.proto
 
 package core
 
@@ -20,15 +20,15 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Core_GenerateUploadUrl_FullMethodName        = "/core.Core/GenerateUploadUrl"
-	Core_CreateResume_FullMethodName             = "/core.Core/CreateResume"
-	Core_GetResume_FullMethodName                = "/core.Core/GetResume"
-	Core_CreateJobProfile_FullMethodName         = "/core.Core/CreateJobProfile"
-	Core_GetJobProfile_FullMethodName            = "/core.Core/GetJobProfile"
+	Core_CreateUserProfile_FullMethodName        = "/core.Core/CreateUserProfile"
+	Core_GetUserProfile_FullMethodName           = "/core.Core/GetUserProfile"
+	Core_CreateScenario_FullMethodName           = "/core.Core/CreateScenario"
+	Core_GetScenario_FullMethodName              = "/core.Core/GetScenario"
 	Core_CreateSession_FullMethodName            = "/core.Core/CreateSession"
 	Core_UpdateSessionStatus_FullMethodName      = "/core.Core/UpdateSessionStatus"
 	Core_AddDialogue_FullMethodName              = "/core.Core/AddDialogue"
 	Core_UpdateDialogueEvaluation_FullMethodName = "/core.Core/UpdateDialogueEvaluation"
-	Core_GetInterviewContext_FullMethodName      = "/core.Core/GetInterviewContext"
+	Core_GetPracticeContext_FullMethodName       = "/core.Core/GetPracticeContext"
 	Core_ListSessions_FullMethodName             = "/core.Core/ListSessions"
 	Core_GetSessionDetail_FullMethodName         = "/core.Core/GetSessionDetail"
 	Core_DeleteSession_FullMethodName            = "/core.Core/DeleteSession"
@@ -38,22 +38,22 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CoreClient interface {
-	// Resume & OSS
+	// User Profile & OSS
 	GenerateUploadUrl(ctx context.Context, in *GenerateUploadUrlReq, opts ...grpc.CallOption) (*GenerateUploadUrlResp, error)
-	CreateResume(ctx context.Context, in *CreateResumeReq, opts ...grpc.CallOption) (*CreateResumeResp, error)
-	GetResume(ctx context.Context, in *GetResumeReq, opts ...grpc.CallOption) (*GetResumeResp, error)
-	// Job Profiles
-	CreateJobProfile(ctx context.Context, in *CreateJobProfileReq, opts ...grpc.CallOption) (*CreateJobProfileResp, error)
-	GetJobProfile(ctx context.Context, in *GetJobProfileReq, opts ...grpc.CallOption) (*GetJobProfileResp, error)
-	// Interview Sessions
+	CreateUserProfile(ctx context.Context, in *CreateUserProfileReq, opts ...grpc.CallOption) (*CreateUserProfileResp, error)
+	GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error)
+	// Scenarios
+	CreateScenario(ctx context.Context, in *CreateScenarioReq, opts ...grpc.CallOption) (*CreateScenarioResp, error)
+	GetScenario(ctx context.Context, in *GetScenarioReq, opts ...grpc.CallOption) (*GetScenarioResp, error)
+	// Practice Sessions
 	CreateSession(ctx context.Context, in *CreateSessionReq, opts ...grpc.CallOption) (*CreateSessionResp, error)
 	UpdateSessionStatus(ctx context.Context, in *UpdateSessionStatusReq, opts ...grpc.CallOption) (*UpdateSessionStatusResp, error)
-	// Interview Dialogues
+	// Dialogues
 	AddDialogue(ctx context.Context, in *AddDialogueReq, opts ...grpc.CallOption) (*AddDialogueResp, error)
 	UpdateDialogueEvaluation(ctx context.Context, in *UpdateDialogueEvaluationReq, opts ...grpc.CallOption) (*UpdateDialogueEvaluationResp, error)
-	// 面试上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
-	GetInterviewContext(ctx context.Context, in *GetInterviewContextReq, opts ...grpc.CallOption) (*GetInterviewContextResp, error)
-	// 面试列表与详情
+	// 上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
+	GetPracticeContext(ctx context.Context, in *GetPracticeContextReq, opts ...grpc.CallOption) (*GetPracticeContextResp, error)
+	// 列表与详情
 	ListSessions(ctx context.Context, in *ListSessionsReq, opts ...grpc.CallOption) (*ListSessionsResp, error)
 	GetSessionDetail(ctx context.Context, in *GetSessionDetailReq, opts ...grpc.CallOption) (*GetSessionDetailResp, error)
 	DeleteSession(ctx context.Context, in *DeleteSessionReq, opts ...grpc.CallOption) (*DeleteSessionResp, error)
@@ -77,40 +77,40 @@ func (c *coreClient) GenerateUploadUrl(ctx context.Context, in *GenerateUploadUr
 	return out, nil
 }
 
-func (c *coreClient) CreateResume(ctx context.Context, in *CreateResumeReq, opts ...grpc.CallOption) (*CreateResumeResp, error) {
+func (c *coreClient) CreateUserProfile(ctx context.Context, in *CreateUserProfileReq, opts ...grpc.CallOption) (*CreateUserProfileResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateResumeResp)
-	err := c.cc.Invoke(ctx, Core_CreateResume_FullMethodName, in, out, cOpts...)
+	out := new(CreateUserProfileResp)
+	err := c.cc.Invoke(ctx, Core_CreateUserProfile_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *coreClient) GetResume(ctx context.Context, in *GetResumeReq, opts ...grpc.CallOption) (*GetResumeResp, error) {
+func (c *coreClient) GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetResumeResp)
-	err := c.cc.Invoke(ctx, Core_GetResume_FullMethodName, in, out, cOpts...)
+	out := new(GetUserProfileResp)
+	err := c.cc.Invoke(ctx, Core_GetUserProfile_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *coreClient) CreateJobProfile(ctx context.Context, in *CreateJobProfileReq, opts ...grpc.CallOption) (*CreateJobProfileResp, error) {
+func (c *coreClient) CreateScenario(ctx context.Context, in *CreateScenarioReq, opts ...grpc.CallOption) (*CreateScenarioResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateJobProfileResp)
-	err := c.cc.Invoke(ctx, Core_CreateJobProfile_FullMethodName, in, out, cOpts...)
+	out := new(CreateScenarioResp)
+	err := c.cc.Invoke(ctx, Core_CreateScenario_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *coreClient) GetJobProfile(ctx context.Context, in *GetJobProfileReq, opts ...grpc.CallOption) (*GetJobProfileResp, error) {
+func (c *coreClient) GetScenario(ctx context.Context, in *GetScenarioReq, opts ...grpc.CallOption) (*GetScenarioResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetJobProfileResp)
-	err := c.cc.Invoke(ctx, Core_GetJobProfile_FullMethodName, in, out, cOpts...)
+	out := new(GetScenarioResp)
+	err := c.cc.Invoke(ctx, Core_GetScenario_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -157,10 +157,10 @@ func (c *coreClient) UpdateDialogueEvaluation(ctx context.Context, in *UpdateDia
 	return out, nil
 }
 
-func (c *coreClient) GetInterviewContext(ctx context.Context, in *GetInterviewContextReq, opts ...grpc.CallOption) (*GetInterviewContextResp, error) {
+func (c *coreClient) GetPracticeContext(ctx context.Context, in *GetPracticeContextReq, opts ...grpc.CallOption) (*GetPracticeContextResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetInterviewContextResp)
-	err := c.cc.Invoke(ctx, Core_GetInterviewContext_FullMethodName, in, out, cOpts...)
+	out := new(GetPracticeContextResp)
+	err := c.cc.Invoke(ctx, Core_GetPracticeContext_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -201,22 +201,22 @@ func (c *coreClient) DeleteSession(ctx context.Context, in *DeleteSessionReq, op
 // All implementations must embed UnimplementedCoreServer
 // for forward compatibility.
 type CoreServer interface {
-	// Resume & OSS
+	// User Profile & OSS
 	GenerateUploadUrl(context.Context, *GenerateUploadUrlReq) (*GenerateUploadUrlResp, error)
-	CreateResume(context.Context, *CreateResumeReq) (*CreateResumeResp, error)
-	GetResume(context.Context, *GetResumeReq) (*GetResumeResp, error)
-	// Job Profiles
-	CreateJobProfile(context.Context, *CreateJobProfileReq) (*CreateJobProfileResp, error)
-	GetJobProfile(context.Context, *GetJobProfileReq) (*GetJobProfileResp, error)
-	// Interview Sessions
+	CreateUserProfile(context.Context, *CreateUserProfileReq) (*CreateUserProfileResp, error)
+	GetUserProfile(context.Context, *GetUserProfileReq) (*GetUserProfileResp, error)
+	// Scenarios
+	CreateScenario(context.Context, *CreateScenarioReq) (*CreateScenarioResp, error)
+	GetScenario(context.Context, *GetScenarioReq) (*GetScenarioResp, error)
+	// Practice Sessions
 	CreateSession(context.Context, *CreateSessionReq) (*CreateSessionResp, error)
 	UpdateSessionStatus(context.Context, *UpdateSessionStatusReq) (*UpdateSessionStatusResp, error)
-	// Interview Dialogues
+	// Dialogues
 	AddDialogue(context.Context, *AddDialogueReq) (*AddDialogueResp, error)
 	UpdateDialogueEvaluation(context.Context, *UpdateDialogueEvaluationReq) (*UpdateDialogueEvaluationResp, error)
-	// 面试上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
-	GetInterviewContext(context.Context, *GetInterviewContextReq) (*GetInterviewContextResp, error)
-	// 面试列表与详情
+	// 上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
+	GetPracticeContext(context.Context, *GetPracticeContextReq) (*GetPracticeContextResp, error)
+	// 列表与详情
 	ListSessions(context.Context, *ListSessionsReq) (*ListSessionsResp, error)
 	GetSessionDetail(context.Context, *GetSessionDetailReq) (*GetSessionDetailResp, error)
 	DeleteSession(context.Context, *DeleteSessionReq) (*DeleteSessionResp, error)
@@ -233,17 +233,17 @@ type UnimplementedCoreServer struct{}
 func (UnimplementedCoreServer) GenerateUploadUrl(context.Context, *GenerateUploadUrlReq) (*GenerateUploadUrlResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GenerateUploadUrl not implemented")
 }
-func (UnimplementedCoreServer) CreateResume(context.Context, *CreateResumeReq) (*CreateResumeResp, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateResume not implemented")
+func (UnimplementedCoreServer) CreateUserProfile(context.Context, *CreateUserProfileReq) (*CreateUserProfileResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateUserProfile not implemented")
 }
-func (UnimplementedCoreServer) GetResume(context.Context, *GetResumeReq) (*GetResumeResp, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetResume not implemented")
+func (UnimplementedCoreServer) GetUserProfile(context.Context, *GetUserProfileReq) (*GetUserProfileResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserProfile not implemented")
 }
-func (UnimplementedCoreServer) CreateJobProfile(context.Context, *CreateJobProfileReq) (*CreateJobProfileResp, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateJobProfile not implemented")
+func (UnimplementedCoreServer) CreateScenario(context.Context, *CreateScenarioReq) (*CreateScenarioResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateScenario not implemented")
 }
-func (UnimplementedCoreServer) GetJobProfile(context.Context, *GetJobProfileReq) (*GetJobProfileResp, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetJobProfile not implemented")
+func (UnimplementedCoreServer) GetScenario(context.Context, *GetScenarioReq) (*GetScenarioResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetScenario not implemented")
 }
 func (UnimplementedCoreServer) CreateSession(context.Context, *CreateSessionReq) (*CreateSessionResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateSession not implemented")
@@ -257,8 +257,8 @@ func (UnimplementedCoreServer) AddDialogue(context.Context, *AddDialogueReq) (*A
 func (UnimplementedCoreServer) UpdateDialogueEvaluation(context.Context, *UpdateDialogueEvaluationReq) (*UpdateDialogueEvaluationResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateDialogueEvaluation not implemented")
 }
-func (UnimplementedCoreServer) GetInterviewContext(context.Context, *GetInterviewContextReq) (*GetInterviewContextResp, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetInterviewContext not implemented")
+func (UnimplementedCoreServer) GetPracticeContext(context.Context, *GetPracticeContextReq) (*GetPracticeContextResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPracticeContext not implemented")
 }
 func (UnimplementedCoreServer) ListSessions(context.Context, *ListSessionsReq) (*ListSessionsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListSessions not implemented")
@@ -308,74 +308,74 @@ func _Core_GenerateUploadUrl_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Core_CreateResume_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateResumeReq)
+func _Core_CreateUserProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserProfileReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoreServer).CreateResume(ctx, in)
+		return srv.(CoreServer).CreateUserProfile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Core_CreateResume_FullMethodName,
+		FullMethod: Core_CreateUserProfile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServer).CreateResume(ctx, req.(*CreateResumeReq))
+		return srv.(CoreServer).CreateUserProfile(ctx, req.(*CreateUserProfileReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Core_GetResume_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetResumeReq)
+func _Core_GetUserProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserProfileReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoreServer).GetResume(ctx, in)
+		return srv.(CoreServer).GetUserProfile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Core_GetResume_FullMethodName,
+		FullMethod: Core_GetUserProfile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServer).GetResume(ctx, req.(*GetResumeReq))
+		return srv.(CoreServer).GetUserProfile(ctx, req.(*GetUserProfileReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Core_CreateJobProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateJobProfileReq)
+func _Core_CreateScenario_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateScenarioReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoreServer).CreateJobProfile(ctx, in)
+		return srv.(CoreServer).CreateScenario(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Core_CreateJobProfile_FullMethodName,
+		FullMethod: Core_CreateScenario_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServer).CreateJobProfile(ctx, req.(*CreateJobProfileReq))
+		return srv.(CoreServer).CreateScenario(ctx, req.(*CreateScenarioReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Core_GetJobProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetJobProfileReq)
+func _Core_GetScenario_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetScenarioReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoreServer).GetJobProfile(ctx, in)
+		return srv.(CoreServer).GetScenario(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Core_GetJobProfile_FullMethodName,
+		FullMethod: Core_GetScenario_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServer).GetJobProfile(ctx, req.(*GetJobProfileReq))
+		return srv.(CoreServer).GetScenario(ctx, req.(*GetScenarioReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -452,20 +452,20 @@ func _Core_UpdateDialogueEvaluation_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Core_GetInterviewContext_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetInterviewContextReq)
+func _Core_GetPracticeContext_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPracticeContextReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CoreServer).GetInterviewContext(ctx, in)
+		return srv.(CoreServer).GetPracticeContext(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Core_GetInterviewContext_FullMethodName,
+		FullMethod: Core_GetPracticeContext_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CoreServer).GetInterviewContext(ctx, req.(*GetInterviewContextReq))
+		return srv.(CoreServer).GetPracticeContext(ctx, req.(*GetPracticeContextReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -536,20 +536,20 @@ var Core_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Core_GenerateUploadUrl_Handler,
 		},
 		{
-			MethodName: "CreateResume",
-			Handler:    _Core_CreateResume_Handler,
+			MethodName: "CreateUserProfile",
+			Handler:    _Core_CreateUserProfile_Handler,
 		},
 		{
-			MethodName: "GetResume",
-			Handler:    _Core_GetResume_Handler,
+			MethodName: "GetUserProfile",
+			Handler:    _Core_GetUserProfile_Handler,
 		},
 		{
-			MethodName: "CreateJobProfile",
-			Handler:    _Core_CreateJobProfile_Handler,
+			MethodName: "CreateScenario",
+			Handler:    _Core_CreateScenario_Handler,
 		},
 		{
-			MethodName: "GetJobProfile",
-			Handler:    _Core_GetJobProfile_Handler,
+			MethodName: "GetScenario",
+			Handler:    _Core_GetScenario_Handler,
 		},
 		{
 			MethodName: "CreateSession",
@@ -568,8 +568,8 @@ var Core_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Core_UpdateDialogueEvaluation_Handler,
 		},
 		{
-			MethodName: "GetInterviewContext",
-			Handler:    _Core_GetInterviewContext_Handler,
+			MethodName: "GetPracticeContext",
+			Handler:    _Core_GetPracticeContext_Handler,
 		},
 		{
 			MethodName: "ListSessions",
@@ -585,5 +585,5 @@ var Core_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "core.proto",
+	Metadata: "backend/rpc/core/core.proto",
 }
