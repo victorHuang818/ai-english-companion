@@ -37,8 +37,8 @@ type InterviewTask struct {
 
 func StartConsumer(svcCtx *svc.ServiceContext) {
 	logx.Infof("Starting Redis Stream task consumer background worker...")
-	stream := "interview_tasks"
-	group := "interview_consumers_group"
+	stream := "english_practice_tasks"
+	group := "english_practice_consumers_group"
 	consumer := fmt.Sprintf("consumer-%d", time.Now().UnixNano())
 
 	// 1. 确保 Stream 和消费组存在 (使用 go-zero 的 typed 方法)

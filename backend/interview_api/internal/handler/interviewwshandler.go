@@ -301,7 +301,7 @@ func InterviewWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 								taskBytes, err := json.Marshal(task)
 								if err == nil {
-									_, xerr := svcCtx.RedisClient.XAdd("interview_tasks", false, "*", map[string]string{"payload": string(taskBytes)})
+									_, xerr := svcCtx.RedisClient.XAdd("english_practice_tasks", false, "*", map[string]string{"payload": string(taskBytes)})
 									if xerr != nil {
 										logx.Errorf("Failed to XADD task to Redis: %v", xerr)
 									} else {
