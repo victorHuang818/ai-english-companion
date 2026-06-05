@@ -38,12 +38,12 @@ export const CommentaryScorecard: React.FC<CommentaryScorecardProps> = ({ data }
       </div>
 
       <div className="dimensions-grid">
-        <DimensionItem label="Fluency" value={data.dimensions.fluency} />
-        <DimensionItem label="Relevance" value={data.dimensions.relevance} />
-        <DimensionItem label="Logic" value={data.dimensions.logic} />
-        <DimensionItem label="Depth" value={data.dimensions.depth} />
+        <DimensionItem label="Fluency & Flow" value={data.dimensions.fluency} />
+        <DimensionItem label="Vocabulary & Word Choice" value={data.dimensions.relevance} />
+        <DimensionItem label="Grammar & Accuracy" value={data.dimensions.logic} />
+        <DimensionItem label="Refined Rewrite" value={data.dimensions.depth} />
         {data.dimensions.star_alignment && (
-          <DimensionItem label="STAR" value={data.dimensions.star_alignment} />
+          <DimensionItem label="Speaking Tips" value={data.dimensions.star_alignment} />
         )}
       </div>
     </div>
