@@ -1,0 +1,21 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:10000
+# Etcd:
+#   Hosts:
+#   - 127.0.0.1:2379
+#   Key: user.rpc
+
+DataSource: root:Valorant76@tcp(127.0.0.1:3306)/ai_interview_db?charset=utf8mb4&parseTime=true&loc=Local
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Type: node
+    Pass: Valorant76  # 👈 在这里添加你的 Redis 密码
+
+JwtAuth:
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: 86400
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9094
+  Path: /metrics

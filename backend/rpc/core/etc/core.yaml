@@ -1,0 +1,29 @@
+Name: core.rpc
+ListenOn: 0.0.0.0:10001
+# Etcd:
+#   Hosts:
+#   - 127.0.0.1:2379
+#   Key: core.rpc
+
+DataSource: root:Valorant76@tcp(127.0.0.1:3306)/ai_interview_db?charset=utf8mb4&parseTime=true&loc=Local
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Type: node
+    Pass: Valorant76  # 👈 在这里添加你的 Redis 密码
+
+Minio:
+  Endpoint: 127.0.0.1:9000
+  AccessKeyID: admin
+  SecretAccessKey: password123
+  UseSSL: false
+  BucketName: ai-interview
+
+AiRpc:
+  Endpoints:
+    - 127.0.0.1:10002
+  NonBlock: true
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9093
+  Path: /metrics

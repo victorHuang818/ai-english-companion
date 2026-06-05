@@ -1,0 +1,25 @@
+Name: ai.rpc
+ListenOn: 0.0.0.0:10002
+# Etcd:
+#   Hosts:
+#   - 127.0.0.1:2379
+#   Key: ai.rpc
+
+# 🌟 AI 评论员 (多模态语音与答题深度打分评估)
+AiCommentator:
+  Vendor: "DashScope"
+  ApiKey: ${DASHSCOPE_API_KEY}
+  BaseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  Model: "qwen3.5-omni-flash"
+
+# 🌟 AI 辅助提示 / 破题锦囊 (纯文本逻辑分析与思路提示)
+AiSuggestion:
+  Vendor: "DashScope"
+  ApiKey: ${DASHSCOPE_API_KEY}
+  BaseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  Model: "qwen3.6-flash"
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9095
+  Path: /metrics

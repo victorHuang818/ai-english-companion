@@ -1,0 +1,20 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317 # 接收 Go-zero 微服务的 gRPC 数据
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8890" # 暴露给 Prometheus 抓取指标的端口
+  # 如果后续想看完整的请求链路(Traces)，可以配置 jaeger exporter，这里先按你要求的指标监控来
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus, logging]
