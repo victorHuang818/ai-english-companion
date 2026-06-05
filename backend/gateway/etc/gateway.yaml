@@ -1,0 +1,24 @@
+Host: 0.0.0.0
+Port: 8888
+Auth:
+  AccessSecret: ${JWT_SECRET}
+Services:
+  # BFF 业务接口 (包含会话创建和 WebSocket 对话)
+  - Prefix: "/api/v1/interviews"
+    Target: "http://127.0.0.1:8889"
+  - Prefix: "/ws/interview"
+    Target: "http://127.0.0.1:8889"
+  
+  # 用户服务接口 (注册、登录、信息查询)
+  # 假设未来会有 user-api 处理，目前先占位或转发给对应的 BFF
+  - Prefix: "/api/v1/user"
+    Target: "http://127.0.0.1:8889"
+  - Prefix: "/api/v1/resumes"
+    Target: "http://127.0.0.1:8889"
+  - Prefix: "/api/v1/job-profiles"
+    Target: "http://127.0.0.1:8889"
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9091
+  Path: /metrics

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package ai;
+option go_package = "./ai";
+
+message ParseResumeReq {
+  string raw_text = 1;
+}
+
+message ParseResumeResp {
+  string structured_json = 1;
+}
+
+message GetAiSuggestionReq {
+  string session_id = 1;
+  string context = 2;
+}
+
+message GetAiSuggestionResp {
+  string suggestion = 1;
+}
+
+message GetAiCommentaryReq {
+  string session_id = 1;
+  string context = 2;
+  bytes audio_content = 3;     // 用户回答的完整 WAV 音频内容字节
+}
+
+message GetAiCommentaryResp {
+  string commentary = 1;
+}
+
+service Ai {
+  rpc ParseResume(ParseResumeReq) returns(ParseResumeResp);
+  rpc GetAiSuggestion(GetAiSuggestionReq) returns(GetAiSuggestionResp);
+  rpc GetAiCommentary(GetAiCommentaryReq) returns(GetAiCommentaryResp);
+}

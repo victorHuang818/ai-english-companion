@@ -1,0 +1,48 @@
+Name: interview-api
+Host: 0.0.0.0
+Port: 8889
+Mock: false # 🌟 新增此项，开启压测 Mock 模式
+
+Redis:
+  Host: 127.0.0.1:6379
+  Pass: Valorant76
+  Type: node
+
+CoreRpc:
+  Endpoints:
+    - 127.0.0.1:10001
+  NonBlock: true
+
+UserRpc:
+  Endpoints:
+    - 127.0.0.1:10000
+  NonBlock: true
+
+AiRpc:
+  Endpoints:
+    - 127.0.0.1:10002
+  NonBlock: true
+
+RealtimeInterviewer:
+  Provider: "Qwen" # 决定使用哪一个面试官: "Gemini" 或 "Qwen"
+  Gemini:
+    ApiKey: ${GEMINI_API_KEY}
+    Model: gemini-3.1-flash-live-preview
+  Qwen:
+    ApiKey: ${DASHSCOPE_API_KEY}
+    Model: qwen3.5-omni-flash-realtime
+
+Auth:
+  AccessSecret: ${JWT_SECRET}
+
+Minio:
+  Endpoint: 127.0.0.1:9000
+  AccessKeyID: minioadmin
+  SecretAccessKey: minioadmin
+  UseSSL: false
+  BucketName: ai-interview
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9092
+  Path: /metrics

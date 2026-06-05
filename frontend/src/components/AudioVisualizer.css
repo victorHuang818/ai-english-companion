@@ -1,0 +1,40 @@
+.audio-visualizer-container {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio-visualizer-container.active {
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.audio-canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.audio-visualizer-container.active .audio-canvas {
+  opacity: 1;
+}
+
+.audio-placeholder {
+  position: absolute;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-family: var(--font-display);
+  animation: pulseOpacity 2s infinite;
+}
+
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}

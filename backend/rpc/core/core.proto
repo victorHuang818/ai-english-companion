@@ -1,0 +1,186 @@
+syntax = "proto3";
+
+package core;
+option go_package = "./core";
+
+// --- Resume & MinIO OSS ---
+
+message GenerateUploadUrlReq {
+  string filename = 1;
+}
+
+message GenerateUploadUrlResp {
+  string upload_url = 1; // 预签名 PUT URL
+  string object_key = 2; // 后续落库用的 OSS Key
+}
+
+message CreateResumeReq {
+  string user_id = 1;
+  string object_key = 2; // OSS 中的文件路径
+}
+
+message CreateResumeResp {
+  string id = 1;
+  string status = 2; // 解析状态
+}
+
+message GetResumeReq {
+  string id = 1;
+}
+
+message GetResumeResp {
+  string id = 1;
+  string user_id = 2;
+  string content = 3; // JSON 格式
+  string pdf_url = 4; // 预签名 GET URL (带时效)
+}
+
+// --- Job Profiles ---
+
+message CreateJobProfileReq {
+  string creator_id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message CreateJobProfileResp {
+  string id = 1;
+}
+
+message GetJobProfileReq {
+  string id = 1;
+}
+
+message GetJobProfileResp {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+// --- Interview Sessions ---
+
+message CreateSessionReq {
+  string user_id = 1;
+  string resume_id = 2;
+  string job_profile_id = 3;
+}
+
+message CreateSessionResp {
+  string id = 1;
+}
+
+message UpdateSessionStatusReq {
+  string id = 1;
+  string status = 2;
+  string evaluation_report = 3; // JSON
+}
+
+message UpdateSessionStatusResp {
+  bool success = 1;
+}
+
+// --- Interview Dialogues ---
+
+message AddDialogueReq {
+  string session_id = 1;
+  string role = 2;
+  string content = 3;
+  string audio_object_key = 4; // 录音的 OSS key
+  string evaluation = 5;       // 此轮回答的 AI 评估报告 (JSON 格式文本)
+  bytes audio_content = 6;     // 用户回答的完整 WAV 音频内容字节
+}
+
+message AddDialogueResp {
+  string id = 1;
+}
+
+message UpdateDialogueEvaluationReq {
+  string dialogue_id = 1;
+  string evaluation = 2;
+}
+
+message UpdateDialogueEvaluationResp {
+  bool success = 1;
+}
+
+// --- 面试上下文查询 (专供 interview_api 的 WebSocket 阶段调用) ---
+
+// 一次性拉取面试所需的完整上下文
+// interview_api 在建立 WebSocket 后，用 session_id 调用此接口获取简历和岗位信息
+// 用于组装发给 Gemini Live API 的系统提示词
+message GetInterviewContextReq {
+  string session_id = 1;
+}
+
+message GetInterviewContextResp {
+  string session_id = 1;
+  string resume_content = 2;    // 简历结构化 JSON
+  string job_profile_name = 3;  // 岗位名称
+  string job_profile_desc = 4;  // 岗位描述
+  string user_id = 5;           // 用于后续 Token 额度扣减
+}
+
+message ListSessionsReq {
+  string user_id = 1;
+}
+
+message SessionItem {
+  string id = 1;
+  string job_title = 2;
+  string status = 3;
+  int64 created_at = 4;
+  int32 overall_score = 5;
+}
+
+message ListSessionsResp {
+  repeated SessionItem sessions = 1;
+}
+
+message GetSessionDetailReq {
+  string session_id = 1;
+}
+
+message GetSessionDetailResp {
+  string session_id = 1;
+  string job_title = 2;
+  string transcript = 3; // 格式化后的对话文本
+  int32 overall_score = 4;
+  string evaluation_report = 5; // JSON
+}
+
+message DeleteSessionReq {
+  string session_id = 1;
+}
+
+message DeleteSessionResp {
+  bool success = 1;
+}
+
+service Core {
+
+  // Resume & OSS
+  rpc GenerateUploadUrl(GenerateUploadUrlReq) returns(GenerateUploadUrlResp);
+  rpc CreateResume(CreateResumeReq) returns(CreateResumeResp); // 将触发 PDF 解析
+  rpc GetResume(GetResumeReq) returns(GetResumeResp);
+  
+  // Job Profiles
+  rpc CreateJobProfile(CreateJobProfileReq) returns(CreateJobProfileResp);
+  rpc GetJobProfile(GetJobProfileReq) returns(GetJobProfileResp);
+  
+  // Interview Sessions
+  rpc CreateSession(CreateSessionReq) returns(CreateSessionResp);
+  rpc UpdateSessionStatus(UpdateSessionStatusReq) returns(UpdateSessionStatusResp);
+  
+  // Interview Dialogues
+  rpc AddDialogue(AddDialogueReq) returns(AddDialogueResp);
+  rpc UpdateDialogueEvaluation(UpdateDialogueEvaluationReq) returns(UpdateDialogueEvaluationResp);
+
+  // 面试上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
+  rpc GetInterviewContext(GetInterviewContextReq) returns(GetInterviewContextResp);
+
+  // 面试列表与详情
+  rpc ListSessions(ListSessionsReq) returns(ListSessionsResp);
+  rpc GetSessionDetail(GetSessionDetailReq) returns(GetSessionDetailResp);
+  rpc DeleteSession(DeleteSessionReq) returns(DeleteSessionResp);
+}
+
