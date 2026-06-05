@@ -1,13 +1,13 @@
 syntax = "v1"
 
 info (
-	title: "AI 面试 BFF API"
+	title: "AI 英语口语陪练 BFF API"
 	desc:  "处理特定业务聚合逻辑、提供 HTTP 和 WebSocket 接口"
 )
 
 type CreateSessionReq {
-	ResumeId     string `json:"resume_id"`
-	JobProfileId string `json:"job_profile_id"`
+	UserProfileId string `json:"user_profile_id"`
+	ScenarioId    string `json:"scenario_id"`
 }
 
 type CreateSessionResp {
@@ -43,7 +43,7 @@ type GetUserInfoResp {
 	RechargeTokens  uint64 `json:"recharge_tokens"`
 }
 
-// --- Resume ---
+// --- User Profile ---
 type GenerateUploadUrlReq {
 	Filename string `json:"filename"`
 }
@@ -53,48 +53,48 @@ type GenerateUploadUrlResp {
 	ObjectKey string `json:"object_key"`
 }
 
-type CreateResumeReq {
-	ObjectKey string `json:"object_key"`
+type CreateUserProfileReq {
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
 }
 
-type CreateResumeResp {
+type CreateUserProfileResp {
 	Id     string `json:"id"`
 	Status string `json:"status"`
 }
 
-type GetResumeReq {
+type GetUserProfileReq {
 	Id string `path:"id"`
 }
 
-type GetResumeResp {
-	Id          string `json:"id"`
-	RawText     string `json:"raw_text"`
-	Status      string `json:"status"`
-	CreatedAt   int64  `json:"created_at"`
-	DownloadUrl string `json:"download_url"`
+type GetUserProfileResp {
+	Id             string `json:"id"`
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
+	CreatedAt      int64  `json:"created_at"`
 }
 
-// --- Job Profile ---
-type CreateJobProfileReq {
+// --- Scenario ---
+type CreateScenarioReq {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-type CreateJobProfileResp {
+type CreateScenarioResp {
 	Id string `json:"id"`
 }
 
-// --- Interview Session ---
-type InterviewSession {
+// --- Practice Session ---
+type PracticeSession {
 	SessionId    string `json:"session_id"`
-	JobTitle     string `json:"job_title"`
+	ScenarioName string `json:"scenario_name"`
 	Status       string `json:"status"`
 	CreatedAt    int64  `json:"created_at"`
 	OverallScore int32  `json:"overall_score"`
 }
 
 type ListSessionsResp {
-	Sessions []InterviewSession `json:"sessions"`
+	Sessions []PracticeSession `json:"sessions"`
 }
 
 type GetSessionDetailReq {
@@ -103,7 +103,7 @@ type GetSessionDetailReq {
 
 type GetSessionDetailResp {
 	SessionId    string `json:"session_id"`
-	JobTitle     string `json:"job_title"`
+	ScenarioName string `json:"scenario_name"`
 	Transcript   string `json:"transcript"`
 	OverallScore int32  `json:"overall_score"`
 	Commentary   string `json:"commentary"`
@@ -141,51 +141,51 @@ service interview-api {
 }
 
 @server (
-	prefix: /api/v1/resumes
+	prefix: /api/v1/user-profiles
 	jwt:    Auth
 )
 service interview-api {
-	@doc "获取上传简历的预签名URL"
+	@doc "获取上传学习背景文件的预签名URL (备用)"
 	@handler GenerateUploadUrl
 	post /upload-url (GenerateUploadUrlReq) returns (GenerateUploadUrlResp)
 
-	@doc "提交通知，触发简历解析入库"
-	@handler CreateResume
-	post / (CreateResumeReq) returns (CreateResumeResp)
+	@doc "提交并设置用户背景档案"
+	@handler CreateUserProfile
+	post / (CreateUserProfileReq) returns (CreateUserProfileResp)
 
-	@doc "获取简历详情"
-	@handler GetResume
-	get /:id (GetResumeReq) returns (GetResumeResp)
+	@doc "获取用户档案信息"
+	@handler GetUserProfile
+	get /:id (GetUserProfileReq) returns (GetUserProfileResp)
 }
 
 @server (
-	prefix: /api/v1/job-profiles
+	prefix: /api/v1/scenarios
 	jwt:    Auth
 )
 service interview-api {
-	@doc "创建面试岗位"
-	@handler CreateJobProfile
-	post / (CreateJobProfileReq) returns (CreateJobProfileResp)
+	@doc "创建练习场景"
+	@handler CreateScenario
+	post / (CreateScenarioReq) returns (CreateScenarioResp)
 }
 
 @server (
-	prefix: /api/v1/interviews
+	prefix: /api/v1/practices
 	jwt:    Auth
 )
 service interview-api {
-	@doc "创建面试会话"
+	@doc "创建口语练习会话"
 	@handler CreateSession
 	post / (CreateSessionReq) returns (CreateSessionResp)
 
-	@doc "获取面试历史列表"
+	@doc "获取口语练习历史列表"
 	@handler ListSessions
 	get / returns (ListSessionsResp)
 
-	@doc "获取面试详情"
+	@doc "获取口语练习详情"
 	@handler GetSessionDetail
 	get /:session_id (GetSessionDetailReq) returns (GetSessionDetailResp)
 
-	@doc "删除面试记录"
+	@doc "删除口语练习记录"
 	@handler DeleteSession
 	delete /:session_id (DeleteSessionReq) returns (DeleteSessionResp)
 }

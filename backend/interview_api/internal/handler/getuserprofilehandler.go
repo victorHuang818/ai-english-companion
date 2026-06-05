@@ -12,17 +12,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// 创建面试岗位
-func CreateJobProfileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 获取用户档案信息
+func GetUserProfileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.CreateJobProfileReq
+		var req types.GetUserProfileReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewCreateJobProfileLogic(r.Context(), svcCtx)
-		resp, err := l.CreateJobProfile(&req)
+		l := logic.NewGetUserProfileLogic(r.Context(), svcCtx)
+		resp, err := l.GetUserProfile(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

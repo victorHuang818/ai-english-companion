@@ -46,69 +46,69 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				// 提交通知，触发简历解析入库
+				// 提交并设置用户背景档案
 				Method:  http.MethodPost,
 				Path:    "/",
-				Handler: CreateResumeHandler(serverCtx),
+				Handler: CreateUserProfileHandler(serverCtx),
 			},
 			{
-				// 获取简历详情
+				// 获取用户档案信息
 				Method:  http.MethodGet,
 				Path:    "/:id",
-				Handler: GetResumeHandler(serverCtx),
+				Handler: GetUserProfileHandler(serverCtx),
 			},
 			{
-				// 获取上传简历的预签名URL
+				// 获取上传学习背景文件的预签名URL (备用)
 				Method:  http.MethodPost,
 				Path:    "/upload-url",
 				Handler: GenerateUploadUrlHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/api/v1/resumes"),
+		rest.WithPrefix("/api/v1/user-profiles"),
 	)
 
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				// 创建面试岗位
+				// 创建练习场景
 				Method:  http.MethodPost,
 				Path:    "/",
-				Handler: CreateJobProfileHandler(serverCtx),
+				Handler: CreateScenarioHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/api/v1/job-profiles"),
+		rest.WithPrefix("/api/v1/scenarios"),
 	)
 
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				// 创建面试会话
+				// 创建口语练习会话
 				Method:  http.MethodPost,
 				Path:    "/",
 				Handler: CreateSessionHandler(serverCtx),
 			},
 			{
-				// 获取面试历史列表
+				// 获取口语练习历史列表
 				Method:  http.MethodGet,
 				Path:    "/",
 				Handler: ListSessionsHandler(serverCtx),
 			},
 			{
-				// 获取面试详情
+				// 获取口语练习详情
 				Method:  http.MethodGet,
 				Path:    "/:session_id",
 				Handler: GetSessionDetailHandler(serverCtx),
 			},
 			{
-				// 删除面试记录
+				// 删除口语练习记录
 				Method:  http.MethodDelete,
 				Path:    "/:session_id",
 				Handler: DeleteSessionHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/api/v1/interviews"),
+		rest.WithPrefix("/api/v1/practices"),
 	)
 }

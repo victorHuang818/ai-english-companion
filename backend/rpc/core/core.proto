@@ -3,7 +3,7 @@ syntax = "proto3";
 package core;
 option go_package = "./core";
 
-// --- Resume & MinIO OSS ---
+// --- User Profile & MinIO OSS ---
 
 message GenerateUploadUrlReq {
   string filename = 1;
@@ -14,55 +14,56 @@ message GenerateUploadUrlResp {
   string object_key = 2; // 后续落库用的 OSS Key
 }
 
-message CreateResumeReq {
+message CreateUserProfileReq {
   string user_id = 1;
-  string object_key = 2; // OSS 中的文件路径
+  string english_level = 2;   // beginner/intermediate/advanced
+  string learning_target = 3;  // 学习目标
 }
 
-message CreateResumeResp {
+message CreateUserProfileResp {
   string id = 1;
   string status = 2; // 解析状态
 }
 
-message GetResumeReq {
+message GetUserProfileReq {
   string id = 1;
 }
 
-message GetResumeResp {
+message GetUserProfileResp {
   string id = 1;
   string user_id = 2;
-  string content = 3; // JSON 格式
-  string pdf_url = 4; // 预签名 GET URL (带时效)
+  string english_level = 3;
+  string learning_target = 4;
 }
 
-// --- Job Profiles ---
+// --- Scenarios ---
 
-message CreateJobProfileReq {
+message CreateScenarioReq {
   string creator_id = 1;
   string name = 2;
   string description = 3;
 }
 
-message CreateJobProfileResp {
+message CreateScenarioResp {
   string id = 1;
 }
 
-message GetJobProfileReq {
+message GetScenarioReq {
   string id = 1;
 }
 
-message GetJobProfileResp {
+message GetScenarioResp {
   string id = 1;
   string name = 2;
   string description = 3;
 }
 
-// --- Interview Sessions ---
+// --- Practice Sessions ---
 
 message CreateSessionReq {
   string user_id = 1;
-  string resume_id = 2;
-  string job_profile_id = 3;
+  string user_profile_id = 2;
+  string scenario_id = 3;
 }
 
 message CreateSessionResp {
@@ -79,7 +80,7 @@ message UpdateSessionStatusResp {
   bool success = 1;
 }
 
-// --- Interview Dialogues ---
+// --- Dialogues ---
 
 message AddDialogueReq {
   string session_id = 1;
@@ -103,21 +104,19 @@ message UpdateDialogueEvaluationResp {
   bool success = 1;
 }
 
-// --- 面试上下文查询 (专供 interview_api 的 WebSocket 阶段调用) ---
+// --- 练习上下文查询 (专供 BFF API WebSocket 阶段调用) ---
 
-// 一次性拉取面试所需的完整上下文
-// interview_api 在建立 WebSocket 后，用 session_id 调用此接口获取简历和岗位信息
-// 用于组装发给 Gemini Live API 的系统提示词
-message GetInterviewContextReq {
+message GetPracticeContextReq {
   string session_id = 1;
 }
 
-message GetInterviewContextResp {
+message GetPracticeContextResp {
   string session_id = 1;
-  string resume_content = 2;    // 简历结构化 JSON
-  string job_profile_name = 3;  // 岗位名称
-  string job_profile_desc = 4;  // 岗位描述
-  string user_id = 5;           // 用于后续 Token 额度扣减
+  string english_level = 2;     // 英语水平
+  string learning_target = 3;   // 学习目标
+  string scenario_name = 4;     // 场景名称
+  string scenario_desc = 5;     // 场景描述
+  string user_id = 6;           // 用于后续 Token 额度扣减
 }
 
 message ListSessionsReq {
@@ -126,7 +125,7 @@ message ListSessionsReq {
 
 message SessionItem {
   string id = 1;
-  string job_title = 2;
+  string scenario_name = 2;
   string status = 3;
   int64 created_at = 4;
   int32 overall_score = 5;
@@ -142,7 +141,7 @@ message GetSessionDetailReq {
 
 message GetSessionDetailResp {
   string session_id = 1;
-  string job_title = 2;
+  string scenario_name = 2;
   string transcript = 3; // 格式化后的对话文本
   int32 overall_score = 4;
   string evaluation_report = 5; // JSON
@@ -157,30 +156,28 @@ message DeleteSessionResp {
 }
 
 service Core {
-
-  // Resume & OSS
+  // User Profile & OSS
   rpc GenerateUploadUrl(GenerateUploadUrlReq) returns(GenerateUploadUrlResp);
-  rpc CreateResume(CreateResumeReq) returns(CreateResumeResp); // 将触发 PDF 解析
-  rpc GetResume(GetResumeReq) returns(GetResumeResp);
+  rpc CreateUserProfile(CreateUserProfileReq) returns(CreateUserProfileResp);
+  rpc GetUserProfile(GetUserProfileReq) returns(GetUserProfileResp);
   
-  // Job Profiles
-  rpc CreateJobProfile(CreateJobProfileReq) returns(CreateJobProfileResp);
-  rpc GetJobProfile(GetJobProfileReq) returns(GetJobProfileResp);
+  // Scenarios
+  rpc CreateScenario(CreateScenarioReq) returns(CreateScenarioResp);
+  rpc GetScenario(GetScenarioReq) returns(GetScenarioResp);
   
-  // Interview Sessions
+  // Practice Sessions
   rpc CreateSession(CreateSessionReq) returns(CreateSessionResp);
   rpc UpdateSessionStatus(UpdateSessionStatusReq) returns(UpdateSessionStatusResp);
   
-  // Interview Dialogues
+  // Dialogues
   rpc AddDialogue(AddDialogueReq) returns(AddDialogueResp);
   rpc UpdateDialogueEvaluation(UpdateDialogueEvaluationReq) returns(UpdateDialogueEvaluationResp);
 
-  // 面试上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
-  rpc GetInterviewContext(GetInterviewContextReq) returns(GetInterviewContextResp);
+  // 上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
+  rpc GetPracticeContext(GetPracticeContextReq) returns(GetPracticeContextResp);
 
-  // 面试列表与详情
+  // 列表与详情
   rpc ListSessions(ListSessionsReq) returns(ListSessionsResp);
   rpc GetSessionDetail(GetSessionDetailReq) returns(GetSessionDetailResp);
   rpc DeleteSession(DeleteSessionReq) returns(DeleteSessionResp);
 }
-

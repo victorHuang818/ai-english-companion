@@ -16,24 +16,24 @@ import (
 type (
 	AddDialogueReq               = core.AddDialogueReq
 	AddDialogueResp              = core.AddDialogueResp
-	CreateJobProfileReq          = core.CreateJobProfileReq
-	CreateJobProfileResp         = core.CreateJobProfileResp
-	CreateResumeReq              = core.CreateResumeReq
-	CreateResumeResp             = core.CreateResumeResp
+	CreateScenarioReq            = core.CreateScenarioReq
+	CreateScenarioResp           = core.CreateScenarioResp
 	CreateSessionReq             = core.CreateSessionReq
 	CreateSessionResp            = core.CreateSessionResp
+	CreateUserProfileReq         = core.CreateUserProfileReq
+	CreateUserProfileResp        = core.CreateUserProfileResp
 	DeleteSessionReq             = core.DeleteSessionReq
 	DeleteSessionResp            = core.DeleteSessionResp
 	GenerateUploadUrlReq         = core.GenerateUploadUrlReq
 	GenerateUploadUrlResp        = core.GenerateUploadUrlResp
-	GetInterviewContextReq       = core.GetInterviewContextReq
-	GetInterviewContextResp      = core.GetInterviewContextResp
-	GetJobProfileReq             = core.GetJobProfileReq
-	GetJobProfileResp            = core.GetJobProfileResp
-	GetResumeReq                 = core.GetResumeReq
-	GetResumeResp                = core.GetResumeResp
+	GetPracticeContextReq        = core.GetPracticeContextReq
+	GetPracticeContextResp       = core.GetPracticeContextResp
+	GetScenarioReq               = core.GetScenarioReq
+	GetScenarioResp              = core.GetScenarioResp
 	GetSessionDetailReq          = core.GetSessionDetailReq
 	GetSessionDetailResp         = core.GetSessionDetailResp
+	GetUserProfileReq            = core.GetUserProfileReq
+	GetUserProfileResp           = core.GetUserProfileResp
 	ListSessionsReq              = core.ListSessionsReq
 	ListSessionsResp             = core.ListSessionsResp
 	SessionItem                  = core.SessionItem
@@ -43,22 +43,22 @@ type (
 	UpdateSessionStatusResp      = core.UpdateSessionStatusResp
 
 	Core interface {
-		// Resume & OSS
+		// User Profile & OSS
 		GenerateUploadUrl(ctx context.Context, in *GenerateUploadUrlReq, opts ...grpc.CallOption) (*GenerateUploadUrlResp, error)
-		CreateResume(ctx context.Context, in *CreateResumeReq, opts ...grpc.CallOption) (*CreateResumeResp, error)
-		GetResume(ctx context.Context, in *GetResumeReq, opts ...grpc.CallOption) (*GetResumeResp, error)
-		// Job Profiles
-		CreateJobProfile(ctx context.Context, in *CreateJobProfileReq, opts ...grpc.CallOption) (*CreateJobProfileResp, error)
-		GetJobProfile(ctx context.Context, in *GetJobProfileReq, opts ...grpc.CallOption) (*GetJobProfileResp, error)
-		// Interview Sessions
+		CreateUserProfile(ctx context.Context, in *CreateUserProfileReq, opts ...grpc.CallOption) (*CreateUserProfileResp, error)
+		GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error)
+		// Scenarios
+		CreateScenario(ctx context.Context, in *CreateScenarioReq, opts ...grpc.CallOption) (*CreateScenarioResp, error)
+		GetScenario(ctx context.Context, in *GetScenarioReq, opts ...grpc.CallOption) (*GetScenarioResp, error)
+		// Practice Sessions
 		CreateSession(ctx context.Context, in *CreateSessionReq, opts ...grpc.CallOption) (*CreateSessionResp, error)
 		UpdateSessionStatus(ctx context.Context, in *UpdateSessionStatusReq, opts ...grpc.CallOption) (*UpdateSessionStatusResp, error)
-		// Interview Dialogues
+		// Dialogues
 		AddDialogue(ctx context.Context, in *AddDialogueReq, opts ...grpc.CallOption) (*AddDialogueResp, error)
 		UpdateDialogueEvaluation(ctx context.Context, in *UpdateDialogueEvaluationReq, opts ...grpc.CallOption) (*UpdateDialogueEvaluationResp, error)
-		// 面试上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
-		GetInterviewContext(ctx context.Context, in *GetInterviewContextReq, opts ...grpc.CallOption) (*GetInterviewContextResp, error)
-		// 面试列表与详情
+		// 上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
+		GetPracticeContext(ctx context.Context, in *GetPracticeContextReq, opts ...grpc.CallOption) (*GetPracticeContextResp, error)
+		// 列表与详情
 		ListSessions(ctx context.Context, in *ListSessionsReq, opts ...grpc.CallOption) (*ListSessionsResp, error)
 		GetSessionDetail(ctx context.Context, in *GetSessionDetailReq, opts ...grpc.CallOption) (*GetSessionDetailResp, error)
 		DeleteSession(ctx context.Context, in *DeleteSessionReq, opts ...grpc.CallOption) (*DeleteSessionResp, error)
@@ -75,34 +75,34 @@ func NewCore(cli zrpc.Client) Core {
 	}
 }
 
-// Resume & OSS
+// User Profile & OSS
 func (m *defaultCore) GenerateUploadUrl(ctx context.Context, in *GenerateUploadUrlReq, opts ...grpc.CallOption) (*GenerateUploadUrlResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.GenerateUploadUrl(ctx, in, opts...)
 }
 
-func (m *defaultCore) CreateResume(ctx context.Context, in *CreateResumeReq, opts ...grpc.CallOption) (*CreateResumeResp, error) {
+func (m *defaultCore) CreateUserProfile(ctx context.Context, in *CreateUserProfileReq, opts ...grpc.CallOption) (*CreateUserProfileResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
-	return client.CreateResume(ctx, in, opts...)
+	return client.CreateUserProfile(ctx, in, opts...)
 }
 
-func (m *defaultCore) GetResume(ctx context.Context, in *GetResumeReq, opts ...grpc.CallOption) (*GetResumeResp, error) {
+func (m *defaultCore) GetUserProfile(ctx context.Context, in *GetUserProfileReq, opts ...grpc.CallOption) (*GetUserProfileResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
-	return client.GetResume(ctx, in, opts...)
+	return client.GetUserProfile(ctx, in, opts...)
 }
 
-// Job Profiles
-func (m *defaultCore) CreateJobProfile(ctx context.Context, in *CreateJobProfileReq, opts ...grpc.CallOption) (*CreateJobProfileResp, error) {
+// Scenarios
+func (m *defaultCore) CreateScenario(ctx context.Context, in *CreateScenarioReq, opts ...grpc.CallOption) (*CreateScenarioResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
-	return client.CreateJobProfile(ctx, in, opts...)
+	return client.CreateScenario(ctx, in, opts...)
 }
 
-func (m *defaultCore) GetJobProfile(ctx context.Context, in *GetJobProfileReq, opts ...grpc.CallOption) (*GetJobProfileResp, error) {
+func (m *defaultCore) GetScenario(ctx context.Context, in *GetScenarioReq, opts ...grpc.CallOption) (*GetScenarioResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
-	return client.GetJobProfile(ctx, in, opts...)
+	return client.GetScenario(ctx, in, opts...)
 }
 
-// Interview Sessions
+// Practice Sessions
 func (m *defaultCore) CreateSession(ctx context.Context, in *CreateSessionReq, opts ...grpc.CallOption) (*CreateSessionResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.CreateSession(ctx, in, opts...)
@@ -113,7 +113,7 @@ func (m *defaultCore) UpdateSessionStatus(ctx context.Context, in *UpdateSession
 	return client.UpdateSessionStatus(ctx, in, opts...)
 }
 
-// Interview Dialogues
+// Dialogues
 func (m *defaultCore) AddDialogue(ctx context.Context, in *AddDialogueReq, opts ...grpc.CallOption) (*AddDialogueResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.AddDialogue(ctx, in, opts...)
@@ -124,13 +124,13 @@ func (m *defaultCore) UpdateDialogueEvaluation(ctx context.Context, in *UpdateDi
 	return client.UpdateDialogueEvaluation(ctx, in, opts...)
 }
 
-// 面试上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
-func (m *defaultCore) GetInterviewContext(ctx context.Context, in *GetInterviewContextReq, opts ...grpc.CallOption) (*GetInterviewContextResp, error) {
+// 上下文查询 (供 BFF WebSocket 阶段一次性调用，绕过流式链路)
+func (m *defaultCore) GetPracticeContext(ctx context.Context, in *GetPracticeContextReq, opts ...grpc.CallOption) (*GetPracticeContextResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
-	return client.GetInterviewContext(ctx, in, opts...)
+	return client.GetPracticeContext(ctx, in, opts...)
 }
 
-// 面试列表与详情
+// 列表与详情
 func (m *defaultCore) ListSessions(ctx context.Context, in *ListSessionsReq, opts ...grpc.CallOption) (*ListSessionsResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.ListSessions(ctx, in, opts...)

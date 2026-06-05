@@ -38,37 +38,37 @@ export const ReportPage: React.FC = () => {
         <button onClick={() => navigate('/')} className="back-btn">
           <ChevronLeft size={20} /> Back to Hub
         </button>
-        <h1>Interview Summary: {data.job_title}</h1>
+        <h1>Practice Summary: {data.scenario_name}</h1>
       </div>
-
-      <div className="report-grid">
-        <div className="report-summary-header">
-          <GlassCard className="score-summary-card">
-            <div className="card-header">
-              <Award className="accent-icon" />
-              <h2>Performance Matrix</h2>
-            </div>
-            {parsedCommentary ? (
-              <CommentaryScorecard data={parsedCommentary} />
-            ) : (
-              <div className="no-score">Analysis not finalized.</div>
-            )}
-          </GlassCard>
-        </div>
-
-        <div className="report-details-grid">
-          <GlassCard className="transcript-card">
-            <div className="card-header">
-              <FileText className="accent-icon" />
-              <h2>Neural Transcript</h2>
-            </div>
-            <div className="transcript-content">
-              {data.transcript.split('\n').map((line: string, i: number) => {
-                if (!line.trim()) return null;
-                const isAI = line.startsWith('AI:');
-                return (
-                  <div key={i} className={`transcript-line ${isAI ? 'ai' : 'user'}`}>
-                    <span className="line-prefix">{isAI ? 'INTERVIEWER' : 'SUBJECT'}</span>
+ 
+       <div className="report-grid">
+         <div className="report-summary-header">
+           <GlassCard className="score-summary-card">
+             <div className="card-header">
+               <Award className="accent-icon" />
+               <h2>Performance Matrix</h2>
+             </div>
+             {parsedCommentary ? (
+               <CommentaryScorecard data={parsedCommentary} />
+             ) : (
+               <div className="no-score">Analysis not finalized.</div>
+             )}
+           </GlassCard>
+         </div>
+ 
+         <div className="report-details-grid">
+           <GlassCard className="transcript-card">
+             <div className="card-header">
+               <FileText className="accent-icon" />
+               <h2>Neural Transcript</h2>
+             </div>
+             <div className="transcript-content">
+               {data.transcript.split('\n').map((line: string, i: number) => {
+                 if (!line.trim()) return null;
+                 const isAI = line.startsWith('AI:');
+                 return (
+                   <div key={i} className={`transcript-line ${isAI ? 'ai' : 'user'}`}>
+                     <span className="line-prefix">{isAI ? 'AI TEACHER' : 'YOU'}</span>
                     <p>{line.replace(/^(AI:|User:)/, '')}</p>
                   </div>
                 );

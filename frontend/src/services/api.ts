@@ -38,20 +38,20 @@ export const api = {
   login: (data: any) => fetchWithAuth('/user/login', { method: 'POST', body: JSON.stringify(data) }),
   getUserInfo: () => fetchWithAuth('/user/info', { method: 'GET' }),
   
-  // Resumes
-  generateUploadUrl: (filename: string) => fetchWithAuth('/resumes/upload-url', { method: 'POST', body: JSON.stringify({ filename }) }),
-  createResume: (objectKey: string) => fetchWithAuth('/resumes/', { method: 'POST', body: JSON.stringify({ object_key: objectKey }) }),
-  getResume: (id: string) => fetchWithAuth(`/resumes/${id}`, { method: 'GET' }),
+  // User Profiles
+  generateUploadUrl: (filename: string) => fetchWithAuth('/user-profiles/upload-url', { method: 'POST', body: JSON.stringify({ filename }) }),
+  createUserProfile: (data: any) => fetchWithAuth('/user-profiles/', { method: 'POST', body: JSON.stringify(data) }),
+  getUserProfile: (id: string) => fetchWithAuth(`/user-profiles/${id}`, { method: 'GET' }),
   
-  // Jobs
-  createJobProfile: (data: any) => fetchWithAuth('/job-profiles/', { method: 'POST', body: JSON.stringify(data) }),
+  // Scenarios
+  createScenario: (data: any) => fetchWithAuth('/scenarios/', { method: 'POST', body: JSON.stringify(data) }),
   
-  // Interviews
-  createSession: (data: any) => fetchWithAuth('/interviews/', { method: 'POST', body: JSON.stringify(data) }),
-  listSessions: () => fetchWithAuth('/interviews/', { method: 'GET' }),
-  getSessionDetail: (id: string) => fetchWithAuth(`/interviews/${id}`, { method: 'GET' }),
-  deleteSession: (id: string) => fetchWithAuth(`/interviews/${id}`, { method: 'DELETE' }),
-  getAiSuggestion: (data: any) => fetchWithAuth('/interviews/suggestion', { method: 'POST', body: JSON.stringify(data) }),
+  // Practice Sessions
+  createSession: (data: any) => fetchWithAuth('/practices/', { method: 'POST', body: JSON.stringify(data) }),
+  listSessions: () => fetchWithAuth('/practices/', { method: 'GET' }),
+  getSessionDetail: (id: string) => fetchWithAuth(`/practices/${id}`, { method: 'GET' }),
+  deleteSession: (id: string) => fetchWithAuth(`/practices/${id}`, { method: 'DELETE' }),
+  getAiSuggestion: (data: any) => fetchWithAuth('/practices/suggestion', { method: 'POST', body: JSON.stringify(data) }),
 
   
   // MinIO direct upload

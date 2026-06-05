@@ -29,19 +29,19 @@ func NewGetSessionDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (*core.GetSessionDetailResp, error) {
 	// 1. Query the session
-	session, err := l.svcCtx.InterviewSessionModel.FindOne(l.ctx, in.SessionId)
+	session, err := l.svcCtx.PracticeSessionModel.FindOne(l.ctx, in.SessionId)
 	if err != nil {
 		l.Errorf("Failed to find session %s: %v", in.SessionId, err)
 		return nil, err
 	}
 
-	// 2. Query job title
-	var jobTitle string
-	queryJob := "SELECT name FROM job_profiles WHERE id = ?"
-	err = l.svcCtx.SqlConn.QueryRowCtx(l.ctx, &jobTitle, queryJob, session.JobProfileId)
+	// 2. Query scenario name
+	var scenarioName string
+	queryScenario := "SELECT name FROM scenarios WHERE id = ?"
+	err = l.svcCtx.SqlConn.QueryRowCtx(l.ctx, &scenarioName, queryScenario, session.ScenarioId)
 	if err != nil {
-		l.Errorf("Failed to query job profile for session %s: %v", in.SessionId, err)
-		jobTitle = "未知岗位"
+		l.Errorf("Failed to query scenario for session %s: %v", in.SessionId, err)
+		scenarioName = "未知场景"
 	}
 
 	// 3. Query all dialogues
@@ -51,7 +51,7 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 		Evaluation sql.NullString `db:"evaluation"`
 	}
 	var dialogues []dbDialogue
-	queryDialogues := "SELECT role, content, evaluation FROM interview_dialogues WHERE interview_session_id = ? ORDER BY created_at ASC"
+	queryDialogues := "SELECT role, content, evaluation FROM dialogues WHERE practice_session_id = ? ORDER BY created_at ASC"
 	err = l.svcCtx.SqlConn.QueryRowsCtx(l.ctx, &dialogues, queryDialogues, in.SessionId)
 	if err != nil {
 		l.Errorf("Failed to query dialogues for session %s: %v", in.SessionId, err)
@@ -67,7 +67,7 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 		}
 	}
 
-	// 4. Consolidate evaluation report if session is completed (or even in progress) and empty
+	// 4. Consolidate evaluation report
 	var evaluationReport string
 	var overallScore int32
 
@@ -136,7 +136,6 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 
 		if count > 0 {
 			overallScore = int32(totalScore / float64(count))
-			// Join comments
 			joinFeedback := func(list []string) string {
 				if len(list) == 0 {
 					return "评估未见异常。"
@@ -144,7 +143,6 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 				if len(list) == 1 {
 					return list[0]
 				}
-				// Format as bullet points or joined strings
 				var sb strings.Builder
 				for i, item := range list {
 					sb.WriteString(fmt.Sprintf("%d. %s ", i+1, item))
@@ -168,20 +166,18 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 			reportBytes, _ := json.Marshal(reportObj)
 			evaluationReport = string(reportBytes)
 
-			// Save evaluation report back to session
 			session.EvaluationReport = sql.NullString{String: evaluationReport, Valid: true}
-			_ = l.svcCtx.InterviewSessionModel.Update(l.ctx, session)
+			_ = l.svcCtx.PracticeSessionModel.Update(l.ctx, session)
 		} else {
-			// Return default empty evaluation
 			reportObj := map[string]interface{}{
 				"score":         0,
 				"overall_score": 0,
 				"dimensions": map[string]string{
-					"fluency":        "本次面试未检测到有效的回答记录。",
-					"relevance":      "本次面试未检测到有效的回答记录。",
-					"logic":          "本次面试未检测到有效的回答记录。",
-					"depth":          "本次面试未检测到有效的回答记录。",
-					"star_alignment": "本次面试未检测到有效的回答记录。",
+					"fluency":        "本次练习未检测到有效的回答记录。",
+					"relevance":      "本次练习未检测到有效的回答记录。",
+					"logic":          "本次练习未检测到有效的回答记录。",
+					"depth":          "本次练习未检测到有效的回答记录。",
+					"star_alignment": "本次练习未检测到有效的回答记录。",
 				},
 				"overall_comment": "未进行充分的对话，无法生成最终评估报告。",
 			}
@@ -191,7 +187,6 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 		}
 	}
 
-	// Calculate overall score from evaluationReport if we got it from DB
 	if overallScore == 0 && evaluationReport != "" {
 		var report map[string]interface{}
 		if err := json.Unmarshal([]byte(evaluationReport), &report); err == nil {
@@ -209,7 +204,7 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 
 	return &core.GetSessionDetailResp{
 		SessionId:        session.Id,
-		JobTitle:         jobTitle,
+		ScenarioName:     scenarioName,
 		Transcript:       transcriptBuilder.String(),
 		OverallScore:     overallScore,
 		EvaluationReport: evaluationReport,

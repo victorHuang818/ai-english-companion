@@ -25,7 +25,7 @@ func NewUpdateSessionStatusLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *UpdateSessionStatusLogic) UpdateSessionStatus(in *core.UpdateSessionStatusReq) (*core.UpdateSessionStatusResp, error) {
-	session, err := l.svcCtx.InterviewSessionModel.FindOne(l.ctx, in.Id)
+	session, err := l.svcCtx.PracticeSessionModel.FindOne(l.ctx, in.Id)
 	if err != nil {
 		l.Errorf("Failed to find session %s: %v", in.Id, err)
 		return nil, err
@@ -39,7 +39,7 @@ func (l *UpdateSessionStatusLogic) UpdateSessionStatus(in *core.UpdateSessionSta
 		}
 	}
 
-	err = l.svcCtx.InterviewSessionModel.Update(l.ctx, session)
+	err = l.svcCtx.PracticeSessionModel.Update(l.ctx, session)
 	if err != nil {
 		l.Errorf("Failed to update session %s: %v", in.Id, err)
 		return nil, err

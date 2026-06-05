@@ -3,31 +3,32 @@
 
 package types
 
-type CreateJobProfileReq struct {
+type CreateScenarioReq struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-type CreateJobProfileResp struct {
+type CreateScenarioResp struct {
 	Id string `json:"id"`
 }
 
-type CreateResumeReq struct {
-	ObjectKey string `json:"object_key"`
-}
-
-type CreateResumeResp struct {
-	Id     string `json:"id"`
-	Status string `json:"status"`
-}
-
 type CreateSessionReq struct {
-	ResumeId     string `json:"resume_id"`
-	JobProfileId string `json:"job_profile_id"`
+	UserProfileId string `json:"user_profile_id"`
+	ScenarioId    string `json:"scenario_id"`
 }
 
 type CreateSessionResp struct {
 	SessionId string `json:"session_id"`
+}
+
+type CreateUserProfileReq struct {
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
+}
+
+type CreateUserProfileResp struct {
+	Id     string `json:"id"`
+	Status string `json:"status"`
 }
 
 type DeleteSessionReq struct {
@@ -47,25 +48,13 @@ type GenerateUploadUrlResp struct {
 	ObjectKey string `json:"object_key"`
 }
 
-type GetResumeReq struct {
-	Id string `path:"id"`
-}
-
-type GetResumeResp struct {
-	Id          string `json:"id"`
-	RawText     string `json:"raw_text"`
-	Status      string `json:"status"`
-	CreatedAt   int64  `json:"created_at"`
-	DownloadUrl string `json:"download_url"`
-}
-
 type GetSessionDetailReq struct {
 	SessionId string `path:"session_id"`
 }
 
 type GetSessionDetailResp struct {
 	SessionId    string `json:"session_id"`
-	JobTitle     string `json:"job_title"`
+	ScenarioName string `json:"scenario_name"`
 	Transcript   string `json:"transcript"`
 	OverallScore int32  `json:"overall_score"`
 	Commentary   string `json:"commentary"`
@@ -79,16 +68,19 @@ type GetUserInfoResp struct {
 	RechargeTokens  uint64 `json:"recharge_tokens"`
 }
 
-type InterviewSession struct {
-	SessionId    string `json:"session_id"`
-	JobTitle     string `json:"job_title"`
-	Status       string `json:"status"`
-	CreatedAt    int64  `json:"created_at"`
-	OverallScore int32  `json:"overall_score"`
+type GetUserProfileReq struct {
+	Id string `path:"id"`
+}
+
+type GetUserProfileResp struct {
+	Id             string `json:"id"`
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
+	CreatedAt      int64  `json:"created_at"`
 }
 
 type ListSessionsResp struct {
-	Sessions []InterviewSession `json:"sessions"`
+	Sessions []PracticeSession `json:"sessions"`
 }
 
 type LoginReq struct {
@@ -99,6 +91,14 @@ type LoginReq struct {
 type LoginResp struct {
 	Id    string `json:"id"`
 	Token string `json:"token"`
+}
+
+type PracticeSession struct {
+	SessionId    string `json:"session_id"`
+	ScenarioName string `json:"scenario_name"`
+	Status       string `json:"status"`
+	CreatedAt    int64  `json:"created_at"`
+	OverallScore int32  `json:"overall_score"`
 }
 
 type RegisterReq struct {

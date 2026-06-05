@@ -25,21 +25,21 @@ func NewCreateSessionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 	}
 }
 
-// Interview Sessions
+// Practice Sessions
 func (l *CreateSessionLogic) CreateSession(in *core.CreateSessionReq) (*core.CreateSessionResp, error) {
 	sessionID := uuid.New().String()
 
-	data := &model.InterviewSessions{
-		Id:             sessionID,
-		UserId:         in.UserId,
-		ResumeId:       in.ResumeId,
-		JobProfileId:   in.JobProfileId,
-		Status:         "in_progress",
+	data := &model.PracticeSessions{
+		Id:            sessionID,
+		UserId:        in.UserId,
+		UserProfileId: in.UserProfileId,
+		ScenarioId:    in.ScenarioId,
+		Status:        "in_progress",
 	}
 
-	_, err := l.svcCtx.InterviewSessionModel.Insert(l.ctx, data)
+	_, err := l.svcCtx.PracticeSessionModel.Insert(l.ctx, data)
 	if err != nil {
-		l.Errorf("Failed to create interview session: %v", err)
+		l.Errorf("Failed to create practice session: %v", err)
 		return nil, err
 	}
 

@@ -12,6 +12,7 @@ import (
 	"ai_interview/interview_api/internal/svc"
 	"ai_interview/rpc/ai/ai"
 	"ai_interview/rpc/core/core"
+	"ai_interview/rpc/core/coreclient"
 	"ai_interview/rpc/user/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -113,7 +114,7 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Interview
 	var userResp *core.AddDialogueResp
 	var err error
 	if task.Answer != "" {
-		userResp, err = svcCtx.CoreRpc.AddDialogue(ctx, &core.AddDialogueReq{
+		userResp, err = svcCtx.CoreRpc.AddDialogue(ctx, &coreclient.AddDialogueReq{
 			SessionId:    task.SessionId,
 			Role:         "user",
 			Content:      task.Answer,
@@ -127,7 +128,7 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Interview
 
 	// 2. 紧接着立即写入面试官的新提问
 	if task.NextQuestion != "" {
-		_, err = svcCtx.CoreRpc.AddDialogue(ctx, &core.AddDialogueReq{
+		_, err = svcCtx.CoreRpc.AddDialogue(ctx, &coreclient.AddDialogueReq{
 			SessionId: task.SessionId,
 			Role:      "interviewer",
 			Content:   task.NextQuestion,
@@ -141,11 +142,11 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Interview
 	if userResp != nil && userResp.Id != "" {
 		go func(dialogueId string) {
 			// 获取简历与岗位上下文
-			ctxResp, err := svcCtx.CoreRpc.GetInterviewContext(context.Background(), &core.GetInterviewContextReq{
+			ctxResp, err := svcCtx.CoreRpc.GetPracticeContext(context.Background(), &coreclient.GetPracticeContextReq{
 				SessionId: task.SessionId,
 			})
 			if err != nil {
-				logx.Errorf("Consumer failed to get interview context: %v", err)
+				logx.Errorf("Consumer failed to get practice context: %v", err)
 				return
 			}
 
@@ -159,11 +160,12 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Interview
 			historyStr := historyBuilder.String()
 
 			// 组装系统 Prompt
+			userProfileContext := fmt.Sprintf("English Level: %s\nLearning Target: %s", ctxResp.EnglishLevel, ctxResp.LearningTarget)
 			commentaryPrompt := fmt.Sprintf(
 				prompts.AiCommentatorPrompt,
-				ctxResp.ResumeContent,
-				ctxResp.JobProfileName,
-				ctxResp.JobProfileDesc,
+				userProfileContext,
+				ctxResp.ScenarioName,
+				ctxResp.ScenarioDesc,
 				historyStr,
 				task.Question,
 				"【当前用户回答已在附带音频中传入，请直接分析并评估候选人的语音表达、自信度、流畅度以及回答内容本身】",
@@ -200,7 +202,7 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Interview
 
 			if rpcErr == nil && commentary != "" {
 				// 评估结果返回后，异步更新用户回答的 evaluation 字段
-				_, err = svcCtx.CoreRpc.UpdateDialogueEvaluation(context.Background(), &core.UpdateDialogueEvaluationReq{
+				_, err = svcCtx.CoreRpc.UpdateDialogueEvaluation(context.Background(), &coreclient.UpdateDialogueEvaluationReq{
 					DialogueId: dialogueId,
 					Evaluation: commentary,
 				})

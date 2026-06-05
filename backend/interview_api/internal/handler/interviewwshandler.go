@@ -17,7 +17,7 @@ import (
 	"ai_interview/interview_api/internal/svc"
 	"ai_interview/rpc/ai/ai"
 
-	"ai_interview/rpc/core/core"
+	"ai_interview/rpc/core/coreclient"
 	"ai_interview/rpc/user/user"
 
 	"github.com/gorilla/websocket"
@@ -99,18 +99,19 @@ func InterviewWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		ctxResp, err := svcCtx.CoreRpc.GetInterviewContext(r.Context(), &core.GetInterviewContextReq{
+		ctxResp, err := svcCtx.CoreRpc.GetPracticeContext(r.Context(), &coreclient.GetPracticeContextReq{
 			SessionId: firstMsg.SessionId,
 		})
 		if err != nil {
-			logx.Errorf("GetInterviewContext rpc error: %v", err)
+			logx.Errorf("GetPracticeContext rpc error: %v", err)
 			return
 		}
 
 		// 🌟 依据配置文件 yaml 的 RealtimeInterviewer.Provider 动态创建适配器，零侵入无缝切流！
 		var realtimeConn RealtimeInterviewerConn
 		provider := svcCtx.Config.RealtimeInterviewer.Provider
-		systemInstruction := fmt.Sprintf(prompts.InterviewerPrompt, ctxResp.JobProfileName, ctxResp.ResumeContent, ctxResp.JobProfileDesc, "暂无对话记录")
+		userProfileContext := fmt.Sprintf("English Level: %s\nLearning Target: %s", ctxResp.EnglishLevel, ctxResp.LearningTarget)
+		systemInstruction := fmt.Sprintf(prompts.InterviewerPrompt, ctxResp.ScenarioName, userProfileContext, ctxResp.ScenarioDesc, "暂无对话记录")
 
 		if svcCtx.Config.Mock {
 			logx.Infof("Initializing Mock Realtime Interviewer for load testing")
@@ -323,11 +324,12 @@ func InterviewWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 							// 在完整接收完新问题后，触发 AI 辅助提示（破题锦囊）
 							if nextQuestion != "" {
 								go func(nq, h string) {
+									userProfileContext := fmt.Sprintf("English Level: %s\nLearning Target: %s", ctxResp.EnglishLevel, ctxResp.LearningTarget)
 									suggestionPrompt := fmt.Sprintf(
 										prompts.AiSuggestionPrompt,
-										ctxResp.JobProfileName,
-										ctxResp.JobProfileDesc,
-										ctxResp.ResumeContent,
+										ctxResp.ScenarioName,
+										ctxResp.ScenarioDesc,
+										userProfileContext,
 										h,
 										nq,
 									)
@@ -400,7 +402,7 @@ func InterviewWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		if firstMsg.SessionId != "" {
 			go func(sid string) {
 				bgCtx := context.Background()
-				_, err := svcCtx.CoreRpc.UpdateSessionStatus(bgCtx, &core.UpdateSessionStatusReq{
+				_, err := svcCtx.CoreRpc.UpdateSessionStatus(bgCtx, &coreclient.UpdateSessionStatusReq{
 					Id:     sid,
 					Status: "completed",
 				})
