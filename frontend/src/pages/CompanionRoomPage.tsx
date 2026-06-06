@@ -89,11 +89,27 @@ export const CompanionRoomPage: React.FC = () => {
           setMessages(prev => [...prev, { id: 'user-' + Date.now(), sender: 'user', text: data.serverContent.inputTranscription.text }]);
         }
         if (data.serverContent?.modelTurn?.parts) {
+          let hasText = false;
+          let textVal = '';
           data.serverContent.modelTurn.parts.forEach((part: any) => {
             if (part.inlineData?.data) {
               decodeAndQueueAudio(part.inlineData.data, part.inlineData.mimeType);
             }
+            if (part.text) {
+              hasText = true;
+              textVal += part.text;
+            }
           });
+          if (hasText) {
+            setMessages(prev => {
+              const last = prev[prev.length - 1];
+              if (last && last.sender === 'ai' && last.id.startsWith('ai-stream-')) {
+                return [...prev.slice(0, -1), { ...last, text: last.text + textVal }];
+              }
+              return [...prev, { id: 'ai-stream-' + Date.now(), sender: 'ai', text: textVal }];
+            });
+            setLoadingSuggestion(true);
+          }
         }
         if (data.serverContent?.outputTranscription?.text) {
           setMessages(prev => [...prev, { id: 'ai-' + Date.now(), sender: 'ai', text: data.serverContent.outputTranscription.text }]);
@@ -148,17 +164,9 @@ export const CompanionRoomPage: React.FC = () => {
               {loadingSuggestion ? (
                 <div className="typing-loader">Thinking...</div>
               ) : suggestion ? (
-                <div className="suggestion-pills">
-                  {suggestion.split('\n')
-                    .map(line => line.trim().replace(/^-\s*/, ''))
-                    .filter(Boolean)
-                    .map((item, index) => (
-                      <span key={index} className="suggestion-pill animate-fade-in">
-                        {item}
-                      </span>
-                    ))
-                  }
-                </div>
+                <p className="suggestion-paragraph animate-fade-in">
+                  {suggestion}
+                </p>
               ) : (
                 <div className="empty-suggestion">Awaiting next question to generate hints...</div>
               )}
