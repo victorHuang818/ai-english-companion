@@ -765,6 +765,7 @@ type AddDialogueReq struct {
 	AudioObjectKey string                 `protobuf:"bytes,4,opt,name=audio_object_key,json=audioObjectKey,proto3" json:"audio_object_key,omitempty"` // 录音的 OSS key
 	Evaluation     string                 `protobuf:"bytes,5,opt,name=evaluation,proto3" json:"evaluation,omitempty"`                                 // 此轮回答的 AI 评估报告 (JSON 格式文本)
 	AudioContent   []byte                 `protobuf:"bytes,6,opt,name=audio_content,json=audioContent,proto3" json:"audio_content,omitempty"`         // 用户回答的完整 WAV 音频内容字节
+	CreatedAt      int64                  `protobuf:"varint,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                 // 毫秒级时间戳
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -839,6 +840,13 @@ func (x *AddDialogueReq) GetAudioContent() []byte {
 		return x.AudioContent
 	}
 	return nil
+}
+
+func (x *AddDialogueReq) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
 }
 
 type AddDialogueResp struct {
@@ -1853,7 +1861,7 @@ const file_core_proto_rawDesc = "" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12+\n" +
 	"\x11evaluation_report\x18\x03 \x01(\tR\x10evaluationReport\"3\n" +
 	"\x17UpdateSessionStatusResp\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xcc\x01\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xeb\x01\n" +
 	"\x0eAddDialogueReq\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x12\n" +
@@ -1863,7 +1871,9 @@ const file_core_proto_rawDesc = "" +
 	"\n" +
 	"evaluation\x18\x05 \x01(\tR\n" +
 	"evaluation\x12#\n" +
-	"\raudio_content\x18\x06 \x01(\fR\faudioContent\"!\n" +
+	"\raudio_content\x18\x06 \x01(\fR\faudioContent\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\a \x01(\x03R\tcreatedAt\"!\n" +
 	"\x0fAddDialogueResp\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"^\n" +
 	"\x1bUpdateDialogueEvaluationReq\x12\x1f\n" +

@@ -56,7 +56,7 @@ CREATE TABLE `dialogues` (
     `audio_url` VARCHAR(1024) DEFAULT NULL COMMENT '录音音频URL',
     `content` TEXT NOT NULL COMMENT '对话文本内容',
     `evaluation` TEXT DEFAULT NULL COMMENT 'AI对本轮回答的评估打分(JSON格式文本)',
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `created_at` TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '创建时间',
     PRIMARY KEY (`id`),
     INDEX `idx_session_time` (`practice_session_id`, `created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

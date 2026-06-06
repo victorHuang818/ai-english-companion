@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"ai_companion/rpc/core/core"
 	"ai_companion/rpc/core/internal/svc"
@@ -69,7 +70,20 @@ func (l *AddDialogueLogic) AddDialogue(in *core.AddDialogueReq) (*core.AddDialog
 		Evaluation:        evaluation,
 	}
 
-	_, err := l.svcCtx.DialogueModel.Insert(l.ctx, data)
+	var err error
+	if in.CreatedAt > 0 {
+		data.CreatedAt = time.UnixMilli(in.CreatedAt)
+		if customModel, ok := l.svcCtx.DialogueModel.(interface {
+			InsertWithTime(ctx context.Context, data *model.Dialogues) (sql.Result, error)
+		}); ok {
+			_, err = customModel.InsertWithTime(l.ctx, data)
+		} else {
+			_, err = l.svcCtx.DialogueModel.Insert(l.ctx, data)
+		}
+	} else {
+		_, err = l.svcCtx.DialogueModel.Insert(l.ctx, data)
+	}
+
 	if err != nil {
 		l.Errorf("Failed to insert dialogue: %v", err)
 		return nil, err

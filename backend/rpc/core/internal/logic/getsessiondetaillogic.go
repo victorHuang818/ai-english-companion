@@ -52,7 +52,7 @@ func (l *GetSessionDetailLogic) GetSessionDetail(in *core.GetSessionDetailReq) (
 		Evaluation sql.NullString `db:"evaluation"`
 	}
 	var dialogues []dbDialogue
-	queryDialogues := "SELECT role, content, audio_url, evaluation FROM dialogues WHERE practice_session_id = ? ORDER BY created_at ASC"
+	queryDialogues := "SELECT role, content, audio_url, evaluation FROM dialogues WHERE practice_session_id = ? ORDER BY created_at ASC, role ASC"
 	err = l.svcCtx.SqlConn.QueryRowsCtx(l.ctx, &dialogues, queryDialogues, in.SessionId)
 	if err != nil {
 		l.Errorf("Failed to query dialogues for session %s: %v", in.SessionId, err)

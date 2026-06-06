@@ -28,7 +28,7 @@ func ConsolidateReport(ctx context.Context, svcCtx *svc.ServiceContext, sessionI
 		Evaluation sql.NullString `db:"evaluation"`
 	}
 	var dialogues []dbDialogue
-	queryDialogues := "SELECT role, content, evaluation FROM dialogues WHERE practice_session_id = ? ORDER BY created_at ASC"
+	queryDialogues := "SELECT role, content, evaluation FROM dialogues WHERE practice_session_id = ? ORDER BY created_at ASC, role ASC"
 	err = svcCtx.SqlConn.QueryRowsCtx(ctx, &dialogues, queryDialogues, sessionId)
 	if err != nil {
 		return "", 0, fmt.Errorf("failed to query dialogues: %v", err)
