@@ -9,9 +9,9 @@ import (
 	"ai_companion/rpc/ai/ai"
 
 	"ai_companion/rpc/ai/internal/config"
+	"ai_companion/rpc/ai/internal/interceptor"
 	"ai_companion/rpc/ai/internal/server"
 	"ai_companion/rpc/ai/internal/svc"
-
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -36,6 +36,7 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
+	s.AddUnaryInterceptors(interceptor.LogSanitizeInterceptor)
 	defer s.Stop()
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)

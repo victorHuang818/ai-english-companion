@@ -38,11 +38,21 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 	}
 
 	modelName := cfg.Model
+	startTime := time.Now()
+
+	// 结构化入口日志：type=evaluation，只记录音频大小，不记录字节内容
+	logx.Infow("[evaluation] starting AI commentary evaluation",
+		logx.Field("type", "evaluation"),
+		logx.Field("session_id", in.SessionId),
+		logx.Field("model", modelName),
+		logx.Field("audio_bytes", len(in.AudioContent)),
+		logx.Field("has_audio", len(in.AudioContent) > 0),
+	)
 
 	// 🌟 1. 如果包含了音频字节数据，使用符合 OpenAI / DashScope 标准的 HTTP 接口发送语音多模态请求
 	// 这样可以彻底避免 go-openai SDK 库版本落后、不支持 "input_audio" 结构体的编译问题
 	if len(in.AudioContent) > 0 {
-		audioBase64 := base64.StdEncoding.EncodeToString(in.AudioContent)
+		audioBase64 := "data:audio/wav;base64," + base64.StdEncoding.EncodeToString(in.AudioContent)
 
 		payload := map[string]interface{}{
 			"model": modelName,
@@ -77,7 +87,10 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 		}
 		apiURL := fmt.Sprintf("%s/chat/completions", baseURL)
 
-		req, err := http.NewRequestWithContext(l.ctx, "POST", apiURL, bytes.NewReader(payloadBytes))
+		// 使用独立 context，避免 go-zero RPC 框架超时 cancel 传播到 HTTP 层
+		httpCtx, httpCancel := context.WithTimeout(context.Background(), 60*time.Second)
+		defer httpCancel()
+		req, err := http.NewRequestWithContext(httpCtx, "POST", apiURL, bytes.NewReader(payloadBytes))
 		if err != nil {
 			return nil, fmt.Errorf("failed to create http request: %v", err)
 		}
@@ -88,7 +101,13 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 		client := &http.Client{Timeout: 60 * time.Second}
 		resp, err := client.Do(req)
 		if err != nil {
-			l.Errorf("Multimodal AI Commentary HTTP request failed (Vendor: %s, Model: %s): %v", cfg.Vendor, modelName, err)
+			logx.Errorw("[evaluation] multimodal HTTP request failed",
+				logx.Field("type", "evaluation"),
+				logx.Field("session_id", in.SessionId),
+				logx.Field("model", modelName),
+				logx.Field("duration_ms", time.Since(startTime).Milliseconds()),
+				logx.Field("error", err.Error()),
+			)
 			return nil, err
 		}
 		defer resp.Body.Close()
@@ -99,7 +118,13 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 		}
 
 		if resp.StatusCode != http.StatusOK {
-			l.Errorf("Multimodal AI Commentary API returned error status %d: %s", resp.StatusCode, string(respBytes))
+			logx.Errorw("[evaluation] API returned non-200 status",
+				logx.Field("type", "evaluation"),
+				logx.Field("session_id", in.SessionId),
+				logx.Field("model", modelName),
+				logx.Field("http_status", resp.StatusCode),
+				logx.Field("duration_ms", time.Since(startTime).Milliseconds()),
+			)
 			return nil, fmt.Errorf("AI API returned status %d", resp.StatusCode)
 		}
 
@@ -119,6 +144,13 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 			return nil, fmt.Errorf("multimodal AI generated no commentary")
 		}
 
+		logx.Infow("[evaluation] multimodal commentary completed",
+			logx.Field("type", "evaluation"),
+			logx.Field("session_id", in.SessionId),
+			logx.Field("model", modelName),
+			logx.Field("duration_ms", time.Since(startTime).Milliseconds()),
+			logx.Field("result", "ok"),
+		)
 		return &ai.GetAiCommentaryResp{
 			Commentary: chatResp.Choices[0].Message.Content,
 		}, nil
@@ -131,8 +163,11 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 	}
 	client := openai.NewClientWithConfig(config)
 
+	// 使用独立 context，避免 go-zero RPC 框架超时 cancel 传播到 HTTP 层
+	textCtx, textCancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer textCancel()
 	resp, err := client.CreateChatCompletion(
-		l.ctx,
+		textCtx,
 		openai.ChatCompletionRequest{
 			Model: modelName,
 			Messages: []openai.ChatCompletionMessage{
@@ -145,7 +180,13 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 	)
 
 	if err != nil {
-		l.Errorf("AI Commentary API error (Vendor: %s, Model: %s): %v", cfg.Vendor, modelName, err)
+		logx.Errorw("[evaluation] text-only commentary failed",
+			logx.Field("type", "evaluation"),
+			logx.Field("session_id", in.SessionId),
+			logx.Field("model", modelName),
+			logx.Field("duration_ms", time.Since(startTime).Milliseconds()),
+			logx.Field("error", err.Error()),
+		)
 		return nil, err
 	}
 
@@ -153,6 +194,13 @@ func (l *GetAiCommentaryLogic) GetAiCommentary(in *ai.GetAiCommentaryReq) (*ai.G
 		return nil, fmt.Errorf("AI generated no commentary")
 	}
 
+	logx.Infow("[evaluation] text-only commentary completed",
+		logx.Field("type", "evaluation"),
+		logx.Field("session_id", in.SessionId),
+		logx.Field("model", modelName),
+		logx.Field("duration_ms", time.Since(startTime).Milliseconds()),
+		logx.Field("result", "ok"),
+	)
 	return &ai.GetAiCommentaryResp{
 		Commentary: resp.Choices[0].Message.Content,
 	}, nil
