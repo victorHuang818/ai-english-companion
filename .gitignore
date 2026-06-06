@@ -10,6 +10,7 @@ node_modules/
 dist/
 build/
 bin/
+/start_services.sh
 
 # Misc
 .DS_Store
