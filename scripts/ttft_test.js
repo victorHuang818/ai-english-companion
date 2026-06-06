@@ -5,7 +5,7 @@ import { check, sleep } from 'k6';
 // 必须在全局作用域（Init Context）加载二进制 PCM 音频文件
 const pcmData = open('./welcome.pcm', 'b');
 
-const HOST = __ENV.API_HOST || '127.0.0.1:8889';
+const HOST = __ENV.API_HOST || '127.0.0.1:8890';
 const BASE_URL = `http://${HOST}/api/v1`;
 const WS_URL = `ws://${HOST}/ws/companion`;
 

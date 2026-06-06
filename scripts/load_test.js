@@ -3,7 +3,7 @@ import ws from 'k6/ws';
 import { check, sleep } from 'k6';
 
 // 从环境变量读取主机地址，默认使用本地测试地址
-const HOST = __ENV.API_HOST || '127.0.0.1:8889';
+const HOST = __ENV.API_HOST || '127.0.0.1:8890';
 const BASE_URL = `http://${HOST}/api/v1`;
 const WS_URL = `ws://${HOST}/ws/companion`;
 

@@ -1,6 +1,6 @@
 Name: companion-api
 Host: 0.0.0.0
-Port: 8889
+Port: 8890
 Mock: false # 🌟 新增此项，开启压测 Mock 模式
 
 Redis:
@@ -10,17 +10,17 @@ Redis:
 
 CoreRpc:
   Endpoints:
-    - 127.0.0.1:10001
+    - 127.0.0.1:10011
   NonBlock: true
 
 UserRpc:
   Endpoints:
-    - 127.0.0.1:10000
+    - 127.0.0.1:10010
   NonBlock: true
 
 AiRpc:
   Endpoints:
-    - 127.0.0.1:10002
+    - 127.0.0.1:10012
   NonBlock: true
 
 RealtimeCompanion:
@@ -44,5 +44,5 @@ Minio:
 
 Prometheus:
   Host: 0.0.0.0
-  Port: 9092
+  Port: 9082
   Path: /metrics

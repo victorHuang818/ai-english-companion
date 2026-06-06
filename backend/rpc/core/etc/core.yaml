@@ -1,5 +1,5 @@
 Name: core.rpc
-ListenOn: 0.0.0.0:10001
+ListenOn: 0.0.0.0:10011
 # Etcd:
 #   Hosts:
 #   - 127.0.0.1:2379
@@ -20,10 +20,10 @@ Minio:
 
 AiRpc:
   Endpoints:
-    - 127.0.0.1:10002
+    - 127.0.0.1:10012
   NonBlock: true
 
 Prometheus:
   Host: 0.0.0.0
-  Port: 9093
+  Port: 9083
   Path: /metrics
