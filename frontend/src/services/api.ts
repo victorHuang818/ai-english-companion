@@ -42,9 +42,11 @@ export const api = {
   generateUploadUrl: (filename: string) => fetchWithAuth('/user-profiles/upload-url', { method: 'POST', body: JSON.stringify({ filename }) }),
   createUserProfile: (data: any) => fetchWithAuth('/user-profiles/', { method: 'POST', body: JSON.stringify(data) }),
   getUserProfile: (id: string) => fetchWithAuth(`/user-profiles/${id}`, { method: 'GET' }),
+  listUserProfiles: () => fetchWithAuth('/user-profiles/', { method: 'GET' }),
   
   // Scenarios
   createScenario: (data: any) => fetchWithAuth('/scenarios/', { method: 'POST', body: JSON.stringify(data) }),
+  listScenarios: () => fetchWithAuth('/scenarios/', { method: 'GET' }),
   
   // Practice Sessions
   createSession: (data: any) => fetchWithAuth('/practices/', { method: 'POST', body: JSON.stringify(data) }),

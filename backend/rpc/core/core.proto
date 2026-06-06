@@ -155,6 +155,37 @@ message DeleteSessionResp {
   bool success = 1;
 }
 
+message ListUserProfilesReq {
+  string user_id = 1;
+}
+
+message UserProfileItem {
+  string id = 1;
+  string english_level = 2;
+  string learning_target = 3;
+  int64 created_at = 4;
+}
+
+message ListUserProfilesResp {
+  repeated UserProfileItem profiles = 1;
+}
+
+message ListScenariosReq {
+  string user_id = 1;
+}
+
+message ScenarioItem {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string creator_id = 4;
+  int64 created_at = 5;
+}
+
+message ListScenariosResp {
+  repeated ScenarioItem scenarios = 1;
+}
+
 service Core {
   // User Profile & OSS
   rpc GenerateUploadUrl(GenerateUploadUrlReq) returns(GenerateUploadUrlResp);
@@ -180,4 +211,7 @@ service Core {
   rpc ListSessions(ListSessionsReq) returns(ListSessionsResp);
   rpc GetSessionDetail(GetSessionDetailReq) returns(GetSessionDetailResp);
   rpc DeleteSession(DeleteSessionReq) returns(DeleteSessionResp);
+  rpc ListUserProfiles(ListUserProfilesReq) returns(ListUserProfilesResp);
+  rpc ListScenarios(ListScenariosReq) returns(ListScenariosResp);
 }
+

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v3.20.3
-// source: backend/rpc/core/core.proto
+// source: core.proto
 
 package core
 
@@ -32,6 +32,8 @@ const (
 	Core_ListSessions_FullMethodName             = "/core.Core/ListSessions"
 	Core_GetSessionDetail_FullMethodName         = "/core.Core/GetSessionDetail"
 	Core_DeleteSession_FullMethodName            = "/core.Core/DeleteSession"
+	Core_ListUserProfiles_FullMethodName         = "/core.Core/ListUserProfiles"
+	Core_ListScenarios_FullMethodName            = "/core.Core/ListScenarios"
 )
 
 // CoreClient is the client API for Core service.
@@ -57,6 +59,8 @@ type CoreClient interface {
 	ListSessions(ctx context.Context, in *ListSessionsReq, opts ...grpc.CallOption) (*ListSessionsResp, error)
 	GetSessionDetail(ctx context.Context, in *GetSessionDetailReq, opts ...grpc.CallOption) (*GetSessionDetailResp, error)
 	DeleteSession(ctx context.Context, in *DeleteSessionReq, opts ...grpc.CallOption) (*DeleteSessionResp, error)
+	ListUserProfiles(ctx context.Context, in *ListUserProfilesReq, opts ...grpc.CallOption) (*ListUserProfilesResp, error)
+	ListScenarios(ctx context.Context, in *ListScenariosReq, opts ...grpc.CallOption) (*ListScenariosResp, error)
 }
 
 type coreClient struct {
@@ -197,6 +201,26 @@ func (c *coreClient) DeleteSession(ctx context.Context, in *DeleteSessionReq, op
 	return out, nil
 }
 
+func (c *coreClient) ListUserProfiles(ctx context.Context, in *ListUserProfilesReq, opts ...grpc.CallOption) (*ListUserProfilesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUserProfilesResp)
+	err := c.cc.Invoke(ctx, Core_ListUserProfiles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *coreClient) ListScenarios(ctx context.Context, in *ListScenariosReq, opts ...grpc.CallOption) (*ListScenariosResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListScenariosResp)
+	err := c.cc.Invoke(ctx, Core_ListScenarios_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CoreServer is the server API for Core service.
 // All implementations must embed UnimplementedCoreServer
 // for forward compatibility.
@@ -220,6 +244,8 @@ type CoreServer interface {
 	ListSessions(context.Context, *ListSessionsReq) (*ListSessionsResp, error)
 	GetSessionDetail(context.Context, *GetSessionDetailReq) (*GetSessionDetailResp, error)
 	DeleteSession(context.Context, *DeleteSessionReq) (*DeleteSessionResp, error)
+	ListUserProfiles(context.Context, *ListUserProfilesReq) (*ListUserProfilesResp, error)
+	ListScenarios(context.Context, *ListScenariosReq) (*ListScenariosResp, error)
 	mustEmbedUnimplementedCoreServer()
 }
 
@@ -268,6 +294,12 @@ func (UnimplementedCoreServer) GetSessionDetail(context.Context, *GetSessionDeta
 }
 func (UnimplementedCoreServer) DeleteSession(context.Context, *DeleteSessionReq) (*DeleteSessionResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteSession not implemented")
+}
+func (UnimplementedCoreServer) ListUserProfiles(context.Context, *ListUserProfilesReq) (*ListUserProfilesResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListUserProfiles not implemented")
+}
+func (UnimplementedCoreServer) ListScenarios(context.Context, *ListScenariosReq) (*ListScenariosResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListScenarios not implemented")
 }
 func (UnimplementedCoreServer) mustEmbedUnimplementedCoreServer() {}
 func (UnimplementedCoreServer) testEmbeddedByValue()              {}
@@ -524,6 +556,42 @@ func _Core_DeleteSession_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Core_ListUserProfiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserProfilesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoreServer).ListUserProfiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Core_ListUserProfiles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoreServer).ListUserProfiles(ctx, req.(*ListUserProfilesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Core_ListScenarios_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListScenariosReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoreServer).ListScenarios(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Core_ListScenarios_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoreServer).ListScenarios(ctx, req.(*ListScenariosReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Core_ServiceDesc is the grpc.ServiceDesc for Core service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -583,7 +651,15 @@ var Core_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteSession",
 			Handler:    _Core_DeleteSession_Handler,
 		},
+		{
+			MethodName: "ListUserProfiles",
+			Handler:    _Core_ListUserProfiles_Handler,
+		},
+		{
+			MethodName: "ListScenarios",
+			Handler:    _Core_ListScenarios_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "backend/rpc/core/core.proto",
+	Metadata: "core.proto",
 }

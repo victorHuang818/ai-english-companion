@@ -20,50 +20,18 @@ import {
   Users,
   Compass,
   Sparkles,
-  RefreshCw,
-  ArrowRight
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 import './DashboardPage.css';
 import '../components/DashboardModals.css';
 
-interface ScenarioPreset {
-  name: string;
-  description: string;
-  category: string;
-  icon: React.ComponentType<any>;
-  details: string;
-}
-
-const PRESET_SCENARIOS: ScenarioPreset[] = [
-  {
-    name: 'Job Interview',
-    description: '外企求职面试',
-    category: 'Career',
-    icon: Briefcase,
-    details: 'Simulate a professional interview at a multinational corporation. Focus on project experience, career goals, and behavioral questions.'
-  },
-  {
-    name: 'Ordering Food',
-    description: '西餐厅点餐',
-    category: 'Daily Life',
-    icon: Coffee,
-    details: 'Practice ordering food, asking about the menu, and handling payments in a dining or restaurant context.'
-  },
-  {
-    name: 'IELTS Speaking',
-    description: '雅思口语模拟',
-    category: 'Exam Prep',
-    icon: BookOpen,
-    details: 'Simulate IELTS speaking test sections (Part 1, Part 2, Part 3) under standardized constraints.'
-  },
-  {
-    name: 'Business Meeting',
-    description: '商务会议沟通',
-    category: 'Workplace',
-    icon: Users,
-    details: 'Practice presenting an idea, reporting project status, or discussing proposals in a business meeting.'
-  }
-];
+const SCENARIO_METADATA_MAP: Record<string, { category: string; subDesc: string; icon: React.ComponentType<any> }> = {
+  'Job Interview': { category: 'Career', subDesc: '外企求职面试', icon: Briefcase },
+  'Ordering Food': { category: 'Daily Life', subDesc: '西餐厅点餐', icon: Coffee },
+  'IELTS Speaking': { category: 'Exam Prep', subDesc: '雅思口语模拟', icon: BookOpen },
+  'Business Meeting': { category: 'Workplace', subDesc: '商务会议沟通', icon: Users }
+};
 
 export const DashboardPage: React.FC = () => {
   const { user, logout } = useAuthStore();
@@ -78,11 +46,24 @@ export const DashboardPage: React.FC = () => {
   const [savedProfilesList, setSavedProfilesList] = useState<Array<{ id: string; english_level: 'beginner' | 'intermediate' | 'advanced'; learning_target: string }>>([]);
 
   // Scenario selection states
-  const [selectedScenario, setSelectedScenario] = useState<ScenarioPreset | { name: string; description: string; isCustom: boolean } | null>(null);
+  const [scenariosList, setScenariosList] = useState<any[]>([]);
+  const [selectedScenario, setSelectedScenario] = useState<any | null>(null);
   const [showCustomScenarioModal, setShowCustomScenarioModal] = useState<boolean>(false);
   const [customName, setCustomName] = useState<string>('');
   const [customDesc, setCustomDesc] = useState<string>('');
-  const [customScenariosList, setCustomScenariosList] = useState<Array<{ id: string; name: string; description: string }>>([]);
+
+  // Start practice modal states
+  const [showStartPracticeModal, setShowStartPracticeModal] = useState<boolean>(false);
+  const [modalProfileId, setModalProfileId] = useState<string>('');
+  const [modalScenarioId, setModalScenarioId] = useState<string>('');
+
+  // Derived scenario lists
+  const presetScenarios = scenariosList.filter(
+    (s) => s.creator_id === '00000000-0000-0000-0000-000000000000'
+  );
+  const customScenariosList = scenariosList.filter(
+    (s) => s.creator_id !== '00000000-0000-0000-0000-000000000000'
+  );
 
   // Session states
   const [starting, setStarting] = useState(false);
@@ -91,98 +72,46 @@ export const DashboardPage: React.FC = () => {
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [deleteSessionTargetId, setDeleteSessionTargetId] = useState<string>('');
 
-  // Load profile & custom scenarios from DB / LocalStorage and verify DB existence
+  // Load profiles & scenarios from DB on mount
   useEffect(() => {
     if (user?.id) {
-      // Restore saved profiles history
-      const savedProfilesKey = `saved_profiles_${user.id}`;
-      const localSavedProfiles = localStorage.getItem(savedProfilesKey);
-      let list: Array<{ id: string; english_level: 'beginner' | 'intermediate' | 'advanced'; learning_target: string }> = [];
-      if (localSavedProfiles) {
-        list = JSON.parse(localSavedProfiles);
-      }
-
-      // Restore active profile from local storage if exists
-      const savedProfileKey = `user_profile_${user.id}`;
-      const localProfile = localStorage.getItem(savedProfileKey);
-      let activeProfileParsed: any = null;
-      if (localProfile) {
-        activeProfileParsed = JSON.parse(localProfile);
-      }
-
-      // Verify all profiles in the list against the backend
-      const verifyProfiles = async () => {
-        const verifiedList: typeof list = [];
-        let activeProfileValid = false;
-
-        for (const profile of list) {
-          if (profile.id) {
-            try {
-              // Call backend to verify if it exists
-              await api.getUserProfile(profile.id);
-              verifiedList.push(profile);
-              if (activeProfileParsed && activeProfileParsed.id === profile.id) {
-                activeProfileValid = true;
-              }
-            } catch (err) {
-              console.warn(`Profile ${profile.id} is invalid/deleted from DB:`, err);
-            }
-          }
-        }
-
-        // Update state and localStorage with only verified profiles
-        setSavedProfilesList(verifiedList);
-        localStorage.setItem(savedProfilesKey, JSON.stringify(verifiedList));
-
-        // If the active profile is verified, set it. Otherwise, clear it.
-        if (activeProfileValid && activeProfileParsed) {
-          setSavedProfileId(activeProfileParsed.id);
-          setEnglishLevel(activeProfileParsed.english_level || 'intermediate');
-          setLearningTarget(activeProfileParsed.learning_target || '');
-          setProfileSavedSuccess(true);
-        } else {
-          localStorage.removeItem(savedProfileKey);
-          setSavedProfileId('');
-          setProfileSavedSuccess(false);
-          setEnglishLevel('intermediate');
-          setLearningTarget('Improve spoken fluency and prepare for professional communication');
-        }
-      };
-
-      if (list.length > 0) {
-        verifyProfiles();
-      } else {
-        // If there's no list, but we have an active profile, verify just the active profile
-        if (activeProfileParsed && activeProfileParsed.id) {
-          api.getUserProfile(activeProfileParsed.id)
-            .then(() => {
-              setSavedProfileId(activeProfileParsed.id);
-              setEnglishLevel(activeProfileParsed.english_level || 'intermediate');
-              setLearningTarget(activeProfileParsed.learning_target || '');
-              setProfileSavedSuccess(true);
-              
-              const updatedList = [activeProfileParsed];
-              setSavedProfilesList(updatedList);
-              localStorage.setItem(savedProfilesKey, JSON.stringify(updatedList));
-            })
-            .catch(() => {
-              localStorage.removeItem(savedProfileKey);
-              setSavedProfileId('');
-              setProfileSavedSuccess(false);
-              setEnglishLevel('intermediate');
-              setLearningTarget('Improve spoken fluency and prepare for professional communication');
-            });
-        }
-      }
-
-      // Restore custom scenarios list
-      const savedScenariosKey = `custom_scenarios_${user.id}`;
-      const localScenarios = localStorage.getItem(savedScenariosKey);
-      if (localScenarios) {
-        setCustomScenariosList(JSON.parse(localScenarios));
-      }
+      fetchProfiles();
+      fetchScenarios();
     }
   }, [user]);
+
+  const fetchProfiles = async () => {
+    try {
+      const res = await api.listUserProfiles();
+      const list = res.profiles || [];
+      setSavedProfilesList(list);
+
+      // Auto-load the most recent profile as the active one
+      if (list.length > 0) {
+        const parsed = list[0];
+        setSavedProfileId(parsed.id);
+        setEnglishLevel(parsed.english_level || 'intermediate');
+        setLearningTarget(parsed.learning_target || '');
+        setProfileSavedSuccess(true);
+      } else {
+        setSavedProfileId('');
+        setEnglishLevel('intermediate');
+        setLearningTarget('Improve spoken fluency and prepare for professional communication');
+        setProfileSavedSuccess(false);
+      }
+    } catch (err) {
+      console.error('Failed to fetch user profiles:', err);
+    }
+  };
+
+  const fetchScenarios = async () => {
+    try {
+      const res = await api.listScenarios();
+      setScenariosList(res.scenarios || []);
+    } catch (err) {
+      console.error('Failed to fetch scenarios:', err);
+    }
+  };
 
   // Track profile changes to prompt for re-saving
   const handleLevelChange = (level: 'beginner' | 'intermediate' | 'advanced') => {
@@ -202,19 +131,6 @@ export const DashboardPage: React.FC = () => {
     setProfileSavedSuccess(true);
   };
 
-  const handleDeleteProfile = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const filtered = savedProfilesList.filter(p => p.id !== id);
-    setSavedProfilesList(filtered);
-    if (user?.id) {
-      localStorage.setItem(`saved_profiles_${user.id}`, JSON.stringify(filtered));
-    }
-    if (savedProfileId === id) {
-      setSavedProfileId('');
-      setProfileSavedSuccess(false);
-    }
-  };
-
   // Save/Update English Profile
   const handleSaveProfile = async () => {
     try {
@@ -228,22 +144,8 @@ export const DashboardPage: React.FC = () => {
       setSavedProfileId(res.id);
       setProfileSavedSuccess(true);
       
-      if (user?.id) {
-        const newProfile = {
-          id: res.id,
-          english_level: englishLevel,
-          learning_target: learningTarget
-        };
-
-        localStorage.setItem(`user_profile_${user.id}`, JSON.stringify(newProfile));
-
-        const filteredList = savedProfilesList.filter(
-          p => !(p.english_level === englishLevel && p.learning_target === learningTarget)
-        );
-        const updatedList = [newProfile, ...filteredList];
-        setSavedProfilesList(updatedList);
-        localStorage.setItem(`saved_profiles_${user.id}`, JSON.stringify(updatedList));
-      }
+      // Refresh the list of saved profiles
+      await fetchProfiles();
     } catch (err: any) {
       setError('Failed to configure profile: ' + err.message);
     } finally {
@@ -273,20 +175,14 @@ export const DashboardPage: React.FC = () => {
     navigate('/auth');
   };
 
-
-
   // Select a preset scenario card
-  const handleSelectPreset = (preset: ScenarioPreset) => {
+  const handleSelectPreset = (preset: any) => {
     setSelectedScenario(preset);
   };
 
   // Select a custom scenario
-  const handleSelectCustomItem = (scenario: { id: string; name: string; description: string }) => {
-    setSelectedScenario({
-      name: scenario.name,
-      description: scenario.description,
-      isCustom: true
-    });
+  const handleSelectCustomItem = (scenario: any) => {
+    setSelectedScenario(scenario);
   };
 
   // Create custom scenario
@@ -299,23 +195,15 @@ export const DashboardPage: React.FC = () => {
         description: customDesc
       });
 
-      const newScenario = {
-        id: res.id,
-        name: customName,
-        description: customDesc
-      };
-
-      const updatedList = [newScenario, ...customScenariosList];
-      setCustomScenariosList(updatedList);
-      if (user?.id) {
-        localStorage.setItem(`custom_scenarios_${user.id}`, JSON.stringify(updatedList));
-      }
+      // Refresh scenarios list
+      await fetchScenarios();
 
       // Automatically select the newly created custom scenario
       setSelectedScenario({
+        id: res.id,
         name: customName,
         description: customDesc,
-        isCustom: true
+        creator_id: user?.id || ''
       });
       
       setShowCustomScenarioModal(false);
@@ -326,86 +214,36 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
-  // Delete custom scenario from local cache list
-  const handleDeleteCustomScenario = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const filtered = customScenariosList.filter(item => item.id !== id);
-    setCustomScenariosList(filtered);
-    if (user?.id) {
-      localStorage.setItem(`custom_scenarios_${user.id}`, JSON.stringify(filtered));
-    }
-    setSelectedScenario(null);
+  // Open Start Modal
+  const handleOpenStartModal = () => {
+    const initialProfileId = savedProfileId || (savedProfilesList.length > 0 ? savedProfilesList[0].id : '');
+    const initialScenarioId = selectedScenario?.id || (scenariosList.length > 0 ? scenariosList[0].id : '');
+    
+    setModalProfileId(initialProfileId);
+    setModalScenarioId(initialScenarioId);
+    setShowStartPracticeModal(true);
   };
 
-  // Start Session (Create Profile/Scenario if not yet done, then create session)
-  const handleStartPractice = async () => {
-    if (!profileSavedSuccess || !englishLevel || !learningTarget.trim()) {
-      setError('Please save your English Profile first.');
-      return;
-    }
-    if (!selectedScenario) {
-      setError('Please choose a practice scenario.');
-      return;
-    }
-
+  // Start Session from the Confirmation Modal
+  const handleStartPracticeFromModal = async () => {
+    if (!modalProfileId || !modalScenarioId) return;
     try {
       setStarting(true);
       setError('');
 
-      // 1. Ensure user profile is saved and ID is active
-      let profileId = savedProfileId;
-      if (!profileId) {
-        const resProfile = await api.createUserProfile({
-          english_level: englishLevel,
-          learning_target: learningTarget
-        });
-        profileId = resProfile.id;
-        setSavedProfileId(profileId);
-        if (user?.id) {
-          localStorage.setItem(`user_profile_${user.id}`, JSON.stringify({
-            id: profileId,
-            english_level: englishLevel,
-            learning_target: learningTarget
-          }));
-        }
-      }
-
-      // 2. Resolve or create scenario ID
-      let scenarioId = '';
-      const scenarioName = selectedScenario.name;
-      const scenarioDesc = 'details' in selectedScenario ? selectedScenario.details : selectedScenario.description;
-
-      // Check if this scenario name is already created in our local list of scenarios
-      const cachedKey = `scenario_id_${user?.id}_${scenarioName}`;
-      const cachedScenarioId = localStorage.getItem(cachedKey);
-      
-      if (cachedScenarioId) {
-        scenarioId = cachedScenarioId;
-      } else {
-        // Find if it is in custom scenario list
-        const customMatch = customScenariosList.find(s => s.name === scenarioName);
-        if (customMatch) {
-          scenarioId = customMatch.id;
-        } else {
-          // Create scenario in DB
-          const resScenario = await api.createScenario({
-            name: scenarioName,
-            description: scenarioDesc
-          });
-          scenarioId = resScenario.id;
-          localStorage.setItem(cachedKey, scenarioId);
-        }
-      }
-
-      // 3. Create practice session
+      // Create practice session
       const resSession = await api.createSession({
-        user_profile_id: profileId,
-        scenario_id: scenarioId
+        user_profile_id: modalProfileId,
+        scenario_id: modalScenarioId
       });
+
+      // Close modal
+      setShowStartPracticeModal(false);
 
       navigate(`/companion/${resSession.session_id}`);
     } catch (err: any) {
       setError('Failed to launch practice room: ' + err.message);
+      setShowStartPracticeModal(false);
     } finally {
       setStarting(false);
     }
@@ -512,21 +350,10 @@ export const DashboardPage: React.FC = () => {
                           key={profile.id}
                           className={`history-item ${savedProfileId === profile.id && profileSavedSuccess ? 'active-profile-item' : ''}`}
                           onClick={() => handleSelectProfile(profile)}
-                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                          style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                         >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, overflow: 'hidden' }}>
-                            <Award size={16} className="item-icon" />
-                            <span className="item-filename" style={{ fontSize: '13px' }}>{displayTitle}</span>
-                          </div>
-                          <div className="item-actions" style={{ flexShrink: 0 }}>
-                            <button
-                              className="action-btn delete"
-                              title="Delete Profile"
-                              onClick={(e) => handleDeleteProfile(profile.id, e)}
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          </div>
+                          <Award size={16} className="item-icon" />
+                          <span className="item-filename" style={{ fontSize: '13px' }}>{displayTitle}</span>
                         </div>
                       );
                     })}
@@ -542,8 +369,26 @@ export const DashboardPage: React.FC = () => {
               <Compass className="card-icon" />
               <h2>Step 2: Choose Speaking Scenario</h2>
               {selectedScenario && (
-                <button className="reset-btn" onClick={() => setSelectedScenario(null)} title="Clear Selection">
-                  <RefreshCw size={14} />
+                <button 
+                  className="back-btn" 
+                  onClick={() => setSelectedScenario(null)} 
+                  title="Back to Scenarios"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    margin: 0,
+                    marginLeft: 'auto',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 'none',
+                    borderRadius: 0,
+                    outline: 'none'
+                  }}
+                >
+                  <ArrowLeft size={16} style={{ color: '#000000' }} />
                 </button>
               )}
             </div>
@@ -557,19 +402,21 @@ export const DashboardPage: React.FC = () => {
                   <div className="scenario-selected-body">
                     <h3>{selectedScenario.name}</h3>
                     <p className="description">{selectedScenario.description}</p>
-                    <p className="details">
-                      {'details' in selectedScenario ? selectedScenario.details : selectedScenario.description}
-                    </p>
                   </div>
                 </div>
               ) : (
                 <div className="scenarios-selection-flow">
                   <div className="scenarios-grid-mini">
-                    {PRESET_SCENARIOS.map(preset => {
-                      const Icon = preset.icon;
+                    {presetScenarios.map(preset => {
+                      const meta = SCENARIO_METADATA_MAP[preset.name] || {
+                        category: 'General',
+                        subDesc: '日常口语练习',
+                        icon: Compass
+                      };
+                      const Icon = meta.icon;
                       return (
                         <div
-                          key={preset.name}
+                          key={preset.id}
                           className="scenario-preset-card"
                           onClick={() => handleSelectPreset(preset)}
                         >
@@ -577,9 +424,9 @@ export const DashboardPage: React.FC = () => {
                             <Icon size={20} />
                           </div>
                           <div className="preset-info">
-                            <span className="preset-category">{preset.category}</span>
+                            <span className="preset-category">{meta.category}</span>
                             <span className="preset-name">{preset.name}</span>
-                            <span className="preset-desc">{preset.description}</span>
+                            <span className="preset-desc">{meta.subDesc}</span>
                           </div>
                         </div>
                       );
@@ -604,20 +451,12 @@ export const DashboardPage: React.FC = () => {
                               key={item.id}
                               className="history-item"
                               onClick={() => handleSelectCustomItem(item)}
+                              style={{ cursor: 'pointer' }}
                             >
                               <Compass size={16} className="item-icon" />
                               <div className="job-info-block">
                                 <span className="item-filename">{item.name}</span>
                                 <span className="item-sub-desc">{item.description}</span>
-                              </div>
-                              <div className="item-actions">
-                                <button
-                                  className="action-btn delete"
-                                  title="Delete Scenario"
-                                  onClick={(e) => handleDeleteCustomScenario(item.id, e)}
-                                >
-                                  <Trash2 size={14} />
-                                </button>
                               </div>
                             </div>
                           ))}
@@ -632,8 +471,8 @@ export const DashboardPage: React.FC = () => {
 
           {/* Step 3: Start Practice */}
           <GlassCard 
-            className={`dashboard-card action-card ${profileSavedSuccess && selectedScenario ? 'ready' : ''}`} 
-            glow={profileSavedSuccess && !!selectedScenario}
+            className="dashboard-card action-card ready" 
+            glow={true}
           >
             <div className="card-header">
               <Sparkles className="card-icon" />
@@ -642,13 +481,13 @@ export const DashboardPage: React.FC = () => {
             <div className="card-content centered">
               <p className="status-text">
                 {profileSavedSuccess && selectedScenario
-                  ? 'All parameters established. Companion interface ready.' 
-                  : 'Establish background profile and choose scenario to initiate companion...'}
+                  ? `Selected: [${englishLevel.toUpperCase()}] and [${selectedScenario.name}]. Click below to confirm and start.` 
+                  : 'Click below to select your profile and scenario and initiate the companion session.'}
               </p>
               <GlowingButton 
                 variant="primary" 
-                onClick={handleStartPractice}
-                disabled={starting || !profileSavedSuccess || !selectedScenario}
+                onClick={handleOpenStartModal}
+                disabled={starting}
                 className="start-btn"
               >
                 {starting ? 'Connecting AI...' : (
@@ -802,6 +641,134 @@ export const DashboardPage: React.FC = () => {
                 onClick={handleConfirmDeleteSession}
               >
                 Confirm Delete
+              </GlowingButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- Start Practice Modal --- */}
+      {showStartPracticeModal && (
+        <div className="modal-overlay" onClick={() => setShowStartPracticeModal(false)}>
+          <div className="modal-content size-md" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2 className="modal-title">
+                <Sparkles size={18} />
+                <span>Start Speaking Practice</span>
+              </h2>
+              <button className="modal-close-btn" onClick={() => setShowStartPracticeModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="modal-form">
+                <div className="form-group">
+                  <label htmlFor="modal-profile-select">Select English Profile</label>
+                  {savedProfilesList.length === 0 ? (
+                    <div style={{ color: 'var(--danger)', fontSize: '0.9rem', marginTop: '4px' }}>
+                      ⚠️ No saved profiles found. Please configure and save a profile in Step 1 first.
+                    </div>
+                  ) : (
+                    <>
+                      <select 
+                        id="modal-profile-select"
+                        value={modalProfileId}
+                        onChange={e => setModalProfileId(e.target.value)}
+                        className="modern-input"
+                        style={{ width: '100%', marginBottom: '8px' }}
+                      >
+                        {savedProfilesList.map(p => (
+                          <option key={p.id} value={p.id}>
+                            {p.english_level.toUpperCase()} - {p.learning_target.substring(0, 30)}{p.learning_target.length > 30 ? '...' : ''}
+                          </option>
+                        ))}
+                      </select>
+                      {(() => {
+                        const selectedP = savedProfilesList.find(p => p.id === modalProfileId);
+                        if (!selectedP) return null;
+                        return (
+                          <div style={{ 
+                            background: 'rgba(0, 102, 204, 0.04)', 
+                            border: '1px solid var(--border-glass)', 
+                            padding: '10px', 
+                            borderRadius: '8px',
+                            fontSize: '0.85rem',
+                            color: 'var(--text-muted)'
+                          }}>
+                            <strong>Level:</strong> <span className="capitalize">{selectedP.english_level}</span><br />
+                            <strong>Target:</strong> {selectedP.learning_target}
+                          </div>
+                        );
+                      })()}
+                    </>
+                  )}
+                </div>
+
+                <div className="form-group" style={{ marginTop: '16px' }}>
+                  <label htmlFor="modal-scenario-select">Select Practice Scenario</label>
+                  {scenariosList.length === 0 ? (
+                    <div style={{ color: 'var(--danger)', fontSize: '0.9rem', marginTop: '4px' }}>
+                      ⚠️ No scenarios found.
+                    </div>
+                  ) : (
+                    <>
+                      <select 
+                        id="modal-scenario-select"
+                        value={modalScenarioId}
+                        onChange={e => setModalScenarioId(e.target.value)}
+                        className="modern-input"
+                        style={{ width: '100%', marginBottom: '8px' }}
+                      >
+                        {presetScenarios.length > 0 && (
+                          <optgroup label="Preset Scenarios">
+                            {presetScenarios.map(s => (
+                              <option key={s.id} value={s.id}>{s.name}</option>
+                            ))}
+                          </optgroup>
+                        )}
+                        {customScenariosList.length > 0 && (
+                          <optgroup label="Custom Scenarios">
+                            {customScenariosList.map(s => (
+                              <option key={s.id} value={s.id}>{s.name}</option>
+                            ))}
+                          </optgroup>
+                        )}
+                      </select>
+                      {(() => {
+                        const selectedS = scenariosList.find(s => s.id === modalScenarioId);
+                        if (!selectedS) return null;
+                        return (
+                          <div style={{ 
+                            background: 'rgba(92, 45, 145, 0.04)', 
+                            border: '1px solid var(--border-glass)', 
+                            padding: '10px', 
+                            borderRadius: '8px',
+                            fontSize: '0.85rem',
+                            color: 'var(--text-muted)'
+                          }}>
+                            <strong>Scenario Name:</strong> {selectedS.name}<br />
+                            <strong>Description:</strong> {selectedS.description}
+                          </div>
+                        );
+                      })()}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <GlowingButton 
+                variant="secondary" 
+                onClick={() => setShowStartPracticeModal(false)}
+              >
+                Cancel
+              </GlowingButton>
+              <GlowingButton 
+                variant="primary" 
+                onClick={handleStartPracticeFromModal}
+                disabled={starting || !modalProfileId || !modalScenarioId}
+              >
+                {starting ? 'Connecting AI...' : 'Confirm & Start'}
               </GlowingButton>
             </div>
           </div>

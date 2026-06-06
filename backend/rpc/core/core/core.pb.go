@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.20.3
-// source: backend/rpc/core/core.proto
+// source: core.proto
 
 package core
 
@@ -30,7 +30,7 @@ type GenerateUploadUrlReq struct {
 
 func (x *GenerateUploadUrlReq) Reset() {
 	*x = GenerateUploadUrlReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[0]
+	mi := &file_core_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *GenerateUploadUrlReq) String() string {
 func (*GenerateUploadUrlReq) ProtoMessage() {}
 
 func (x *GenerateUploadUrlReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[0]
+	mi := &file_core_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *GenerateUploadUrlReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateUploadUrlReq.ProtoReflect.Descriptor instead.
 func (*GenerateUploadUrlReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{0}
+	return file_core_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GenerateUploadUrlReq) GetFilename() string {
@@ -75,7 +75,7 @@ type GenerateUploadUrlResp struct {
 
 func (x *GenerateUploadUrlResp) Reset() {
 	*x = GenerateUploadUrlResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[1]
+	mi := &file_core_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -87,7 +87,7 @@ func (x *GenerateUploadUrlResp) String() string {
 func (*GenerateUploadUrlResp) ProtoMessage() {}
 
 func (x *GenerateUploadUrlResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[1]
+	mi := &file_core_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -100,7 +100,7 @@ func (x *GenerateUploadUrlResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateUploadUrlResp.ProtoReflect.Descriptor instead.
 func (*GenerateUploadUrlResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{1}
+	return file_core_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GenerateUploadUrlResp) GetUploadUrl() string {
@@ -128,7 +128,7 @@ type CreateUserProfileReq struct {
 
 func (x *CreateUserProfileReq) Reset() {
 	*x = CreateUserProfileReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[2]
+	mi := &file_core_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -140,7 +140,7 @@ func (x *CreateUserProfileReq) String() string {
 func (*CreateUserProfileReq) ProtoMessage() {}
 
 func (x *CreateUserProfileReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[2]
+	mi := &file_core_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -153,7 +153,7 @@ func (x *CreateUserProfileReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserProfileReq.ProtoReflect.Descriptor instead.
 func (*CreateUserProfileReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{2}
+	return file_core_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateUserProfileReq) GetUserId() string {
@@ -187,7 +187,7 @@ type CreateUserProfileResp struct {
 
 func (x *CreateUserProfileResp) Reset() {
 	*x = CreateUserProfileResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[3]
+	mi := &file_core_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -199,7 +199,7 @@ func (x *CreateUserProfileResp) String() string {
 func (*CreateUserProfileResp) ProtoMessage() {}
 
 func (x *CreateUserProfileResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[3]
+	mi := &file_core_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -212,7 +212,7 @@ func (x *CreateUserProfileResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserProfileResp.ProtoReflect.Descriptor instead.
 func (*CreateUserProfileResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{3}
+	return file_core_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateUserProfileResp) GetId() string {
@@ -238,7 +238,7 @@ type GetUserProfileReq struct {
 
 func (x *GetUserProfileReq) Reset() {
 	*x = GetUserProfileReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[4]
+	mi := &file_core_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -250,7 +250,7 @@ func (x *GetUserProfileReq) String() string {
 func (*GetUserProfileReq) ProtoMessage() {}
 
 func (x *GetUserProfileReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[4]
+	mi := &file_core_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -263,7 +263,7 @@ func (x *GetUserProfileReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserProfileReq.ProtoReflect.Descriptor instead.
 func (*GetUserProfileReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{4}
+	return file_core_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetUserProfileReq) GetId() string {
@@ -285,7 +285,7 @@ type GetUserProfileResp struct {
 
 func (x *GetUserProfileResp) Reset() {
 	*x = GetUserProfileResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[5]
+	mi := &file_core_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -297,7 +297,7 @@ func (x *GetUserProfileResp) String() string {
 func (*GetUserProfileResp) ProtoMessage() {}
 
 func (x *GetUserProfileResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[5]
+	mi := &file_core_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -310,7 +310,7 @@ func (x *GetUserProfileResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserProfileResp.ProtoReflect.Descriptor instead.
 func (*GetUserProfileResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{5}
+	return file_core_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetUserProfileResp) GetId() string {
@@ -352,7 +352,7 @@ type CreateScenarioReq struct {
 
 func (x *CreateScenarioReq) Reset() {
 	*x = CreateScenarioReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[6]
+	mi := &file_core_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -364,7 +364,7 @@ func (x *CreateScenarioReq) String() string {
 func (*CreateScenarioReq) ProtoMessage() {}
 
 func (x *CreateScenarioReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[6]
+	mi := &file_core_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -377,7 +377,7 @@ func (x *CreateScenarioReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateScenarioReq.ProtoReflect.Descriptor instead.
 func (*CreateScenarioReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{6}
+	return file_core_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CreateScenarioReq) GetCreatorId() string {
@@ -410,7 +410,7 @@ type CreateScenarioResp struct {
 
 func (x *CreateScenarioResp) Reset() {
 	*x = CreateScenarioResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[7]
+	mi := &file_core_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -422,7 +422,7 @@ func (x *CreateScenarioResp) String() string {
 func (*CreateScenarioResp) ProtoMessage() {}
 
 func (x *CreateScenarioResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[7]
+	mi := &file_core_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -435,7 +435,7 @@ func (x *CreateScenarioResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateScenarioResp.ProtoReflect.Descriptor instead.
 func (*CreateScenarioResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{7}
+	return file_core_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CreateScenarioResp) GetId() string {
@@ -454,7 +454,7 @@ type GetScenarioReq struct {
 
 func (x *GetScenarioReq) Reset() {
 	*x = GetScenarioReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[8]
+	mi := &file_core_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -466,7 +466,7 @@ func (x *GetScenarioReq) String() string {
 func (*GetScenarioReq) ProtoMessage() {}
 
 func (x *GetScenarioReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[8]
+	mi := &file_core_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -479,7 +479,7 @@ func (x *GetScenarioReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetScenarioReq.ProtoReflect.Descriptor instead.
 func (*GetScenarioReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{8}
+	return file_core_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetScenarioReq) GetId() string {
@@ -500,7 +500,7 @@ type GetScenarioResp struct {
 
 func (x *GetScenarioResp) Reset() {
 	*x = GetScenarioResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[9]
+	mi := &file_core_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -512,7 +512,7 @@ func (x *GetScenarioResp) String() string {
 func (*GetScenarioResp) ProtoMessage() {}
 
 func (x *GetScenarioResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[9]
+	mi := &file_core_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -525,7 +525,7 @@ func (x *GetScenarioResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetScenarioResp.ProtoReflect.Descriptor instead.
 func (*GetScenarioResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{9}
+	return file_core_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetScenarioResp) GetId() string {
@@ -560,7 +560,7 @@ type CreateSessionReq struct {
 
 func (x *CreateSessionReq) Reset() {
 	*x = CreateSessionReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[10]
+	mi := &file_core_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -572,7 +572,7 @@ func (x *CreateSessionReq) String() string {
 func (*CreateSessionReq) ProtoMessage() {}
 
 func (x *CreateSessionReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[10]
+	mi := &file_core_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -585,7 +585,7 @@ func (x *CreateSessionReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSessionReq.ProtoReflect.Descriptor instead.
 func (*CreateSessionReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{10}
+	return file_core_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CreateSessionReq) GetUserId() string {
@@ -618,7 +618,7 @@ type CreateSessionResp struct {
 
 func (x *CreateSessionResp) Reset() {
 	*x = CreateSessionResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[11]
+	mi := &file_core_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -630,7 +630,7 @@ func (x *CreateSessionResp) String() string {
 func (*CreateSessionResp) ProtoMessage() {}
 
 func (x *CreateSessionResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[11]
+	mi := &file_core_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -643,7 +643,7 @@ func (x *CreateSessionResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSessionResp.ProtoReflect.Descriptor instead.
 func (*CreateSessionResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{11}
+	return file_core_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CreateSessionResp) GetId() string {
@@ -664,7 +664,7 @@ type UpdateSessionStatusReq struct {
 
 func (x *UpdateSessionStatusReq) Reset() {
 	*x = UpdateSessionStatusReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[12]
+	mi := &file_core_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -676,7 +676,7 @@ func (x *UpdateSessionStatusReq) String() string {
 func (*UpdateSessionStatusReq) ProtoMessage() {}
 
 func (x *UpdateSessionStatusReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[12]
+	mi := &file_core_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -689,7 +689,7 @@ func (x *UpdateSessionStatusReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateSessionStatusReq.ProtoReflect.Descriptor instead.
 func (*UpdateSessionStatusReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{12}
+	return file_core_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateSessionStatusReq) GetId() string {
@@ -722,7 +722,7 @@ type UpdateSessionStatusResp struct {
 
 func (x *UpdateSessionStatusResp) Reset() {
 	*x = UpdateSessionStatusResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[13]
+	mi := &file_core_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -734,7 +734,7 @@ func (x *UpdateSessionStatusResp) String() string {
 func (*UpdateSessionStatusResp) ProtoMessage() {}
 
 func (x *UpdateSessionStatusResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[13]
+	mi := &file_core_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -747,7 +747,7 @@ func (x *UpdateSessionStatusResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateSessionStatusResp.ProtoReflect.Descriptor instead.
 func (*UpdateSessionStatusResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{13}
+	return file_core_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateSessionStatusResp) GetSuccess() bool {
@@ -771,7 +771,7 @@ type AddDialogueReq struct {
 
 func (x *AddDialogueReq) Reset() {
 	*x = AddDialogueReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[14]
+	mi := &file_core_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -783,7 +783,7 @@ func (x *AddDialogueReq) String() string {
 func (*AddDialogueReq) ProtoMessage() {}
 
 func (x *AddDialogueReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[14]
+	mi := &file_core_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -796,7 +796,7 @@ func (x *AddDialogueReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddDialogueReq.ProtoReflect.Descriptor instead.
 func (*AddDialogueReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{14}
+	return file_core_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *AddDialogueReq) GetSessionId() string {
@@ -850,7 +850,7 @@ type AddDialogueResp struct {
 
 func (x *AddDialogueResp) Reset() {
 	*x = AddDialogueResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[15]
+	mi := &file_core_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -862,7 +862,7 @@ func (x *AddDialogueResp) String() string {
 func (*AddDialogueResp) ProtoMessage() {}
 
 func (x *AddDialogueResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[15]
+	mi := &file_core_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -875,7 +875,7 @@ func (x *AddDialogueResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddDialogueResp.ProtoReflect.Descriptor instead.
 func (*AddDialogueResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{15}
+	return file_core_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *AddDialogueResp) GetId() string {
@@ -895,7 +895,7 @@ type UpdateDialogueEvaluationReq struct {
 
 func (x *UpdateDialogueEvaluationReq) Reset() {
 	*x = UpdateDialogueEvaluationReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[16]
+	mi := &file_core_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -907,7 +907,7 @@ func (x *UpdateDialogueEvaluationReq) String() string {
 func (*UpdateDialogueEvaluationReq) ProtoMessage() {}
 
 func (x *UpdateDialogueEvaluationReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[16]
+	mi := &file_core_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -920,7 +920,7 @@ func (x *UpdateDialogueEvaluationReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDialogueEvaluationReq.ProtoReflect.Descriptor instead.
 func (*UpdateDialogueEvaluationReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{16}
+	return file_core_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *UpdateDialogueEvaluationReq) GetDialogueId() string {
@@ -946,7 +946,7 @@ type UpdateDialogueEvaluationResp struct {
 
 func (x *UpdateDialogueEvaluationResp) Reset() {
 	*x = UpdateDialogueEvaluationResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[17]
+	mi := &file_core_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -958,7 +958,7 @@ func (x *UpdateDialogueEvaluationResp) String() string {
 func (*UpdateDialogueEvaluationResp) ProtoMessage() {}
 
 func (x *UpdateDialogueEvaluationResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[17]
+	mi := &file_core_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -971,7 +971,7 @@ func (x *UpdateDialogueEvaluationResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDialogueEvaluationResp.ProtoReflect.Descriptor instead.
 func (*UpdateDialogueEvaluationResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{17}
+	return file_core_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *UpdateDialogueEvaluationResp) GetSuccess() bool {
@@ -990,7 +990,7 @@ type GetPracticeContextReq struct {
 
 func (x *GetPracticeContextReq) Reset() {
 	*x = GetPracticeContextReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[18]
+	mi := &file_core_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1002,7 +1002,7 @@ func (x *GetPracticeContextReq) String() string {
 func (*GetPracticeContextReq) ProtoMessage() {}
 
 func (x *GetPracticeContextReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[18]
+	mi := &file_core_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1015,7 +1015,7 @@ func (x *GetPracticeContextReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPracticeContextReq.ProtoReflect.Descriptor instead.
 func (*GetPracticeContextReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{18}
+	return file_core_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetPracticeContextReq) GetSessionId() string {
@@ -1039,7 +1039,7 @@ type GetPracticeContextResp struct {
 
 func (x *GetPracticeContextResp) Reset() {
 	*x = GetPracticeContextResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[19]
+	mi := &file_core_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1051,7 +1051,7 @@ func (x *GetPracticeContextResp) String() string {
 func (*GetPracticeContextResp) ProtoMessage() {}
 
 func (x *GetPracticeContextResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[19]
+	mi := &file_core_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1064,7 +1064,7 @@ func (x *GetPracticeContextResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPracticeContextResp.ProtoReflect.Descriptor instead.
 func (*GetPracticeContextResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{19}
+	return file_core_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetPracticeContextResp) GetSessionId() string {
@@ -1118,7 +1118,7 @@ type ListSessionsReq struct {
 
 func (x *ListSessionsReq) Reset() {
 	*x = ListSessionsReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[20]
+	mi := &file_core_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1130,7 +1130,7 @@ func (x *ListSessionsReq) String() string {
 func (*ListSessionsReq) ProtoMessage() {}
 
 func (x *ListSessionsReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[20]
+	mi := &file_core_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1143,7 +1143,7 @@ func (x *ListSessionsReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSessionsReq.ProtoReflect.Descriptor instead.
 func (*ListSessionsReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{20}
+	return file_core_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ListSessionsReq) GetUserId() string {
@@ -1166,7 +1166,7 @@ type SessionItem struct {
 
 func (x *SessionItem) Reset() {
 	*x = SessionItem{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[21]
+	mi := &file_core_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1178,7 +1178,7 @@ func (x *SessionItem) String() string {
 func (*SessionItem) ProtoMessage() {}
 
 func (x *SessionItem) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[21]
+	mi := &file_core_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1191,7 +1191,7 @@ func (x *SessionItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SessionItem.ProtoReflect.Descriptor instead.
 func (*SessionItem) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{21}
+	return file_core_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *SessionItem) GetId() string {
@@ -1238,7 +1238,7 @@ type ListSessionsResp struct {
 
 func (x *ListSessionsResp) Reset() {
 	*x = ListSessionsResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[22]
+	mi := &file_core_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1250,7 +1250,7 @@ func (x *ListSessionsResp) String() string {
 func (*ListSessionsResp) ProtoMessage() {}
 
 func (x *ListSessionsResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[22]
+	mi := &file_core_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1263,7 +1263,7 @@ func (x *ListSessionsResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSessionsResp.ProtoReflect.Descriptor instead.
 func (*ListSessionsResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{22}
+	return file_core_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListSessionsResp) GetSessions() []*SessionItem {
@@ -1282,7 +1282,7 @@ type GetSessionDetailReq struct {
 
 func (x *GetSessionDetailReq) Reset() {
 	*x = GetSessionDetailReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[23]
+	mi := &file_core_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1294,7 +1294,7 @@ func (x *GetSessionDetailReq) String() string {
 func (*GetSessionDetailReq) ProtoMessage() {}
 
 func (x *GetSessionDetailReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[23]
+	mi := &file_core_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1307,7 +1307,7 @@ func (x *GetSessionDetailReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionDetailReq.ProtoReflect.Descriptor instead.
 func (*GetSessionDetailReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{23}
+	return file_core_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetSessionDetailReq) GetSessionId() string {
@@ -1330,7 +1330,7 @@ type GetSessionDetailResp struct {
 
 func (x *GetSessionDetailResp) Reset() {
 	*x = GetSessionDetailResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[24]
+	mi := &file_core_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1342,7 +1342,7 @@ func (x *GetSessionDetailResp) String() string {
 func (*GetSessionDetailResp) ProtoMessage() {}
 
 func (x *GetSessionDetailResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[24]
+	mi := &file_core_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1355,7 +1355,7 @@ func (x *GetSessionDetailResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionDetailResp.ProtoReflect.Descriptor instead.
 func (*GetSessionDetailResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{24}
+	return file_core_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetSessionDetailResp) GetSessionId() string {
@@ -1402,7 +1402,7 @@ type DeleteSessionReq struct {
 
 func (x *DeleteSessionReq) Reset() {
 	*x = DeleteSessionReq{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[25]
+	mi := &file_core_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1414,7 +1414,7 @@ func (x *DeleteSessionReq) String() string {
 func (*DeleteSessionReq) ProtoMessage() {}
 
 func (x *DeleteSessionReq) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[25]
+	mi := &file_core_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1427,7 +1427,7 @@ func (x *DeleteSessionReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSessionReq.ProtoReflect.Descriptor instead.
 func (*DeleteSessionReq) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{25}
+	return file_core_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *DeleteSessionReq) GetSessionId() string {
@@ -1446,7 +1446,7 @@ type DeleteSessionResp struct {
 
 func (x *DeleteSessionResp) Reset() {
 	*x = DeleteSessionResp{}
-	mi := &file_backend_rpc_core_core_proto_msgTypes[26]
+	mi := &file_core_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1458,7 +1458,7 @@ func (x *DeleteSessionResp) String() string {
 func (*DeleteSessionResp) ProtoMessage() {}
 
 func (x *DeleteSessionResp) ProtoReflect() protoreflect.Message {
-	mi := &file_backend_rpc_core_core_proto_msgTypes[26]
+	mi := &file_core_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1471,7 +1471,7 @@ func (x *DeleteSessionResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSessionResp.ProtoReflect.Descriptor instead.
 func (*DeleteSessionResp) Descriptor() ([]byte, []int) {
-	return file_backend_rpc_core_core_proto_rawDescGZIP(), []int{26}
+	return file_core_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *DeleteSessionResp) GetSuccess() bool {
@@ -1481,11 +1481,332 @@ func (x *DeleteSessionResp) GetSuccess() bool {
 	return false
 }
 
-var File_backend_rpc_core_core_proto protoreflect.FileDescriptor
+type ListUserProfilesReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_backend_rpc_core_core_proto_rawDesc = "" +
+func (x *ListUserProfilesReq) Reset() {
+	*x = ListUserProfilesReq{}
+	mi := &file_core_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListUserProfilesReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUserProfilesReq) ProtoMessage() {}
+
+func (x *ListUserProfilesReq) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUserProfilesReq.ProtoReflect.Descriptor instead.
+func (*ListUserProfilesReq) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *ListUserProfilesReq) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type UserProfileItem struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	EnglishLevel   string                 `protobuf:"bytes,2,opt,name=english_level,json=englishLevel,proto3" json:"english_level,omitempty"`
+	LearningTarget string                 `protobuf:"bytes,3,opt,name=learning_target,json=learningTarget,proto3" json:"learning_target,omitempty"`
+	CreatedAt      int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *UserProfileItem) Reset() {
+	*x = UserProfileItem{}
+	mi := &file_core_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserProfileItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserProfileItem) ProtoMessage() {}
+
+func (x *UserProfileItem) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserProfileItem.ProtoReflect.Descriptor instead.
+func (*UserProfileItem) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *UserProfileItem) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UserProfileItem) GetEnglishLevel() string {
+	if x != nil {
+		return x.EnglishLevel
+	}
+	return ""
+}
+
+func (x *UserProfileItem) GetLearningTarget() string {
+	if x != nil {
+		return x.LearningTarget
+	}
+	return ""
+}
+
+func (x *UserProfileItem) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+type ListUserProfilesResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Profiles      []*UserProfileItem     `protobuf:"bytes,1,rep,name=profiles,proto3" json:"profiles,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListUserProfilesResp) Reset() {
+	*x = ListUserProfilesResp{}
+	mi := &file_core_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListUserProfilesResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUserProfilesResp) ProtoMessage() {}
+
+func (x *ListUserProfilesResp) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUserProfilesResp.ProtoReflect.Descriptor instead.
+func (*ListUserProfilesResp) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ListUserProfilesResp) GetProfiles() []*UserProfileItem {
+	if x != nil {
+		return x.Profiles
+	}
+	return nil
+}
+
+type ListScenariosReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListScenariosReq) Reset() {
+	*x = ListScenariosReq{}
+	mi := &file_core_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListScenariosReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListScenariosReq) ProtoMessage() {}
+
+func (x *ListScenariosReq) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListScenariosReq.ProtoReflect.Descriptor instead.
+func (*ListScenariosReq) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *ListScenariosReq) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type ScenarioItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	CreatorId     string                 `protobuf:"bytes,4,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
+	CreatedAt     int64                  `protobuf:"varint,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ScenarioItem) Reset() {
+	*x = ScenarioItem{}
+	mi := &file_core_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ScenarioItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ScenarioItem) ProtoMessage() {}
+
+func (x *ScenarioItem) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ScenarioItem.ProtoReflect.Descriptor instead.
+func (*ScenarioItem) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *ScenarioItem) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *ScenarioItem) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ScenarioItem) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *ScenarioItem) GetCreatorId() string {
+	if x != nil {
+		return x.CreatorId
+	}
+	return ""
+}
+
+func (x *ScenarioItem) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+type ListScenariosResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Scenarios     []*ScenarioItem        `protobuf:"bytes,1,rep,name=scenarios,proto3" json:"scenarios,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListScenariosResp) Reset() {
+	*x = ListScenariosResp{}
+	mi := &file_core_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListScenariosResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListScenariosResp) ProtoMessage() {}
+
+func (x *ListScenariosResp) ProtoReflect() protoreflect.Message {
+	mi := &file_core_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListScenariosResp.ProtoReflect.Descriptor instead.
+func (*ListScenariosResp) Descriptor() ([]byte, []int) {
+	return file_core_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *ListScenariosResp) GetScenarios() []*ScenarioItem {
+	if x != nil {
+		return x.Scenarios
+	}
+	return nil
+}
+
+var File_core_proto protoreflect.FileDescriptor
+
+const file_core_proto_rawDesc = "" +
 	"\n" +
-	"\x1bbackend/rpc/core/core.proto\x12\x04core\"2\n" +
+	"\n" +
+	"core.proto\x12\x04core\"2\n" +
 	"\x14GenerateUploadUrlReq\x12\x1a\n" +
 	"\bfilename\x18\x01 \x01(\tR\bfilename\"U\n" +
 	"\x15GenerateUploadUrlResp\x12\x1d\n" +
@@ -1591,7 +1912,29 @@ const file_backend_rpc_core_core_proto_rawDesc = "" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"-\n" +
 	"\x11DeleteSessionResp\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xba\a\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\".\n" +
+	"\x13ListUserProfilesReq\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x8e\x01\n" +
+	"\x0fUserProfileItem\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
+	"\renglish_level\x18\x02 \x01(\tR\fenglishLevel\x12'\n" +
+	"\x0flearning_target\x18\x03 \x01(\tR\x0elearningTarget\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\x03R\tcreatedAt\"I\n" +
+	"\x14ListUserProfilesResp\x121\n" +
+	"\bprofiles\x18\x01 \x03(\v2\x15.core.UserProfileItemR\bprofiles\"+\n" +
+	"\x10ListScenariosReq\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x92\x01\n" +
+	"\fScenarioItem\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1d\n" +
+	"\n" +
+	"creator_id\x18\x04 \x01(\tR\tcreatorId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\x03R\tcreatedAt\"E\n" +
+	"\x11ListScenariosResp\x120\n" +
+	"\tscenarios\x18\x01 \x03(\v2\x12.core.ScenarioItemR\tscenarios2\xc7\b\n" +
 	"\x04Core\x12L\n" +
 	"\x11GenerateUploadUrl\x12\x1a.core.GenerateUploadUrlReq\x1a\x1b.core.GenerateUploadUrlResp\x12L\n" +
 	"\x11CreateUserProfile\x12\x1a.core.CreateUserProfileReq\x1a\x1b.core.CreateUserProfileResp\x12C\n" +
@@ -1605,22 +1948,24 @@ const file_backend_rpc_core_core_proto_rawDesc = "" +
 	"\x12GetPracticeContext\x12\x1b.core.GetPracticeContextReq\x1a\x1c.core.GetPracticeContextResp\x12=\n" +
 	"\fListSessions\x12\x15.core.ListSessionsReq\x1a\x16.core.ListSessionsResp\x12I\n" +
 	"\x10GetSessionDetail\x12\x19.core.GetSessionDetailReq\x1a\x1a.core.GetSessionDetailResp\x12@\n" +
-	"\rDeleteSession\x12\x16.core.DeleteSessionReq\x1a\x17.core.DeleteSessionRespB\bZ\x06./coreb\x06proto3"
+	"\rDeleteSession\x12\x16.core.DeleteSessionReq\x1a\x17.core.DeleteSessionResp\x12I\n" +
+	"\x10ListUserProfiles\x12\x19.core.ListUserProfilesReq\x1a\x1a.core.ListUserProfilesResp\x12@\n" +
+	"\rListScenarios\x12\x16.core.ListScenariosReq\x1a\x17.core.ListScenariosRespB\bZ\x06./coreb\x06proto3"
 
 var (
-	file_backend_rpc_core_core_proto_rawDescOnce sync.Once
-	file_backend_rpc_core_core_proto_rawDescData []byte
+	file_core_proto_rawDescOnce sync.Once
+	file_core_proto_rawDescData []byte
 )
 
-func file_backend_rpc_core_core_proto_rawDescGZIP() []byte {
-	file_backend_rpc_core_core_proto_rawDescOnce.Do(func() {
-		file_backend_rpc_core_core_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_backend_rpc_core_core_proto_rawDesc), len(file_backend_rpc_core_core_proto_rawDesc)))
+func file_core_proto_rawDescGZIP() []byte {
+	file_core_proto_rawDescOnce.Do(func() {
+		file_core_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_core_proto_rawDesc), len(file_core_proto_rawDesc)))
 	})
-	return file_backend_rpc_core_core_proto_rawDescData
+	return file_core_proto_rawDescData
 }
 
-var file_backend_rpc_core_core_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
-var file_backend_rpc_core_core_proto_goTypes = []any{
+var file_core_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_core_proto_goTypes = []any{
 	(*GenerateUploadUrlReq)(nil),         // 0: core.GenerateUploadUrlReq
 	(*GenerateUploadUrlResp)(nil),        // 1: core.GenerateUploadUrlResp
 	(*CreateUserProfileReq)(nil),         // 2: core.CreateUserProfileReq
@@ -1648,62 +1993,74 @@ var file_backend_rpc_core_core_proto_goTypes = []any{
 	(*GetSessionDetailResp)(nil),         // 24: core.GetSessionDetailResp
 	(*DeleteSessionReq)(nil),             // 25: core.DeleteSessionReq
 	(*DeleteSessionResp)(nil),            // 26: core.DeleteSessionResp
+	(*ListUserProfilesReq)(nil),          // 27: core.ListUserProfilesReq
+	(*UserProfileItem)(nil),              // 28: core.UserProfileItem
+	(*ListUserProfilesResp)(nil),         // 29: core.ListUserProfilesResp
+	(*ListScenariosReq)(nil),             // 30: core.ListScenariosReq
+	(*ScenarioItem)(nil),                 // 31: core.ScenarioItem
+	(*ListScenariosResp)(nil),            // 32: core.ListScenariosResp
 }
-var file_backend_rpc_core_core_proto_depIdxs = []int32{
+var file_core_proto_depIdxs = []int32{
 	21, // 0: core.ListSessionsResp.sessions:type_name -> core.SessionItem
-	0,  // 1: core.Core.GenerateUploadUrl:input_type -> core.GenerateUploadUrlReq
-	2,  // 2: core.Core.CreateUserProfile:input_type -> core.CreateUserProfileReq
-	4,  // 3: core.Core.GetUserProfile:input_type -> core.GetUserProfileReq
-	6,  // 4: core.Core.CreateScenario:input_type -> core.CreateScenarioReq
-	8,  // 5: core.Core.GetScenario:input_type -> core.GetScenarioReq
-	10, // 6: core.Core.CreateSession:input_type -> core.CreateSessionReq
-	12, // 7: core.Core.UpdateSessionStatus:input_type -> core.UpdateSessionStatusReq
-	14, // 8: core.Core.AddDialogue:input_type -> core.AddDialogueReq
-	16, // 9: core.Core.UpdateDialogueEvaluation:input_type -> core.UpdateDialogueEvaluationReq
-	18, // 10: core.Core.GetPracticeContext:input_type -> core.GetPracticeContextReq
-	20, // 11: core.Core.ListSessions:input_type -> core.ListSessionsReq
-	23, // 12: core.Core.GetSessionDetail:input_type -> core.GetSessionDetailReq
-	25, // 13: core.Core.DeleteSession:input_type -> core.DeleteSessionReq
-	1,  // 14: core.Core.GenerateUploadUrl:output_type -> core.GenerateUploadUrlResp
-	3,  // 15: core.Core.CreateUserProfile:output_type -> core.CreateUserProfileResp
-	5,  // 16: core.Core.GetUserProfile:output_type -> core.GetUserProfileResp
-	7,  // 17: core.Core.CreateScenario:output_type -> core.CreateScenarioResp
-	9,  // 18: core.Core.GetScenario:output_type -> core.GetScenarioResp
-	11, // 19: core.Core.CreateSession:output_type -> core.CreateSessionResp
-	13, // 20: core.Core.UpdateSessionStatus:output_type -> core.UpdateSessionStatusResp
-	15, // 21: core.Core.AddDialogue:output_type -> core.AddDialogueResp
-	17, // 22: core.Core.UpdateDialogueEvaluation:output_type -> core.UpdateDialogueEvaluationResp
-	19, // 23: core.Core.GetPracticeContext:output_type -> core.GetPracticeContextResp
-	22, // 24: core.Core.ListSessions:output_type -> core.ListSessionsResp
-	24, // 25: core.Core.GetSessionDetail:output_type -> core.GetSessionDetailResp
-	26, // 26: core.Core.DeleteSession:output_type -> core.DeleteSessionResp
-	14, // [14:27] is the sub-list for method output_type
-	1,  // [1:14] is the sub-list for method input_type
-	1,  // [1:1] is the sub-list for extension type_name
-	1,  // [1:1] is the sub-list for extension extendee
-	0,  // [0:1] is the sub-list for field type_name
+	28, // 1: core.ListUserProfilesResp.profiles:type_name -> core.UserProfileItem
+	31, // 2: core.ListScenariosResp.scenarios:type_name -> core.ScenarioItem
+	0,  // 3: core.Core.GenerateUploadUrl:input_type -> core.GenerateUploadUrlReq
+	2,  // 4: core.Core.CreateUserProfile:input_type -> core.CreateUserProfileReq
+	4,  // 5: core.Core.GetUserProfile:input_type -> core.GetUserProfileReq
+	6,  // 6: core.Core.CreateScenario:input_type -> core.CreateScenarioReq
+	8,  // 7: core.Core.GetScenario:input_type -> core.GetScenarioReq
+	10, // 8: core.Core.CreateSession:input_type -> core.CreateSessionReq
+	12, // 9: core.Core.UpdateSessionStatus:input_type -> core.UpdateSessionStatusReq
+	14, // 10: core.Core.AddDialogue:input_type -> core.AddDialogueReq
+	16, // 11: core.Core.UpdateDialogueEvaluation:input_type -> core.UpdateDialogueEvaluationReq
+	18, // 12: core.Core.GetPracticeContext:input_type -> core.GetPracticeContextReq
+	20, // 13: core.Core.ListSessions:input_type -> core.ListSessionsReq
+	23, // 14: core.Core.GetSessionDetail:input_type -> core.GetSessionDetailReq
+	25, // 15: core.Core.DeleteSession:input_type -> core.DeleteSessionReq
+	27, // 16: core.Core.ListUserProfiles:input_type -> core.ListUserProfilesReq
+	30, // 17: core.Core.ListScenarios:input_type -> core.ListScenariosReq
+	1,  // 18: core.Core.GenerateUploadUrl:output_type -> core.GenerateUploadUrlResp
+	3,  // 19: core.Core.CreateUserProfile:output_type -> core.CreateUserProfileResp
+	5,  // 20: core.Core.GetUserProfile:output_type -> core.GetUserProfileResp
+	7,  // 21: core.Core.CreateScenario:output_type -> core.CreateScenarioResp
+	9,  // 22: core.Core.GetScenario:output_type -> core.GetScenarioResp
+	11, // 23: core.Core.CreateSession:output_type -> core.CreateSessionResp
+	13, // 24: core.Core.UpdateSessionStatus:output_type -> core.UpdateSessionStatusResp
+	15, // 25: core.Core.AddDialogue:output_type -> core.AddDialogueResp
+	17, // 26: core.Core.UpdateDialogueEvaluation:output_type -> core.UpdateDialogueEvaluationResp
+	19, // 27: core.Core.GetPracticeContext:output_type -> core.GetPracticeContextResp
+	22, // 28: core.Core.ListSessions:output_type -> core.ListSessionsResp
+	24, // 29: core.Core.GetSessionDetail:output_type -> core.GetSessionDetailResp
+	26, // 30: core.Core.DeleteSession:output_type -> core.DeleteSessionResp
+	29, // 31: core.Core.ListUserProfiles:output_type -> core.ListUserProfilesResp
+	32, // 32: core.Core.ListScenarios:output_type -> core.ListScenariosResp
+	18, // [18:33] is the sub-list for method output_type
+	3,  // [3:18] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_backend_rpc_core_core_proto_init() }
-func file_backend_rpc_core_core_proto_init() {
-	if File_backend_rpc_core_core_proto != nil {
+func init() { file_core_proto_init() }
+func file_core_proto_init() {
+	if File_core_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_backend_rpc_core_core_proto_rawDesc), len(file_backend_rpc_core_core_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_proto_rawDesc), len(file_core_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   27,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_backend_rpc_core_core_proto_goTypes,
-		DependencyIndexes: file_backend_rpc_core_core_proto_depIdxs,
-		MessageInfos:      file_backend_rpc_core_core_proto_msgTypes,
+		GoTypes:           file_core_proto_goTypes,
+		DependencyIndexes: file_core_proto_depIdxs,
+		MessageInfos:      file_core_proto_msgTypes,
 	}.Build()
-	File_backend_rpc_core_core_proto = out.File
-	file_backend_rpc_core_core_proto_goTypes = nil
-	file_backend_rpc_core_core_proto_depIdxs = nil
+	File_core_proto = out.File
+	file_core_proto_goTypes = nil
+	file_core_proto_depIdxs = nil
 }

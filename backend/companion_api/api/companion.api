@@ -74,6 +74,17 @@ type GetUserProfileResp {
 	CreatedAt      int64  `json:"created_at"`
 }
 
+type UserProfileItem {
+	Id             string `json:"id"`
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
+	CreatedAt      int64  `json:"created_at"`
+}
+
+type ListUserProfilesResp {
+	Profiles []UserProfileItem `json:"profiles"`
+}
+
 // --- Scenario ---
 type CreateScenarioReq {
 	Name        string `json:"name"`
@@ -82,6 +93,18 @@ type CreateScenarioReq {
 
 type CreateScenarioResp {
 	Id string `json:"id"`
+}
+
+type ScenarioItem {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	CreatorId   string `json:"creator_id"`
+	CreatedAt   int64  `json:"created_at"`
+}
+
+type ListScenariosResp {
+	Scenarios []ScenarioItem `json:"scenarios"`
 }
 
 // --- Practice Session ---
@@ -156,6 +179,10 @@ service companion-api {
 	@doc "获取用户档案信息"
 	@handler GetUserProfile
 	get /:id (GetUserProfileReq) returns (GetUserProfileResp)
+
+	@doc "获取当前用户的档案列表"
+	@handler ListUserProfiles
+	get / returns (ListUserProfilesResp)
 }
 
 @server (
@@ -166,6 +193,10 @@ service companion-api {
 	@doc "创建练习场景"
 	@handler CreateScenario
 	post / (CreateScenarioReq) returns (CreateScenarioResp)
+
+	@doc "获取场景列表"
+	@handler ListScenarios
+	get / returns (ListScenariosResp)
 }
 
 @server (

@@ -34,13 +34,19 @@ type (
 	GetSessionDetailResp         = core.GetSessionDetailResp
 	GetUserProfileReq            = core.GetUserProfileReq
 	GetUserProfileResp           = core.GetUserProfileResp
+	ListScenariosReq             = core.ListScenariosReq
+	ListScenariosResp            = core.ListScenariosResp
 	ListSessionsReq              = core.ListSessionsReq
 	ListSessionsResp             = core.ListSessionsResp
+	ListUserProfilesReq          = core.ListUserProfilesReq
+	ListUserProfilesResp         = core.ListUserProfilesResp
+	ScenarioItem                 = core.ScenarioItem
 	SessionItem                  = core.SessionItem
 	UpdateDialogueEvaluationReq  = core.UpdateDialogueEvaluationReq
 	UpdateDialogueEvaluationResp = core.UpdateDialogueEvaluationResp
 	UpdateSessionStatusReq       = core.UpdateSessionStatusReq
 	UpdateSessionStatusResp      = core.UpdateSessionStatusResp
+	UserProfileItem              = core.UserProfileItem
 
 	Core interface {
 		// User Profile & OSS
@@ -62,6 +68,8 @@ type (
 		ListSessions(ctx context.Context, in *ListSessionsReq, opts ...grpc.CallOption) (*ListSessionsResp, error)
 		GetSessionDetail(ctx context.Context, in *GetSessionDetailReq, opts ...grpc.CallOption) (*GetSessionDetailResp, error)
 		DeleteSession(ctx context.Context, in *DeleteSessionReq, opts ...grpc.CallOption) (*DeleteSessionResp, error)
+		ListUserProfiles(ctx context.Context, in *ListUserProfilesReq, opts ...grpc.CallOption) (*ListUserProfilesResp, error)
+		ListScenarios(ctx context.Context, in *ListScenariosReq, opts ...grpc.CallOption) (*ListScenariosResp, error)
 	}
 
 	defaultCore struct {
@@ -144,4 +152,14 @@ func (m *defaultCore) GetSessionDetail(ctx context.Context, in *GetSessionDetail
 func (m *defaultCore) DeleteSession(ctx context.Context, in *DeleteSessionReq, opts ...grpc.CallOption) (*DeleteSessionResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.DeleteSession(ctx, in, opts...)
+}
+
+func (m *defaultCore) ListUserProfiles(ctx context.Context, in *ListUserProfilesReq, opts ...grpc.CallOption) (*ListUserProfilesResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.ListUserProfiles(ctx, in, opts...)
+}
+
+func (m *defaultCore) ListScenarios(ctx context.Context, in *ListScenariosReq, opts ...grpc.CallOption) (*ListScenariosResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.ListScenarios(ctx, in, opts...)
 }

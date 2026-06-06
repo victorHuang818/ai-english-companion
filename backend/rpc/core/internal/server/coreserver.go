@@ -93,3 +93,13 @@ func (s *CoreServer) DeleteSession(ctx context.Context, in *core.DeleteSessionRe
 	l := logic.NewDeleteSessionLogic(ctx, s.svcCtx)
 	return l.DeleteSession(in)
 }
+
+func (s *CoreServer) ListUserProfiles(ctx context.Context, in *core.ListUserProfilesReq) (*core.ListUserProfilesResp, error) {
+	l := logic.NewListUserProfilesLogic(ctx, s.svcCtx)
+	return l.ListUserProfiles(in)
+}
+
+func (s *CoreServer) ListScenarios(ctx context.Context, in *core.ListScenariosReq) (*core.ListScenariosResp, error) {
+	l := logic.NewListScenariosLogic(ctx, s.svcCtx)
+	return l.ListScenarios(in)
+}

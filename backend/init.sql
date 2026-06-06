@@ -1,5 +1,6 @@
--- 创建数据库（如果不存在）
-CREATE DATABASE IF NOT EXISTS ai_english_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- 如果已存在数据库，先删除再重建
+DROP DATABASE IF EXISTS ai_english_db;
+CREATE DATABASE ai_english_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE ai_english_db;
 
 -- 1. 用户表 Users
@@ -59,3 +60,10 @@ CREATE TABLE `dialogues` (
     PRIMARY KEY (`id`),
     INDEX `idx_session_time` (`practice_session_id`, `created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 插入4个公共预设场景
+INSERT INTO `scenarios` (`id`, `creator_id`, `name`, `description`, `created_at`) VALUES
+('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', 'Job Interview', 'Simulate a professional interview at a multinational corporation. Focus on project experience, career goals, and behavioral questions.', CURRENT_TIMESTAMP),
+('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000', 'Ordering Food', 'Practice ordering food, asking about the menu, and handling payments in a dining or restaurant context.', CURRENT_TIMESTAMP),
+('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000000', 'IELTS Speaking', 'Simulate IELTS speaking test sections (Part 1, Part 2, Part 3) under standardized constraints.', CURRENT_TIMESTAMP),
+('00000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000', 'Business Meeting', 'Practice presenting an idea, reporting project status, or discussing proposals in a business meeting.', CURRENT_TIMESTAMP);

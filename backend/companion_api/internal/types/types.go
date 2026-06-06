@@ -79,8 +79,16 @@ type GetUserProfileResp struct {
 	CreatedAt      int64  `json:"created_at"`
 }
 
+type ListScenariosResp struct {
+	Scenarios []ScenarioItem `json:"scenarios"`
+}
+
 type ListSessionsResp struct {
 	Sessions []PracticeSession `json:"sessions"`
+}
+
+type ListUserProfilesResp struct {
+	Profiles []UserProfileItem `json:"profiles"`
 }
 
 type LoginReq struct {
@@ -109,4 +117,19 @@ type RegisterReq struct {
 
 type RegisterResp struct {
 	Id string `json:"id"`
+}
+
+type ScenarioItem struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	CreatorId   string `json:"creator_id"`
+	CreatedAt   int64  `json:"created_at"`
+}
+
+type UserProfileItem struct {
+	Id             string `json:"id"`
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
+	CreatedAt      int64  `json:"created_at"`
 }

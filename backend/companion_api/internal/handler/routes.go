@@ -52,6 +52,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: CreateUserProfileHandler(serverCtx),
 			},
 			{
+				// 获取当前用户的档案列表
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: ListUserProfilesHandler(serverCtx),
+			},
+			{
 				// 获取用户档案信息
 				Method:  http.MethodGet,
 				Path:    "/:id",
@@ -75,6 +81,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/",
 				Handler: CreateScenarioHandler(serverCtx),
+			},
+			{
+				// 获取场景列表
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: ListScenariosHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
