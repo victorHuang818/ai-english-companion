@@ -75,6 +75,7 @@ export const DashboardPage: React.FC = () => {
   const [savedProfileId, setSavedProfileId] = useState<string>('');
   const [savingProfile, setSavingProfile] = useState<boolean>(false);
   const [profileSavedSuccess, setProfileSavedSuccess] = useState<boolean>(false);
+  const [savedProfilesList, setSavedProfilesList] = useState<Array<{ id: string; english_level: 'beginner' | 'intermediate' | 'advanced'; learning_target: string }>>([]);
 
   // Scenario selection states
   const [selectedScenario, setSelectedScenario] = useState<ScenarioPreset | { name: string; description: string; isCustom: boolean } | null>(null);
@@ -90,18 +91,88 @@ export const DashboardPage: React.FC = () => {
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [deleteSessionTargetId, setDeleteSessionTargetId] = useState<string>('');
 
-  // Load profile & custom scenarios from DB / LocalStorage
+  // Load profile & custom scenarios from DB / LocalStorage and verify DB existence
   useEffect(() => {
     if (user?.id) {
-      // Restore profile from local storage if exists
+      // Restore saved profiles history
+      const savedProfilesKey = `saved_profiles_${user.id}`;
+      const localSavedProfiles = localStorage.getItem(savedProfilesKey);
+      let list: Array<{ id: string; english_level: 'beginner' | 'intermediate' | 'advanced'; learning_target: string }> = [];
+      if (localSavedProfiles) {
+        list = JSON.parse(localSavedProfiles);
+      }
+
+      // Restore active profile from local storage if exists
       const savedProfileKey = `user_profile_${user.id}`;
       const localProfile = localStorage.getItem(savedProfileKey);
+      let activeProfileParsed: any = null;
       if (localProfile) {
-        const parsed = JSON.parse(localProfile);
-        setSavedProfileId(parsed.id);
-        setEnglishLevel(parsed.english_level);
-        setLearningTarget(parsed.learning_target);
-        setProfileSavedSuccess(true);
+        activeProfileParsed = JSON.parse(localProfile);
+      }
+
+      // Verify all profiles in the list against the backend
+      const verifyProfiles = async () => {
+        const verifiedList: typeof list = [];
+        let activeProfileValid = false;
+
+        for (const profile of list) {
+          if (profile.id) {
+            try {
+              // Call backend to verify if it exists
+              await api.getUserProfile(profile.id);
+              verifiedList.push(profile);
+              if (activeProfileParsed && activeProfileParsed.id === profile.id) {
+                activeProfileValid = true;
+              }
+            } catch (err) {
+              console.warn(`Profile ${profile.id} is invalid/deleted from DB:`, err);
+            }
+          }
+        }
+
+        // Update state and localStorage with only verified profiles
+        setSavedProfilesList(verifiedList);
+        localStorage.setItem(savedProfilesKey, JSON.stringify(verifiedList));
+
+        // If the active profile is verified, set it. Otherwise, clear it.
+        if (activeProfileValid && activeProfileParsed) {
+          setSavedProfileId(activeProfileParsed.id);
+          setEnglishLevel(activeProfileParsed.english_level || 'intermediate');
+          setLearningTarget(activeProfileParsed.learning_target || '');
+          setProfileSavedSuccess(true);
+        } else {
+          localStorage.removeItem(savedProfileKey);
+          setSavedProfileId('');
+          setProfileSavedSuccess(false);
+          setEnglishLevel('intermediate');
+          setLearningTarget('Improve spoken fluency and prepare for professional communication');
+        }
+      };
+
+      if (list.length > 0) {
+        verifyProfiles();
+      } else {
+        // If there's no list, but we have an active profile, verify just the active profile
+        if (activeProfileParsed && activeProfileParsed.id) {
+          api.getUserProfile(activeProfileParsed.id)
+            .then(() => {
+              setSavedProfileId(activeProfileParsed.id);
+              setEnglishLevel(activeProfileParsed.english_level || 'intermediate');
+              setLearningTarget(activeProfileParsed.learning_target || '');
+              setProfileSavedSuccess(true);
+              
+              const updatedList = [activeProfileParsed];
+              setSavedProfilesList(updatedList);
+              localStorage.setItem(savedProfilesKey, JSON.stringify(updatedList));
+            })
+            .catch(() => {
+              localStorage.removeItem(savedProfileKey);
+              setSavedProfileId('');
+              setProfileSavedSuccess(false);
+              setEnglishLevel('intermediate');
+              setLearningTarget('Improve spoken fluency and prepare for professional communication');
+            });
+        }
       }
 
       // Restore custom scenarios list
@@ -112,6 +183,73 @@ export const DashboardPage: React.FC = () => {
       }
     }
   }, [user]);
+
+  // Track profile changes to prompt for re-saving
+  const handleLevelChange = (level: 'beginner' | 'intermediate' | 'advanced') => {
+    setEnglishLevel(level);
+    setProfileSavedSuccess(false);
+  };
+
+  const handleTargetChange = (target: string) => {
+    setLearningTarget(target);
+    setProfileSavedSuccess(false);
+  };
+
+  const handleSelectProfile = (profile: { id: string; english_level: 'beginner' | 'intermediate' | 'advanced'; learning_target: string }) => {
+    setSavedProfileId(profile.id);
+    setEnglishLevel(profile.english_level);
+    setLearningTarget(profile.learning_target);
+    setProfileSavedSuccess(true);
+  };
+
+  const handleDeleteProfile = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const filtered = savedProfilesList.filter(p => p.id !== id);
+    setSavedProfilesList(filtered);
+    if (user?.id) {
+      localStorage.setItem(`saved_profiles_${user.id}`, JSON.stringify(filtered));
+    }
+    if (savedProfileId === id) {
+      setSavedProfileId('');
+      setProfileSavedSuccess(false);
+    }
+  };
+
+  // Save/Update English Profile
+  const handleSaveProfile = async () => {
+    try {
+      setSavingProfile(true);
+      setError('');
+      const res = await api.createUserProfile({
+        english_level: englishLevel,
+        learning_target: learningTarget
+      });
+      
+      setSavedProfileId(res.id);
+      setProfileSavedSuccess(true);
+      
+      if (user?.id) {
+        const newProfile = {
+          id: res.id,
+          english_level: englishLevel,
+          learning_target: learningTarget
+        };
+
+        localStorage.setItem(`user_profile_${user.id}`, JSON.stringify(newProfile));
+
+        const filteredList = savedProfilesList.filter(
+          p => !(p.english_level === englishLevel && p.learning_target === learningTarget)
+        );
+        const updatedList = [newProfile, ...filteredList];
+        setSavedProfilesList(updatedList);
+        localStorage.setItem(`saved_profiles_${user.id}`, JSON.stringify(updatedList));
+      }
+    } catch (err: any) {
+      setError('Failed to configure profile: ' + err.message);
+    } finally {
+      setSavingProfile(false);
+    }
+  };
 
   // Load practice sessions
   useEffect(() => {
@@ -135,37 +273,7 @@ export const DashboardPage: React.FC = () => {
     navigate('/auth');
   };
 
-  // Save/Update English Profile
-  const handleSaveProfile = async () => {
-    try {
-      setSavingProfile(true);
-      setError('');
-      const res = await api.createUserProfile({
-        english_level: englishLevel,
-        learning_target: learningTarget
-      });
-      
-      setSavedProfileId(res.id);
-      setProfileSavedSuccess(true);
-      
-      if (user?.id) {
-        localStorage.setItem(`user_profile_${user.id}`, JSON.stringify({
-          id: res.id,
-          english_level: englishLevel,
-          learning_target: learningTarget
-        }));
-      }
-    } catch (err: any) {
-      setError('Failed to configure profile: ' + err.message);
-    } finally {
-      setSavingProfile(false);
-    }
-  };
 
-  // Reset profile to allow editing
-  const handleResetProfile = () => {
-    setProfileSavedSuccess(false);
-  };
 
   // Select a preset scenario card
   const handleSelectPreset = (preset: ScenarioPreset) => {
@@ -231,8 +339,8 @@ export const DashboardPage: React.FC = () => {
 
   // Start Session (Create Profile/Scenario if not yet done, then create session)
   const handleStartPractice = async () => {
-    if (!profileSavedSuccess || !englishLevel || !learningTarget) {
-      setError('Please configure your English Profile first.');
+    if (!profileSavedSuccess || !englishLevel || !learningTarget.trim()) {
+      setError('Please save your English Profile first.');
       return;
     }
     if (!selectedScenario) {
@@ -346,67 +454,83 @@ export const DashboardPage: React.FC = () => {
             <div className="card-header">
               <Award className="card-icon" />
               <h2>Step 1: Background English Profile</h2>
-              {profileSavedSuccess && (
-                <button className="reset-btn" onClick={handleResetProfile} title="Edit Profile">
-                  <RefreshCw size={14} />
-                </button>
-              )}
             </div>
             <div className="card-content">
-              {profileSavedSuccess ? (
-                <div className="profile-saved-card animate-fade-in">
-                  <div className="profile-status">
-                    <CheckCircle className="check-icon" size={18} />
-                    <span>Active Profile Configured</span>
-                  </div>
-                  <div className="profile-detail-item">
-                    <span className="detail-label">Current English Level:</span>
-                    <span className="detail-value level-badge capitalize">{englishLevel}</span>
-                  </div>
-                  <div className="profile-detail-item">
-                    <span className="detail-label">Learning Goal / Focus:</span>
-                    <p className="detail-text">{learningTarget}</p>
+              <div className="form-section">
+                <div className="form-group">
+                  <label>Select English Level</label>
+                  <div className="level-select-row">
+                    {(['beginner', 'intermediate', 'advanced'] as const).map(level => (
+                      <button
+                        key={level}
+                        type="button"
+                        className={`level-btn capitalize ${englishLevel === level ? 'active' : ''}`}
+                        onClick={() => handleLevelChange(level)}
+                      >
+                        {level === 'beginner' && '🌱 '}
+                        {level === 'intermediate' && '🚀 '}
+                        {level === 'advanced' && '🏆 '}
+                        {level}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              ) : (
-                <div className="form-section">
-                  <div className="form-group">
-                    <label>Select English Level</label>
-                    <div className="level-select-row">
-                      {(['beginner', 'intermediate', 'advanced'] as const).map(level => (
-                        <button
-                          key={level}
-                          type="button"
-                          className={`level-btn capitalize ${englishLevel === level ? 'active' : ''}`}
-                          onClick={() => setEnglishLevel(level)}
+                <div className="form-group">
+                  <label htmlFor="learning-target">Practice Target or context</label>
+                  <textarea
+                    id="learning-target"
+                    className="modern-input"
+                    placeholder="e.g., I want to prepare for an upcoming overseas trip, focus on accent, vocabulary, and basic hotel check-in / shopping scenarios."
+                    value={learningTarget}
+                    onChange={e => handleTargetChange(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+                <GlowingButton
+                  variant="primary"
+                  onClick={handleSaveProfile}
+                  disabled={savingProfile || !learningTarget.trim()}
+                  fullWidth
+                >
+                  {savingProfile ? 'Saving profile...' : 'Save Profile'}
+                </GlowingButton>
+              </div>
+
+              {/* Previously Saved Profiles */}
+              {savedProfilesList.length > 0 && (
+                <div className="custom-scenarios-history" style={{ marginTop: '20px', borderTop: '1px solid var(--border-glass)', paddingTop: '16px' }}>
+                  <div className="history-list-title">PREVIOUSLY SAVED PROFILES</div>
+                  <div className="history-items-scroll">
+                    {savedProfilesList.map(profile => {
+                      const abbreviatedTarget = profile.learning_target.length > 25 
+                        ? profile.learning_target.substring(0, 25) + '...' 
+                        : profile.learning_target;
+                      const displayTitle = `${profile.english_level} - ${abbreviatedTarget}`;
+                      
+                      return (
+                        <div
+                          key={profile.id}
+                          className={`history-item ${savedProfileId === profile.id && profileSavedSuccess ? 'active-profile-item' : ''}`}
+                          onClick={() => handleSelectProfile(profile)}
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                         >
-                          {level === 'beginner' && '🌱 '}
-                          {level === 'intermediate' && '🚀 '}
-                          {level === 'advanced' && '🏆 '}
-                          {level}
-                        </button>
-                      ))}
-                    </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, overflow: 'hidden' }}>
+                            <Award size={16} className="item-icon" />
+                            <span className="item-filename" style={{ fontSize: '13px' }}>{displayTitle}</span>
+                          </div>
+                          <div className="item-actions" style={{ flexShrink: 0 }}>
+                            <button
+                              className="action-btn delete"
+                              title="Delete Profile"
+                              onClick={(e) => handleDeleteProfile(profile.id, e)}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="learning-target">Practice Target or context</label>
-                    <textarea
-                      id="learning-target"
-                      className="modern-input"
-                      placeholder="e.g., I want to prepare for an upcoming overseas trip, focus on accent, vocabulary, and basic hotel check-in / shopping scenarios."
-                      value={learningTarget}
-                      onChange={e => setLearningTarget(e.target.value)}
-                      rows={4}
-                    />
-                  </div>
-                  <GlowingButton
-                    variant="secondary"
-                    onClick={handleSaveProfile}
-                    disabled={savingProfile || !learningTarget.trim()}
-                    fullWidth
-                  >
-                    {savingProfile ? 'Saving profile...' : 'Save Profile'}
-                  </GlowingButton>
                 </div>
               )}
             </div>
