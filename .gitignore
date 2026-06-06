@@ -7,9 +7,9 @@ node_modules/
 /coverage
 
 # Production
-/dist
-/build
-/bin
+dist/
+build/
+bin/
 
 # Misc
 .DS_Store
