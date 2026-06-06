@@ -7,7 +7,7 @@ package coreclient
 import (
 	"context"
 
-	"ai_interview/rpc/core/core"
+	"ai_companion/rpc/core/core"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

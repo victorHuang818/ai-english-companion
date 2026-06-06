@@ -1,4 +1,4 @@
-module ai_interview
+module ai_companion
 
 go 1.25.5
 

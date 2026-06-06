@@ -52,7 +52,7 @@ graph TD
 ai_english_companion/
 ├── backend/                  # 后端 Go-zero 微服务
 │   ├── gateway/              # 网关层，处理统一 JWT 鉴权与服务路由分发
-│   ├── interview_api/        # BFF 网关服务，提供 REST API 和实时 WebSocket 接口
+│   ├── companion_api/        # BFF 网关服务，提供 REST API 和实时 WebSocket 接口
 │   ├── pkg/                  # 公用工具包 (包含鉴权、错误响应、存储适配器)
 │   ├── rpc/                  # RPC 领域微服务层
 │   │   ├── ai/               # AI 评测与锦囊 RPC 服务
@@ -97,8 +97,8 @@ cd backend/rpc/user
 go run user.go
 
 # 启动 BFF API 接口服务
-cd backend/interview_api
-go run interview.go
+cd backend/companion_api
+go run companion.go
 
 # 启动 Gateway 网关服务
 cd backend/gateway

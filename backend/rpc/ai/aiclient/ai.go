@@ -7,7 +7,7 @@ package aiclient
 import (
 	"context"
 
-	"ai_interview/rpc/ai/ai"
+	"ai_companion/rpc/ai/ai"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

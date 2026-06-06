@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"ai_interview/pkg/auth"
-	"ai_interview/rpc/user/internal/svc"
-	"ai_interview/rpc/user/model"
-	"ai_interview/rpc/user/user"
+	"ai_companion/pkg/auth"
+	"ai_companion/rpc/user/internal/svc"
+	"ai_companion/rpc/user/model"
+	"ai_companion/rpc/user/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"golang.org/x/crypto/bcrypt"

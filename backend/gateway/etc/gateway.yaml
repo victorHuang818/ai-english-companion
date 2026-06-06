@@ -4,18 +4,16 @@ Auth:
   AccessSecret: ${JWT_SECRET}
 Services:
   # BFF 业务接口 (包含会话创建和 WebSocket 对话)
-  - Prefix: "/api/v1/interviews"
+  - Prefix: "/api/v1/companions"
     Target: "http://127.0.0.1:8889"
-  - Prefix: "/ws/interview"
+  - Prefix: "/ws/companion"
     Target: "http://127.0.0.1:8889"
-  
-  # 用户服务接口 (注册、登录、信息查询)
-  # 假设未来会有 user-api 处理，目前先占位或转发给对应的 BFF
+  # 用户与业务接口
   - Prefix: "/api/v1/user"
     Target: "http://127.0.0.1:8889"
-  - Prefix: "/api/v1/resumes"
+  - Prefix: "/api/v1/scenarios"
     Target: "http://127.0.0.1:8889"
-  - Prefix: "/api/v1/job-profiles"
+  - Prefix: "/api/v1/practices"
     Target: "http://127.0.0.1:8889"
 
 Prometheus:

@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"fmt"
 
-	"ai_interview/rpc/core/core"
-	"ai_interview/rpc/core/internal/svc"
-	"ai_interview/rpc/core/model"
+	"ai_companion/rpc/core/core"
+	"ai_companion/rpc/core/internal/svc"
+	"ai_companion/rpc/core/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

@@ -1,0 +1,192 @@
+syntax = "v1"
+
+info (
+	title: "AI 英语口语陪练 BFF API"
+	desc:  "处理特定业务聚合逻辑、提供 HTTP 和 WebSocket 接口"
+)
+
+type CreateSessionReq {
+	UserProfileId string `json:"user_profile_id"`
+	ScenarioId    string `json:"scenario_id"`
+}
+
+type CreateSessionResp {
+	SessionId string `json:"session_id"`
+}
+
+// --- User Auth ---
+type RegisterReq {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type RegisterResp {
+	Id string `json:"id"`
+}
+
+type LoginReq {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type LoginResp {
+	Id    string `json:"id"`
+	Token string `json:"token"`
+}
+
+type GetUserInfoResp {
+	Id              string `json:"id"`
+	Username        string `json:"username"`
+	Email           string `json:"email"`
+	DailyFreeTokens uint32 `json:"daily_free_tokens"`
+	RechargeTokens  uint64 `json:"recharge_tokens"`
+}
+
+// --- User Profile ---
+type GenerateUploadUrlReq {
+	Filename string `json:"filename"`
+}
+
+type GenerateUploadUrlResp {
+	UploadUrl string `json:"upload_url"`
+	ObjectKey string `json:"object_key"`
+}
+
+type CreateUserProfileReq {
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
+}
+
+type CreateUserProfileResp {
+	Id     string `json:"id"`
+	Status string `json:"status"`
+}
+
+type GetUserProfileReq {
+	Id string `path:"id"`
+}
+
+type GetUserProfileResp {
+	Id             string `json:"id"`
+	EnglishLevel   string `json:"english_level"`
+	LearningTarget string `json:"learning_target"`
+	CreatedAt      int64  `json:"created_at"`
+}
+
+// --- Scenario ---
+type CreateScenarioReq {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type CreateScenarioResp {
+	Id string `json:"id"`
+}
+
+// --- Practice Session ---
+type PracticeSession {
+	SessionId    string `json:"session_id"`
+	ScenarioName string `json:"scenario_name"`
+	Status       string `json:"status"`
+	CreatedAt    int64  `json:"created_at"`
+	OverallScore int32  `json:"overall_score"`
+}
+
+type ListSessionsResp {
+	Sessions []PracticeSession `json:"sessions"`
+}
+
+type GetSessionDetailReq {
+	SessionId string `path:"session_id"`
+}
+
+type GetSessionDetailResp {
+	SessionId    string `json:"session_id"`
+	ScenarioName string `json:"scenario_name"`
+	Transcript   string `json:"transcript"`
+	OverallScore int32  `json:"overall_score"`
+	Commentary   string `json:"commentary"`
+}
+
+type DeleteSessionReq {
+	SessionId string `path:"session_id"`
+}
+
+type DeleteSessionResp {
+	Success bool `json:"success"`
+}
+
+@server (
+	prefix: /api/v1/user
+)
+service companion-api {
+	@doc "用户注册"
+	@handler Register
+	post /register (RegisterReq) returns (RegisterResp)
+
+	@doc "用户登录"
+	@handler Login
+	post /login (LoginReq) returns (LoginResp)
+}
+
+@server (
+	prefix: /api/v1/user
+	jwt:    Auth
+)
+service companion-api {
+	@doc "获取当前用户信息"
+	@handler GetUserInfo
+	get /info returns (GetUserInfoResp)
+}
+
+@server (
+	prefix: /api/v1/user-profiles
+	jwt:    Auth
+)
+service companion-api {
+	@doc "获取上传学习背景文件的预签名URL (备用)"
+	@handler GenerateUploadUrl
+	post /upload-url (GenerateUploadUrlReq) returns (GenerateUploadUrlResp)
+
+	@doc "提交并设置用户背景档案"
+	@handler CreateUserProfile
+	post / (CreateUserProfileReq) returns (CreateUserProfileResp)
+
+	@doc "获取用户档案信息"
+	@handler GetUserProfile
+	get /:id (GetUserProfileReq) returns (GetUserProfileResp)
+}
+
+@server (
+	prefix: /api/v1/scenarios
+	jwt:    Auth
+)
+service companion-api {
+	@doc "创建练习场景"
+	@handler CreateScenario
+	post / (CreateScenarioReq) returns (CreateScenarioResp)
+}
+
+@server (
+	prefix: /api/v1/practices
+	jwt:    Auth
+)
+service companion-api {
+	@doc "创建口语练习会话"
+	@handler CreateSession
+	post / (CreateSessionReq) returns (CreateSessionResp)
+
+	@doc "获取口语练习历史列表"
+	@handler ListSessions
+	get / returns (ListSessionsResp)
+
+	@doc "获取口语练习详情"
+	@handler GetSessionDetail
+	get /:session_id (GetSessionDetailReq) returns (GetSessionDetailResp)
+
+	@doc "删除口语练习记录"
+	@handler DeleteSession
+	delete /:session_id (DeleteSessionReq) returns (DeleteSessionResp)
+}
+

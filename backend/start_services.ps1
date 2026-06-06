@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Starts all Go backend services for the AI Interview project on Windows.
+    Starts all Go backend services for the AI English Companion project on Windows.
 .DESCRIPTION
-    Loads environment variables from .env and runs user.rpc, core.rpc, ai.rpc, interview_api, and gateway in background jobs.
+    Loads environment variables from .env and runs user.rpc, core.rpc, ai.rpc, companion_api, and gateway in background jobs.
 #>
 
 # 1. Ensure we are in the backend directory
@@ -54,7 +54,7 @@ $Services = @(
     @{ Name = "ai-rpc";       Path = "rpc/ai";       File = "ai.go";       Config = "etc/ai.yaml" },
     @{ Name = "user-rpc";     Path = "rpc/user";     File = "user.go";     Config = "etc/user.yaml" },
     @{ Name = "core-rpc";     Path = "rpc/core";     File = "core.go";     Config = "etc/core.yaml" },
-    @{ Name = "interview-api";Path = "interview_api";File = "interview.go";Config = "etc/interview-api.yaml" },
+    @{ Name = "companion-api";Path = "companion_api";File = "companion.go";Config = "etc/companion-api.yaml" },
     @{ Name = "gateway";      Path = "gateway";      File = "main.go";     Config = "etc/gateway.yaml" }
 )
 

@@ -1,6 +1,6 @@
 package svc
 
-import "ai_interview/rpc/ai/internal/config"
+import "ai_companion/rpc/ai/internal/config"
 
 type ServiceContext struct {
 	Config config.Config

@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthPage } from './pages/AuthPage'
 import { DashboardPage } from './pages/DashboardPage'
-import { InterviewRoomPage } from './pages/InterviewRoomPage'
+import { CompanionRoomPage } from './pages/CompanionRoomPage'
 import { ReportPage } from './pages/ReportPage'
 import { useAuthStore } from './store/authStore'
 
@@ -27,10 +27,10 @@ function App() {
         } 
       />
       <Route 
-        path="/interview/:sessionId" 
+        path="/companion/:sessionId" 
         element={
           <ProtectedRoute>
-            <InterviewRoomPage />
+            <CompanionRoomPage />
           </ProtectedRoute>
         } 
       />

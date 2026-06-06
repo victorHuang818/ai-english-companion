@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"ai_interview/rpc/user/internal/svc"
-	"ai_interview/rpc/user/model"
-	"ai_interview/rpc/user/user"
+	"ai_companion/rpc/user/internal/svc"
+	"ai_companion/rpc/user/model"
+	"ai_companion/rpc/user/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

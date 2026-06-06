@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"ai_interview/rpc/ai/ai"
-	"ai_interview/rpc/ai/internal/svc"
+	"ai_companion/rpc/ai/ai"
+	"ai_companion/rpc/ai/internal/svc"
 
 	"github.com/sashabaranov/go-openai"
 	"github.com/zeromicro/go-zero/core/logx"

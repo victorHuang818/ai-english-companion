@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"ai_interview/rpc/ai/ai"
-	"ai_interview/rpc/ai/internal/svc"
+	"ai_companion/rpc/ai/ai"
+	"ai_companion/rpc/ai/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

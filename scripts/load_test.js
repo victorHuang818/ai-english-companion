@@ -5,7 +5,7 @@ import { check, sleep } from 'k6';
 // 从环境变量读取主机地址，默认使用本地测试地址
 const HOST = __ENV.API_HOST || '127.0.0.1:8889';
 const BASE_URL = `http://${HOST}/api/v1`;
-const WS_URL = `ws://${HOST}/ws/interview`;
+const WS_URL = `ws://${HOST}/ws/companion`;
 
 export const options = {
   stages: [
@@ -60,69 +60,45 @@ export function setup() {
     'Authorization': `Bearer ${token}`,
   };
 
-  // 3. 动态创建一个面试岗位 (Job Profile)
-  const jobPayload = JSON.stringify({
-    name: 'Go Backend Developer (Stress Test)',
-    description: 'High-throughput system simulation',
+  // 3. 动态创建一个练习场景 (Scenario)
+  const scenarioPayload = JSON.stringify({
+    name: 'Stress Test Scenario',
+    description: 'High-throughput system simulation for speaking practice',
   });
-  const jobRes = http.post(`${BASE_URL}/job-profiles/`, jobPayload, {
+  const scenarioRes = http.post(`${BASE_URL}/scenarios/`, scenarioPayload, {
     headers: authHeader,
   });
 
-  check(jobRes, {
-    'Create Job Profile status is 200': (r) => r.status === 200,
+  check(scenarioRes, {
+    'Create Scenario status is 200': (r) => r.status === 200,
   });
-  const jobData = JSON.parse(jobRes.body);
-  const jobProfileId = jobData.id;
+  const scenarioData = JSON.parse(scenarioRes.body);
+  const scenarioId = scenarioData.id;
 
-  // 4. 获取上传简历的预签名 URL
-  const uploadUrlPayload = JSON.stringify({
-    filename: 'stress_test_resume.pdf',
+  // 4. 创建一个用户背景档案 (User Profile)
+  const profilePayload = JSON.stringify({
+    english_level: 'intermediate',
+    learning_target: 'Stress testing companion API',
   });
-  const uploadUrlRes = http.post(`${BASE_URL}/resumes/upload-url`, uploadUrlPayload, {
+  const profileRes = http.post(`${BASE_URL}/user-profiles/`, profilePayload, {
     headers: authHeader,
   });
 
-  check(uploadUrlRes, {
-    'Get Upload URL status is 200': (r) => r.status === 200,
+  check(profileRes, {
+    'Create User Profile status is 200': (r) => r.status === 200,
   });
-  const uploadUrlData = JSON.parse(uploadUrlRes.body);
-  const uploadUrl = uploadUrlData.upload_url;
-  const objectKey = uploadUrlData.object_key;
+  const profileData = JSON.parse(profileRes.body);
+  const userProfileId = profileData.id;
 
-  // 5. 上传一个 Mock PDF 文件二进制内容到 MinIO
-  const dummyPdf = 'Mock PDF File Content for Stress Testing';
-  const putRes = http.put(uploadUrl, dummyPdf, {
-    headers: { 'Content-Type': 'application/pdf' },
-  });
-
-  check(putRes, {
-    'Upload PDF to MinIO status is 200': (r) => r.status === 200,
-  });
-
-  // 6. 提交通知，触发简历入库并获取 resume_id
-  const resumePayload = JSON.stringify({
-    object_key: objectKey,
-  });
-  const resumeRes = http.post(`${BASE_URL}/resumes/`, resumePayload, {
-    headers: authHeader,
-  });
-
-  check(resumeRes, {
-    'Create Resume status is 200': (r) => r.status === 200,
-  });
-  const resumeData = JSON.parse(resumeRes.body);
-  const resumeId = resumeData.id;
-
-  if (!jobProfileId || !resumeId) {
-    throw new Error(`Failed to dynamically seed data. JobProfileId: ${jobProfileId}, ResumeId: ${resumeId}`);
+  if (!scenarioId || !userProfileId) {
+    throw new Error(`Failed to dynamically seed data. ScenarioId: ${scenarioId}, UserProfileId: ${userProfileId}`);
   }
 
-  console.log(`[k6 Setup] Token, Job Profile (${jobProfileId}) and Resume (${resumeId}) initialized. Target host: ${HOST}`);
+  console.log(`[k6 Setup] Token, Scenario (${scenarioId}) and User Profile (${userProfileId}) initialized. Target host: ${HOST}`);
   return {
     token: token,
-    resumeId: resumeId,
-    jobProfileId: jobProfileId,
+    userProfileId: userProfileId,
+    scenarioId: scenarioId,
   };
 }
 
@@ -133,12 +109,12 @@ export default function (data) {
     'Authorization': `Bearer ${token}`,
   };
 
-  // 1. 模拟业务流：发起 HTTP 请求创建一个面试会话 (Session)
+  // 1. 模拟业务流：发起 HTTP 请求创建一个口语练习会话 (Session)
   const createSessionPayload = JSON.stringify({
-    resume_id: data.resumeId,
-    job_profile_id: data.jobProfileId,
+    user_profile_id: data.userProfileId,
+    scenario_id: data.scenarioId,
   });
-  const createRes = http.post(`${BASE_URL}/interviews/`, createSessionPayload, {
+  const createRes = http.post(`${BASE_URL}/practices/`, createSessionPayload, {
     headers: authHeader,
   });
 

@@ -7,7 +7,7 @@ const pcmData = open('./welcome.pcm', 'b');
 
 const HOST = __ENV.API_HOST || '127.0.0.1:8889';
 const BASE_URL = `http://${HOST}/api/v1`;
-const WS_URL = `ws://${HOST}/ws/interview`;
+const WS_URL = `ws://${HOST}/ws/companion`;
 
 export const options = {
   vus: 1,
@@ -34,30 +34,27 @@ export function setup() {
   const responseBody = JSON.parse(loginRes.body);
   const token = responseBody.token;
 
-  // 3. 创建岗位
+  // 3. 创建练习场景 (Scenario)
   const authHeader = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`,
   };
-  const jobPayload = JSON.stringify({
+  const scenarioPayload = JSON.stringify({
     name: 'Go Developer (TTFT Test)',
     description: 'Testing real latency with PCM voice',
   });
-  const jobRes = http.post(`${BASE_URL}/job-profiles/`, jobPayload, { headers: authHeader });
-  const jobProfileId = JSON.parse(jobRes.body).id;
+  const scenarioRes = http.post(`${BASE_URL}/scenarios/`, scenarioPayload, { headers: authHeader });
+  const scenarioId = JSON.parse(scenarioRes.body).id;
 
-  // 4. 获取上传URL
-  const uploadUrlRes = http.post(`${BASE_URL}/resumes/upload-url`, JSON.stringify({ filename: 'ttft_resume.pdf' }), { headers: authHeader });
-  const uploadUrlData = JSON.parse(uploadUrlRes.body);
-  
-  // 5. 上传 Mock PDF
-  http.put(uploadUrlData.upload_url, 'Mock PDF Content', { headers: { 'Content-Type': 'application/pdf' } });
+  // 4. 创建一个用户背景档案 (User Profile)
+  const profilePayload = JSON.stringify({
+    english_level: 'intermediate',
+    learning_target: 'TTFT latency testing with PCM voice',
+  });
+  const profileRes = http.post(`${BASE_URL}/user-profiles/`, profilePayload, { headers: authHeader });
+  const userProfileId = JSON.parse(profileRes.body).id;
 
-  // 6. 创建简历记录
-  const resumeRes = http.post(`${BASE_URL}/resumes/`, JSON.stringify({ object_key: uploadUrlData.object_key }), { headers: authHeader });
-  const resumeId = JSON.parse(resumeRes.body).id;
-
-  return { token, resumeId, jobProfileId };
+  return { token, userProfileId, scenarioId };
 }
 
 export default function (data) {
@@ -67,12 +64,12 @@ export default function (data) {
     'Authorization': `Bearer ${token}`,
   };
 
-  // 1. 创建面试会话
+  // 1. 创建口语练习会话
   const createSessionPayload = JSON.stringify({
-    resume_id: data.resumeId,
-    job_profile_id: data.jobProfileId,
+    user_profile_id: data.userProfileId,
+    scenario_id: data.scenarioId,
   });
-  const createRes = http.post(`${BASE_URL}/interviews/`, createSessionPayload, { headers: authHeader });
+  const createRes = http.post(`${BASE_URL}/practices/`, createSessionPayload, { headers: authHeader });
   const sessionId = JSON.parse(createRes.body).session_id;
 
   // 2. 建立 WebSocket 连接

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==============================================================================
-#  Starts all Go backend services for the AI Interview project.
+#  Starts all Go backend services for the AI English Companion project.
 #  Supports both running pre-compiled binaries (for server) and go run (local).
 # ==============================================================================
 
@@ -56,7 +56,7 @@ SERVICES=(
     "ai-rpc|rpc/ai|ai-rpc|ai.go|ai.yaml"
     "user-rpc|rpc/user|user-rpc|user.go|user.yaml"
     "core-rpc|rpc/core|core-rpc|core.go|core.yaml"
-    "interview-api|interview_api|interview_api|interview.go|interview-api.yaml"
+    "companion-api|companion_api|companion_api|companion.go|companion-api.yaml"
     "gateway|gateway|gateway|main.go|gateway.yaml"
 )
 

@@ -296,7 +296,7 @@ export const DashboardPage: React.FC = () => {
         scenario_id: scenarioId
       });
 
-      navigate(`/interview/${resSession.session_id}`);
+      navigate(`/companion/${resSession.session_id}`);
     } catch (err: any) {
       setError('Failed to launch practice room: ' + err.message);
     } finally {

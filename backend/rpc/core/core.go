@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"ai_interview/rpc/core/core"
-	"ai_interview/rpc/core/internal/config"
-	"ai_interview/rpc/core/internal/server"
-	"ai_interview/rpc/core/internal/svc"
+	"ai_companion/rpc/core/core"
+	"ai_companion/rpc/core/internal/config"
+	"ai_companion/rpc/core/internal/server"
+	"ai_companion/rpc/core/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

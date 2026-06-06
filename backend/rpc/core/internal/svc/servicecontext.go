@@ -3,11 +3,11 @@ package svc
 import (
 	"context"
 
-	"ai_interview/pkg/oss_util"
-	"ai_interview/rpc/ai/ai"
+	"ai_companion/pkg/oss_util"
+	"ai_companion/rpc/ai/ai"
 
-	"ai_interview/rpc/core/internal/config"
-	"ai_interview/rpc/core/model"
+	"ai_companion/rpc/core/internal/config"
+	"ai_companion/rpc/core/model"
 	
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"

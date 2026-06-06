@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"ai_interview/rpc/user/internal/config"
-	"ai_interview/rpc/user/model"
+	"ai_companion/rpc/user/internal/config"
+	"ai_companion/rpc/user/model"
 
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )

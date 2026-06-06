@@ -56,7 +56,7 @@ export const AuthPage: React.FC = () => {
       <div className="auth-background-decoration"></div>
       <GlassCard className="auth-card" glow>
         <div className="auth-header">
-          <h1>AI Interview</h1>
+          <h1>AI English Companion</h1>
           <p>{isLogin ? 'Welcome back to the future' : 'Start your journey'}</p>
         </div>
 

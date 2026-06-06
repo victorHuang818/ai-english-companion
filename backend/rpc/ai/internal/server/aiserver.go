@@ -7,9 +7,9 @@ package server
 import (
 	"context"
 
-	"ai_interview/rpc/ai/ai"
-	"ai_interview/rpc/ai/internal/logic"
-	"ai_interview/rpc/ai/internal/svc"
+	"ai_companion/rpc/ai/ai"
+	"ai_companion/rpc/ai/internal/logic"
+	"ai_companion/rpc/ai/internal/svc"
 )
 
 type AiServer struct {

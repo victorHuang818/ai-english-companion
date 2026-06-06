@@ -6,11 +6,11 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 
-	"ai_interview/rpc/ai/ai"
+	"ai_companion/rpc/ai/ai"
 
-	"ai_interview/rpc/ai/internal/config"
-	"ai_interview/rpc/ai/internal/server"
-	"ai_interview/rpc/ai/internal/svc"
+	"ai_companion/rpc/ai/internal/config"
+	"ai_companion/rpc/ai/internal/server"
+	"ai_companion/rpc/ai/internal/svc"
 
 
 	"github.com/zeromicro/go-zero/core/conf"

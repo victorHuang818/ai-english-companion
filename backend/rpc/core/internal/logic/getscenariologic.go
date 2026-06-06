@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"ai_interview/rpc/core/core"
-	"ai_interview/rpc/core/internal/svc"
+	"ai_companion/rpc/core/core"
+	"ai_companion/rpc/core/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
