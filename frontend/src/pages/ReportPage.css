@@ -12,9 +12,9 @@
 }
 
 .back-btn {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.03);
   border: 1px solid var(--border-glass);
-  color: #fff;
+  color: var(--text-main);
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -25,8 +25,9 @@
 }
 
 .back-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 102, 204, 0.08);
   border-color: var(--primary);
+  color: var(--primary);
 }
 
 .report-nav h1 {
@@ -47,7 +48,7 @@
 
 .report-details-grid {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: 1fr;
   gap: 24px;
 }
 
@@ -62,22 +63,56 @@
   gap: 16px;
 }
 
-.transcript-line {
+.transcript-line-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.transcript-line-container.ai {
+  justify-content: flex-start;
+}
+
+.transcript-line-container.user {
+  justify-content: flex-end;
+}
+
+.transcript-bubble {
+  max-width: 85%;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 12px;
-  border-radius: 8px;
+  gap: 8px;
 }
 
-.transcript-line.ai {
-  background: rgba(102, 252, 241, 0.05);
-  border-left: 3px solid var(--primary);
+.transcript-bubble.ai {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 102, 204, 0.1);
+  border-bottom-left-radius: 4px;
 }
 
-.transcript-line.user {
-  background: rgba(255, 255, 255, 0.02);
-  border-left: 3px solid rgba(255, 255, 255, 0.2);
+.transcript-bubble.user {
+  background: rgba(230, 243, 255, 0.98);
+  border: 1px solid rgba(0, 102, 204, 0.2);
+  border-bottom-right-radius: 4px;
+}
+
+.bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.bubble-text {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: #111111 !important; /* Force black/dark legibility */
+  margin: 0;
+  font-weight: 500;
 }
 
 .line-prefix {
@@ -85,13 +120,125 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--accent);
 }
 
-.transcript-line p {
-  font-size: 14px;
+.transcript-bubble.ai .line-prefix {
+  color: #2563eb;
+}
+
+.transcript-bubble.user .line-prefix {
+  color: #4f46e5;
+}
+
+.round-score-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.round-score-badge.high {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.round-score-badge.mid {
+  background: rgba(234, 179, 8, 0.15);
+  color: #a16207;
+}
+
+.round-score-badge.low {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
+/* Collapsible Round Evaluation Styles */
+.round-evaluation-wrapper {
+  margin-top: 8px;
+  border-top: 1px dashed rgba(0, 102, 204, 0.15);
+  padding-top: 8px;
+}
+
+.toggle-eval-btn {
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.toggle-eval-btn:hover {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.toggle-eval-btn .toggle-icon {
+  font-size: 10px;
+  transition: transform 0.25s ease;
+}
+
+.toggle-eval-btn.active {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: #2563eb;
+  color: #1d4ed8;
+}
+
+.round-evaluation-details {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  border: 1px solid rgba(0, 102, 204, 0.08);
+}
+
+.eval-detail-comment {
+  color: #1f2937;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 102, 204, 0.05);
+}
+
+.eval-detail-dims {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eval-dim-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  padding-bottom: 4px;
+}
+
+.eval-dim-row:last-child {
+  border-bottom: none;
+}
+
+.dim-label {
+  font-weight: 700;
+  color: #4b5563;
+}
+
+.dim-val {
+  color: #111111;
+  line-height: 1.4;
 }
 
 .recommendation-card {
@@ -129,4 +276,91 @@
   justify-content: center;
   font-size: 18px;
   color: var(--text-muted);
+}
+
+.audio-player-container {
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.user-audio-player {
+  width: 100%;
+  max-width: 300px;
+  height: 36px;
+  outline: none;
+  border-radius: 18px;
+}
+
+/* Progress bars for speaking competencies inside round assessment */
+.round-scores-container {
+  margin-bottom: 16px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(0, 102, 204, 0.08);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.01);
+}
+
+.round-scores-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #374151;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.round-scores-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+}
+
+.round-score-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.round-score-bar-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.round-score-bar-label {
+  font-weight: 700;
+  color: #4b5563;
+}
+
+.round-score-bar-value {
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.round-score-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.round-score-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 600px) {
+  .round-scores-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }

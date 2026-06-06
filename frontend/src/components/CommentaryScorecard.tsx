@@ -3,13 +3,14 @@ import './CommentaryScorecard.css';
 
 interface CommentaryScorecardProps {
   data: {
-    score: number;
+    score?: number;
+    overall_score?: number;
     dimensions: {
       fluency: string;
       relevance: string;
       logic: string;
       depth: string;
-      star_alignment: string;
+      star_alignment?: string;
     };
     scores?: {
       fluency: number;
@@ -22,21 +23,24 @@ interface CommentaryScorecardProps {
 }
 
 export const CommentaryScorecard: React.FC<CommentaryScorecardProps> = ({ data }) => {
+  const scoreValue = data.overall_score ?? data.score;
   return (
     <div className="scorecard-container animate-slide-up">
       <div className="score-header">
-        <div className="score-circle">
-          <svg viewBox="0 0 36 36" className="circular-chart">
-            <path className="circle-bg"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-            <path className="circle"
-              strokeDasharray={`${data.score}, 100`}
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-            <text x="18" y="20.35" className="percentage">{data.score}</text>
-          </svg>
-        </div>
+        {scoreValue !== undefined && scoreValue > 0 && (
+          <div className="score-circle">
+            <svg viewBox="0 0 36 36" className="circular-chart">
+              <path className="circle-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path className="circle"
+                strokeDasharray={`${scoreValue}, 100`}
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <text x="18" y="20.35" className="percentage">{scoreValue}</text>
+            </svg>
+          </div>
+        )}
         <div className="overall-summary">
           <h3>Overall Assessment</h3>
           <p>{data.overall_comment}</p>
