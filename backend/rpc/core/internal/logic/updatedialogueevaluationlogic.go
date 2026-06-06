@@ -47,6 +47,12 @@ func (l *UpdateDialogueEvaluationLogic) UpdateDialogueEvaluation(in *core.Update
 		return nil, err
 	}
 
+	// 🌟 如果会话已结束，在评估结果更新时，异步触发一次合并，保证整体评分第一时间落库
+	go func(sid string) {
+		bgCtx := context.Background()
+		_, _, _ = ConsolidateReport(bgCtx, l.svcCtx, sid)
+	}(dialogue.PracticeSessionId)
+
 	return &core.UpdateDialogueEvaluationResp{
 		Success: true,
 	}, nil

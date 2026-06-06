@@ -22,6 +22,7 @@ AiRpc:
   Endpoints:
     - 127.0.0.1:10012
   NonBlock: true
+  Timeout: 60000  # 60 seconds
 
 RealtimeCompanion:
   Provider: "Qwen" # 决定使用哪一个面试官: "Gemini" 或 "Qwen"
@@ -29,7 +30,7 @@ RealtimeCompanion:
     ApiKey: ${GEMINI_API_KEY}
     Model: gemini-3.1-flash-live-preview
   Qwen:
-    ApiKey: ${DASHSCOPE_API_KEY}
+    ApiKey: ${DASHSCOPE_API_KEY1}
     Model: qwen3.5-omni-flash-realtime
 
 Auth:

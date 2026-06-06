@@ -197,7 +197,7 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		// Goroutine B: Realtime AI Companion -> 前端 (含 AI 辅助提示和滑动窗口 AI 评论员)
 		go func() {
 			for {
-				mt, data, _, _, _, _, err := realtimeConn.ReadMessage()
+				mt, data, turnComplete, inputTrans, outputTrans, totalTokens, err := realtimeConn.ReadMessage()
 				if err != nil {
 					errCh <- err
 					return
@@ -234,29 +234,23 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 						historyMu.Unlock()
 
 						// 1. 收集用户回答文本
-						if gResp.ServerContent.InputTranscription != nil {
-							text := gResp.ServerContent.InputTranscription.Text
-							if text != "" {
-								fullUserTranscript += text
-								historyMu.Lock()
-								currentAnswer += text // 收集用户回答文本碎片，拼接成完整的回答 A_n
-								historyMu.Unlock()
-							}
+						if inputTrans != "" {
+							fullUserTranscript += inputTrans
+							historyMu.Lock()
+							currentAnswer += inputTrans // 收集用户回答文本碎片，拼接成完整的回答 A_n
+							historyMu.Unlock()
 						}
 
 						// 2. 收集陪练老师提问文本
-						if gResp.ServerContent.OutputTranscription != nil {
-							text := gResp.ServerContent.OutputTranscription.Text
-							if text != "" {
-								fullCompanionText += text
-								historyMu.Lock()
-								nextQuestion += text // 流式拼接下一轮问题 Q_{n+1}
-								historyMu.Unlock()
-							}
+						if outputTrans != "" {
+							fullCompanionText += outputTrans
+							historyMu.Lock()
+							nextQuestion += outputTrans // 流式拼接下一轮问题 Q_{n+1}
+							historyMu.Unlock()
 						}
 
 						// 3. 捕捉 TurnComplete 信号，代表当前回合数据流（用户回答 A_n 和新问题 Q_{n+1}已全部完整接收完毕）
-						if gResp.ServerContent.TurnComplete {
+						if turnComplete {
 							historyMu.Lock()
 
 							var suggestionHistoryStr string
@@ -340,7 +334,9 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 										time.Sleep(30 * time.Millisecond)
 										suggestion = "- 阐述你在高并发下的限流设计思路。\n- 使用STAR法则：描述背景S、挑战T、行动A、结果R。"
 									} else {
-										suggestionResp, err := svcCtx.AiRpc.GetAiSuggestion(context.Background(), &ai.GetAiSuggestionReq{
+										suggestionCtx, suggestionCancel := context.WithTimeout(context.Background(), 30*time.Second)
+										defer suggestionCancel()
+										suggestionResp, err := svcCtx.AiRpc.GetAiSuggestion(suggestionCtx, &ai.GetAiSuggestionReq{
 											SessionId: firstMsg.SessionId,
 											Context:   suggestionPrompt,
 										})
@@ -381,8 +377,7 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 						}
 					}
 					// 计费逻辑
-					if gResp.UsageMetadata != nil {
-						totalTokens := gResp.UsageMetadata.TotalTokenCount
+					if totalTokens > 0 {
 						go func(t int64) {
 							svcCtx.UserRpc.DeductToken(context.Background(), &user.DeductTokenReq{
 								Id:     userId,

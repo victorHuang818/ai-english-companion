@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -74,6 +75,16 @@ func (c *GeminiRealtimeConn) ReadMessage() (messageType int, payload []byte, tur
 		}
 		if gResp.ServerContent.OutputTranscription != nil {
 			outputTrans = gResp.ServerContent.OutputTranscription.Text
+		} else if gResp.ServerContent.ModelTurn != nil {
+			var textBuilder strings.Builder
+			for _, part := range gResp.ServerContent.ModelTurn.Parts {
+				if part.Text != "" {
+					textBuilder.WriteString(part.Text)
+				}
+			}
+			if textBuilder.Len() > 0 {
+				outputTrans = textBuilder.String()
+			}
 		}
 		turnComplete = gResp.ServerContent.TurnComplete
 		if gResp.UsageMetadata != nil {

@@ -46,14 +46,14 @@ func main() {
 	// 检查并打印 Key 的读取情况（脱敏处理，避免日志泄露密钥）
 	fmt.Println("\n======================= CONFIG CHECK =======================")
 	if c.RealtimeCompanion.Qwen.ApiKey == "" {
-		fmt.Println("[WARN] DASHSCOPE_API_KEY is EMPTY!")
+		fmt.Println("[WARN] DASHSCOPE_API_KEY1 is EMPTY!")
 	} else {
 		key := c.RealtimeCompanion.Qwen.ApiKey
 		masked := key
 		if len(key) > 8 {
 			masked = key[:4] + "..." + key[len(key)-4:]
 		}
-		fmt.Printf("[INFO] DASHSCOPE_API_KEY successfully loaded: %s (Length: %d)\n", masked, len(key))
+		fmt.Printf("[INFO] DASHSCOPE_API_KEY1 successfully loaded: %s (Length: %d)\n", masked, len(key))
 	}
 	if c.RealtimeCompanion.Gemini.ApiKey == "" {
 		fmt.Println("[WARN] GEMINI_API_KEY is EMPTY!")

@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 
@@ -177,18 +178,23 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Companion
 				// 模拟计算耗时
 				time.Sleep(50 * time.Millisecond)
 				commentary = `{
-					"score": 88,
 					"dimensions": {
 						"fluency": "口语表达流畅度较好，表达自然且逻辑连贯。",
 						"relevance": "回答切题度良好，重点抓得准。",
 						"logic": "逻辑严密，采用了总分结构进行回答。",
-						"depth": "专业词汇掌握扎实，展现出了较深的技术经验。",
-						"star_alignment": "基本符合STAR法则，提供了清晰的背景和行动结果。"
+						"depth": "专业词汇掌握扎实，展现出了较深的技术经验。"
 					},
-					"overall_comment": "用户语言组织能力优秀，表达清楚，表现良好。"
+					"scores": {
+						"fluency": 85,
+						"vocabulary": 88,
+						"grammar": 80,
+						"pronunciation": 90
+					}
 				}`
 			} else {
-				commentaryResp, err := svcCtx.AiRpc.GetAiCommentary(context.Background(), &ai.GetAiCommentaryReq{
+				commentaryCtx, commentaryCancel := context.WithTimeout(context.Background(), 60*time.Second)
+				defer commentaryCancel()
+				commentaryResp, err := svcCtx.AiRpc.GetAiCommentary(commentaryCtx, &ai.GetAiCommentaryReq{
 					SessionId:    task.SessionId,
 					Context:      commentaryPrompt,
 					AudioContent: wav,
@@ -201,16 +207,51 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Companion
 			}
 
 			if rpcErr == nil && commentary != "" {
+				// Clean the commentary to remove any lists or bullet points
+				cleanedCommentary := cleanDialogueEvaluationJSON(commentary)
 				// 评估结果返回后，异步更新用户回答的 evaluation 字段
 				_, err = svcCtx.CoreRpc.UpdateDialogueEvaluation(context.Background(), &coreclient.UpdateDialogueEvaluationReq{
 					DialogueId: dialogueId,
-					Evaluation: commentary,
+					Evaluation: cleanedCommentary,
 				})
 				if err != nil {
 					logx.Errorf("Consumer failed to update dialogue evaluation: %v", err)
 				}
-			} else if rpcErr != nil {
-				logx.Errorf("Consumer GetAiCommentary RPC error: %v", rpcErr)
+			} else {
+				errMsg := "Unknown error"
+				if rpcErr != nil {
+					logx.Errorf("Consumer GetAiCommentary RPC error: %v", rpcErr)
+					errMsg = rpcErr.Error()
+				} else if commentary == "" {
+					logx.Errorf("Consumer GetAiCommentary returned empty commentary")
+					errMsg = "Empty response from AI"
+				}
+
+				// 🌟 写入失败时的降级 JSON，避免状态永久卡在 "evaluating"
+				fallbackObj := map[string]interface{}{
+					"dimensions": map[string]string{
+						"fluency":        fmt.Sprintf("评估请求失败: %s", errMsg),
+						"relevance":      "评估请求失败",
+						"logic":          "评估请求失败",
+						"depth":          "评估请求失败",
+					},
+					"scores": map[string]int{
+						"fluency":       0,
+						"vocabulary":    0,
+						"grammar":       0,
+						"pronunciation": 0,
+					},
+				}
+				fallbackBytes, _ := json.Marshal(fallbackObj)
+				fallbackCommentary := string(fallbackBytes)
+
+				_, err = svcCtx.CoreRpc.UpdateDialogueEvaluation(context.Background(), &coreclient.UpdateDialogueEvaluationReq{
+					DialogueId: dialogueId,
+					Evaluation: fallbackCommentary,
+				})
+				if err != nil {
+					logx.Errorf("Consumer failed to update fallback dialogue evaluation: %v", err)
+				}
 			}
 		}(userResp.Id)
 	}
@@ -227,4 +268,55 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Companion
 			}
 		}(task.TotalTokens)
 	}
+}
+
+func cleanParagraph(text string) string {
+	text = strings.ReplaceAll(text, "\n", " ")
+	text = strings.ReplaceAll(text, "\r", " ")
+	text = strings.ReplaceAll(text, "\t", " ")
+
+	// Remove markers at the very beginning of the string
+	reStart := regexp.MustCompile(`^\s*([-[*•]|\d+[\.)]|\(\d+\))\s*`)
+	text = reStart.ReplaceAllString(text, "")
+
+	// Remove markers in the middle of the string
+	reMiddle := regexp.MustCompile(`\s*([-[*•]|\d+[\.)]|\(\d+\))\s+`)
+	text = reMiddle.ReplaceAllString(text, " ")
+
+	// Normalize spacing
+	words := strings.Fields(text)
+	text = strings.Join(words, " ")
+
+	return text
+}
+
+func cleanDialogueEvaluationJSON(jsonStr string) string {
+	cleanJSON := strings.ReplaceAll(jsonStr, "```json", "")
+	cleanJSON = strings.ReplaceAll(cleanJSON, "```", "")
+	cleanJSON = strings.TrimSpace(cleanJSON)
+
+	var data map[string]interface{}
+	if err := json.Unmarshal([]byte(cleanJSON), &data); err != nil {
+		return jsonStr // return original if not parseable
+	}
+
+	// Clean dimensions
+	if dims, ok := data["dimensions"].(map[string]interface{}); ok {
+		for k, v := range dims {
+			if strVal, ok := v.(string); ok {
+				dims[k] = cleanParagraph(strVal)
+			}
+		}
+	}
+
+	// Clean overall_comment if it exists
+	if comment, ok := data["overall_comment"].(string); ok {
+		data["overall_comment"] = cleanParagraph(comment)
+	}
+
+	// Re-marshal to JSON string
+	if cleanedBytes, err := json.Marshal(data); err == nil {
+		return string(cleanedBytes)
+	}
+	return jsonStr
 }

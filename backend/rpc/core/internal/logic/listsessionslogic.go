@@ -32,12 +32,19 @@ type dbSessionItem struct {
 	Status           string         `db:"status"`
 	CreatedAt        time.Time      `db:"created_at"`
 	EvaluationReport sql.NullString `db:"evaluation_report"`
+	EvaluatingCount  int            `db:"evaluating_count"`
 }
 
 func (l *ListSessionsLogic) ListSessions(in *core.ListSessionsReq) (*core.ListSessionsResp, error) {
 	var list []dbSessionItem
 	query := `
-		SELECT s.id, COALESCE(j.name, '未知场景') AS scenario_name, s.status, s.created_at, s.evaluation_report
+		SELECT 
+			s.id, 
+			COALESCE(j.name, '未知场景') AS scenario_name, 
+			s.status, 
+			s.created_at, 
+			s.evaluation_report,
+			COALESCE((SELECT COUNT(*) FROM dialogues d WHERE d.practice_session_id = s.id AND d.role = 'user' AND d.evaluation = 'evaluating'), 0) AS evaluating_count
 		FROM practice_sessions s
 		LEFT JOIN scenarios j ON s.scenario_id = j.id
 		WHERE s.user_id = ?
@@ -67,10 +74,15 @@ func (l *ListSessionsLogic) ListSessions(in *core.ListSessionsReq) (*core.ListSe
 			}
 		}
 
+		status := item.Status
+		if item.Status == "completed" && item.EvaluatingCount > 0 {
+			status = "evaluating"
+		}
+
 		sessions = append(sessions, &core.SessionItem{
 			Id:           item.Id,
 			ScenarioName: item.ScenarioName,
-			Status:       item.Status,
+			Status:       status,
 			CreatedAt:    item.CreatedAt.Unix(),
 			OverallScore: score,
 		})
