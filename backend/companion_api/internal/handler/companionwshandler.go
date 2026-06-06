@@ -158,7 +158,11 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			// 🌟 音频收集与 AI 语音评估上下文
 			audioMu               sync.Mutex
 			isFirstResponseOfTurn = true
+			isFirstUserChunkOfTurn = true
 			activeWavBytes        []byte
+
+			userCreatedAt         int64
+			aiCreatedAt           int64
 		)
 
 		// 从对象池借用音频缓冲区并确保重置长度
@@ -181,6 +185,13 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 				if mt == websocket.BinaryMessage {
 					// 🌟 收集前端传来的原始 PCM 音频碎片，用于当前回合的完整回答音频合并
+					historyMu.Lock()
+					if isFirstUserChunkOfTurn {
+						isFirstUserChunkOfTurn = false
+						userCreatedAt = time.Now().UnixMilli()
+					}
+					historyMu.Unlock()
+
 					audioMu.Lock()
 					userAudioBuffer = append(userAudioBuffer, data...)
 					audioMu.Unlock()
@@ -215,6 +226,10 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 						historyMu.Lock()
 						if isFirstResponseOfTurn {
 							isFirstResponseOfTurn = false
+							aiCreatedAt = time.Now().UnixMilli()
+							if userCreatedAt == 0 {
+								userCreatedAt = aiCreatedAt - 1000 // 降级兜底：如果没收到音频分片，则设定为 AI 响应前 1 秒
+							}
 
 							audioMu.Lock()
 							var pcmBytes []byte
@@ -252,6 +267,7 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 						// 3. 捕捉 TurnComplete 信号，代表当前回合数据流（用户回答 A_n 和新问题 Q_{n+1}已全部完整接收完毕）
 						if turnComplete {
 							historyMu.Lock()
+							// aiCreatedAt 已在 isFirstResponseOfTurn 接收到第一块时精确获取，此处不再重新获取以保证时序
 
 							var suggestionHistoryStr string
 
@@ -283,14 +299,16 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 								// 组装并发布任务至 Redis Stream 队列，实现高吞吐异步落库与评估
 								task := logic.CompanionTask{
-									SessionId:    firstMsg.SessionId,
-									UserId:       userId,
-									Question:     evaluatedQuestion,
-									Answer:       evaluatedAnswer,
-									WavBase64:    wavBase64,
-									NextQuestion: nextQuestion,
-									History:      historyCopy,
-									TotalTokens:  0,
+									SessionId:     firstMsg.SessionId,
+									UserId:        userId,
+									Question:      evaluatedQuestion,
+									Answer:        evaluatedAnswer,
+									WavBase64:     wavBase64,
+									NextQuestion:  nextQuestion,
+									History:       historyCopy,
+									TotalTokens:   0,
+									UserCreatedAt: userCreatedAt,
+									AiCreatedAt:   aiCreatedAt,
 								}
 
 								taskBytes, err := json.Marshal(task)
@@ -371,6 +389,7 @@ func CompanionWSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 							// 🌟 重置录音标记，为下一轮做准备
 							isFirstResponseOfTurn = true
+							isFirstUserChunkOfTurn = true
 							activeWavBytes = nil
 
 							historyMu.Unlock()

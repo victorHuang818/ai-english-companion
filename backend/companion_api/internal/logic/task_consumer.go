@@ -26,14 +26,16 @@ type Turn struct {
 }
 
 type CompanionTask struct {
-	SessionId    string `json:"session_id"`
-	UserId       string `json:"user_id"`
-	Question     string `json:"question"`
-	Answer       string `json:"answer"`
-	WavBase64    string `json:"wav_base64"`
-	NextQuestion string `json:"next_question"`
-	History      []Turn `json:"history"`
-	TotalTokens  int64  `json:"total_tokens"`
+	SessionId     string `json:"session_id"`
+	UserId        string `json:"user_id"`
+	Question      string `json:"question"`
+	Answer        string `json:"answer"`
+	WavBase64     string `json:"wav_base64"`
+	NextQuestion  string `json:"next_question"`
+	History       []Turn `json:"history"`
+	TotalTokens   int64  `json:"total_tokens"`
+	UserCreatedAt int64  `json:"user_created_at"`
+	AiCreatedAt   int64  `json:"ai_created_at"`
 }
 
 func StartConsumer(svcCtx *svc.ServiceContext) {
@@ -121,6 +123,7 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Companion
 			Content:      task.Answer,
 			AudioContent: wav,
 			Evaluation:   "evaluating",
+			CreatedAt:    task.UserCreatedAt,
 		})
 		if err != nil {
 			logx.Errorf("Consumer failed to save user dialogue: %v", err)
@@ -133,6 +136,7 @@ func processTask(ctx context.Context, svcCtx *svc.ServiceContext, task Companion
 			SessionId: task.SessionId,
 			Role:      "interviewer",
 			Content:   task.NextQuestion,
+			CreatedAt: task.AiCreatedAt,
 		})
 		if err != nil {
 			logx.Errorf("Consumer failed to save companion teacher dialogue: %v", err)
