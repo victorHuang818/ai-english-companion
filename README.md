@@ -6,19 +6,54 @@
 
 ## 🏗️ 系统架构设计
 
-系统由 **Frontend (React-TS)** 交互层、**BFF Gateway (go-zero REST/WS)** 聚合网关层、**Core & AI RPC** 后台微服务层以及 **Redis Stream 异步任务队列** 组成。
+系统由 **Frontend (React-TS)** 交互层、**Nginx (OpenResty)** 反向代理与 SSL 卸载层、**Gateway** JWT 鉴权与路由层、**BFF companion_api** REST/WebSocket 聚合层、**RPC 微服务** 领域层以及 **Redis Stream 异步任务队列** 组成。
 
 ```mermaid
 graph TD
-    A[Frontend React-TS] -->|HTTP / WS| B[Gateway / BFF api]
-    B -->|RPC| C[User RPC Service]
-    B -->|RPC| D[Core RPC Service]
-    B -->|RPC| E[AI RPC Service]
-    B -->|XADD| F[(Redis Stream english_practice_tasks)]
-    G[Task Consumer Worker] -->|XREAD| F
-    G -->|RPC| E
-    G -->|RPC| D
-    D -->|MySQL| H[(MySQL ai_english_db)]
+    A["Frontend (React-TS)"]
+
+    subgraph Internet
+        A
+    end
+
+    subgraph "Linux Server - Podman"
+        NGX["Nginx (OpenResty)\n━━━━━━━━━━━━━━\n• SSL/TLS Termination\n• Static File Serving\n• Reverse Proxy"]
+        GW["Gateway :8880\n━━━━━━━━━━━━━━\n• JWT Verification\n• Rate Limiting (Lua)\n• Route Dispatch"]
+        BFF["BFF companion_api :8890\n━━━━━━━━━━━━━━\n• REST API Endpoints\n• WebSocket Handler\n• Task Publisher\n• Task Consumer Worker"]
+
+        subgraph "RPC Services"
+            URPC["User RPC :10010\n• Register / Login\n• Token Quota"]
+            CRPC["Core RPC :10011\n• Profile / Scenario\n• Session / Dialogue\n• Report Consolidation"]
+            ARPC["AI RPC :10012\n• AI Commentary\n• AI Suggestion Hints"]
+        end
+
+        subgraph "Infrastructure (Podman)"
+            REDIS[("Redis Stream\nenglish_practice_tasks")]
+            MYSQL[("MySQL\nai_english_db")]
+            MINIO[("MinIO\nAudio Object Storage")]
+        end
+    end
+
+    subgraph "External AI API"
+        QWEN["qwen3.5-omni-flash-realtime\nAlibaba Cloud Realtime API"]
+    end
+
+    A -->|"HTTPS / WSS (port 9443)"| NGX
+    NGX -->|"HTTP (Static Files)"| STA["frontend/dist"]
+    NGX -->|"HTTP /api/ & WS /ws/"| GW
+    GW -->|"HTTP forward"| BFF
+
+    BFF <-->|"WebSocket Streaming\n(Real-time Audio / Text)"| QWEN
+
+    BFF -->|gRPC| URPC
+    BFF -->|gRPC| CRPC
+    BFF -->|gRPC| ARPC
+    BFF -->|XADD| REDIS
+    BFF -->|XREAD| REDIS
+
+    CRPC -->|SQL| MYSQL
+    CRPC -->|"S3 Put/Get"| MINIO
+    ARPC -->|"S3 Get"| MINIO
 ```
 
 ---
@@ -104,7 +139,7 @@ go run companion.go
 cd backend/gateway
 go run main.go
 ```
-*(注：也可运行 `backend/start_services.ps1` 脚本一键在后台开启全部后端微服务)*
+*(注：Linux 服务器上可将二进制文件交叉编译后上传，并运行根目录下的 `start_services.sh` 一键启动全部后端服务)*
 
 ### 4. 运行前端应用
 ```bash
