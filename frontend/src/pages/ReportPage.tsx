@@ -192,7 +192,7 @@ export const ReportPage: React.FC = () => {
                   <div key={idx} className={`transcript-line-container ${isAI ? 'ai' : 'user'}`}>
                     <div className={`transcript-bubble ${isAI ? 'ai' : 'user'}`}>
                       <div className="bubble-header">
-                        <span className="line-prefix">{isAI ? 'AI TEACHER' : 'YOU'}</span>
+                        <span className="line-prefix">{isAI ? 'AI SPEAKER' : 'YOU'}</span>
                         {hasEval && (
                           <span className={`round-score-badge ${score >= 80 ? 'high' : score >= 60 ? 'mid' : 'low'}`}>
                             Score: {score}
