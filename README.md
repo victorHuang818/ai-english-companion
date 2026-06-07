@@ -6,7 +6,13 @@
 
 ## 🏗️ 系统架构设计
 
-系统由 **Frontend (React-TS)** 交互层、**Nginx (OpenResty)** 反向代理与 SSL 卸载层、**Gateway** JWT 鉴权与路由层、**BFF companion_api** REST/WebSocket 聚合层、**RPC 微服务** 领域层以及 **Redis Stream 异步任务队列** 组成。
+系统由 **Frontend (React-TS)** 交互层、**Nginx (OpenResty)** 反向代理与入站 SSL 卸载层、**Gateway** JWT 鉴权与路由层、**BFF companion_api** REST/WebSocket 聚合层、**RPC 微服务** 领域层以及 **Redis Stream 异步任务队列** 组成。
+
+> **📌 双段独立 TLS 说明**：本系统存在两段方向相反、互不干扰的 TLS 连接：
+> - **入站 TLS 终止（Inbound Termination）**：浏览器以 `wss://` 访问 Nginx，Nginx 持有域名证书，在边缘**卸载 SSL**，将流量以明文 `ws://` 在内网转发给 Gateway → BFF，降低后端负担。
+> - **出站 TLS 发起（Outbound Origination）**：BFF 作为客户端，用 Go 的 `websocket.DefaultDialer` 主动向阿里云公网 `wss://dashscope.aliyuncs.com` **发起加密连接**，保护音频流在公网传输中的安全。
+>
+> 两段 TLS 的证书、方向、发起方均不同，不存在"卸载后重装"的矛盾。
 
 ```mermaid
 graph TD
@@ -38,12 +44,12 @@ graph TD
         QWEN["qwen3.5-omni-flash-realtime\nAlibaba Cloud Realtime API"]
     end
 
-    A -->|"HTTPS / WSS (port 9443)"| NGX
-    NGX -->|"HTTP (Static Files)"| STA["frontend/dist"]
-    NGX -->|"HTTP /api/ & WS /ws/"| GW
-    GW -->|"HTTP forward"| BFF
+    A -->|"① Inbound wss:// (port 9443)"| NGX
+    NGX -->|"HTTP Static Files"| STA["frontend/dist"]
+    NGX -->|"② SSL Terminated → ws:// (内网明文)"| GW
+    GW -->|"③ HTTP forward (JWT verified)"| BFF
 
-    BFF <-->|"WebSocket Streaming\n(Real-time Audio / Text)"| QWEN
+    BFF <-->|"④ Outbound wss://dashscope.aliyuncs.com\n(独立出站 TLS · Go Dialer 直连)"| QWEN
 
     BFF -->|gRPC| URPC
     BFF -->|gRPC| CRPC
