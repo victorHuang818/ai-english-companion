@@ -4,6 +4,12 @@
 
 ---
 
+## 📺 视频演示与设计讲解
+
+🎬 **项目演示与视频汇报**：[点击观看 Bilibili 视频](https://www.bilibili.com/video/BV132Ex6kEAx/)
+
+---
+
 ## 🏗️ 系统架构设计
 
 系统由 **Frontend (React-TS)** 交互层、**Nginx (OpenResty)** 反向代理与 SSL 卸载层、**Gateway** JWT 鉴权与路由层、**BFF companion_api** REST/WebSocket 聚合层、**RPC 微服务** 领域层以及 **Redis Stream 异步任务队列** 组成。
