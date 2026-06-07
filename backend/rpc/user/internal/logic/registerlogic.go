@@ -52,7 +52,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 		Username:        in.Username,
 		Email:           in.Email,
 		Password:        string(hashedPassword),
-		DailyFreeTokens: 1000, // 初始赠送额度
+		DailyFreeTokens: 50000, // 初始赠送额度
 	})
 	if err != nil {
 		return nil, err
