@@ -34,7 +34,7 @@ const SCENARIO_METADATA_MAP: Record<string, { category: string; subDesc: string;
 };
 
 export const DashboardPage: React.FC = () => {
-  const { user, logout } = useAuthStore();
+  const { user, logout, updateUser } = useAuthStore();
   const navigate = useNavigate();
 
   // Profile configuration states
@@ -72,13 +72,15 @@ export const DashboardPage: React.FC = () => {
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [deleteSessionTargetId, setDeleteSessionTargetId] = useState<string>('');
 
-  // Load profiles & scenarios from DB on mount
+  // Load profiles, scenarios & fresh user info from DB on mount
   useEffect(() => {
     if (user?.id) {
       fetchProfiles();
       fetchScenarios();
+      // Always refresh user info to get up-to-date token balance (overwrite stale localStorage cache)
+      api.getUserInfo().then((info) => updateUser(info)).catch(() => {});
     }
-  }, [user]);
+  }, [user?.id]);
 
   const fetchProfiles = async () => {
     try {
@@ -271,9 +273,9 @@ export const DashboardPage: React.FC = () => {
             <span>AI English Companion</span>
           </div>
           <div className="nav-user">
-            <div className="token-badge">
+            <div className="token-badge" title={`免费: ${user?.daily_free_tokens ?? 0} | 充值: ${user?.recharge_tokens ?? 0}`}>
               <span className="token-label">Tokens Left:</span>
-              <span className="token-value">{user?.daily_free_tokens || 0}</span>
+              <span className="token-value">{(user?.daily_free_tokens ?? 0) + (user?.recharge_tokens ?? 0)}</span>
             </div>
             <div className="user-info">
               <span className="username">{user?.username}</span>

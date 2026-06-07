@@ -142,9 +142,12 @@ export const ReportPage: React.FC = () => {
     <div className="report-container animate-fade-in">
       <div className="report-nav">
         <button onClick={() => navigate('/')} className="back-btn">
-          <ChevronLeft size={20} /> Back to Hub
+          <ChevronLeft size={18} /> Back to Hub
         </button>
-        <h1>Practice Summary: {data.scenario_name}</h1>
+        <div className="nav-title-group">
+          <h1>Practice Summary: {data.scenario_name}</h1>
+          <span className="nav-subtitle">AI-Powered Speaking Evaluation Report</span>
+        </div>
       </div>
  
       <div className="report-grid">
