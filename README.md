@@ -22,7 +22,7 @@ graph TD
         ARPC["AI RPC :10012\n• AI Commentary\n• AI Suggestion Hints"]
     end
 
-    subgraph "Infrastructure (Podman)"
+    subgraph "Infrastructure"
         REDIS[("Redis Stream\nenglish_practice_tasks")]
         MYSQL[("MySQL\nai_english_db")]
         MINIO[("MinIO\nAudio Object Storage")]
@@ -32,9 +32,9 @@ graph TD
         QWEN["qwen3.5-omni-flash-realtime\nAlibaba Cloud"]
     end
 
-    A -->|"wss:// (port 9443)"| NGX
-    NGX -->|"ws:// (internal)"| GW
-    GW -->|"HTTP"| BFF
+    A -->|"HTTPS / WSS (port 9443)"| NGX
+    NGX -->|"HTTP / WS (internal)"| GW
+    GW -->|"HTTP / WS"| BFF
 
     BFF <-->|"wss:// (Realtime Streaming)"| QWEN
 
